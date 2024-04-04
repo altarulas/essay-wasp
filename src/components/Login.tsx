@@ -2,10 +2,23 @@
 
 import { cn } from "@/lib/utils";
 import styles from "./Login.style.module.scss";
+import { createClient } from "@/utils/supabase/client";
 
 export const Login = () => {
-  const handleGoogleLogin = () => {
-    console.log("im working");
+  const handleGoogleLogin = async () => {
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
+    });
+
+    console.log("error", error);
+    console.log("data", data);
   };
 
   return (
