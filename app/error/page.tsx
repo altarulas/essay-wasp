@@ -1,3 +1,5 @@
+import { Login } from "@/src/components/Login";
+
 export default function ErrorPage() {
-  return <p>Sorry, something went wrong</p>;
+  return <Login />;
 }

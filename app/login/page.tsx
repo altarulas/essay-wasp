@@ -1,5 +1,7 @@
-import { login, signup } from "./actions";
+import { LoginPage } from "@/src/pages/LoginPage";
 
-export default function LoginPage() {
-  return <div>LoginPage</div>;
-}
+const Login = () => {
+  return <LoginPage />;
+};
+
+export default Login;
