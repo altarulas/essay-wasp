@@ -1,4 +1,4 @@
-import { LoginPage } from "@/src/pages/LoginPage";
+import LoginPage from "@/src/pages/LoginPage";
 
 const Login = () => {
   return <LoginPage />;

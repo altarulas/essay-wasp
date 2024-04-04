@@ -1,4 +1,4 @@
-import { AppScreenPage } from "@/src/pages/AppScreenPage";
+import AppScreenPage from "@/src/pages/AppScreenPage";
 
 const AppScreen = () => {
   return <AppScreenPage />;
