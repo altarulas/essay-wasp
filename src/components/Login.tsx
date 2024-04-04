@@ -5,8 +5,23 @@ import styles from "./Login.style.module.scss";
 import { createClient } from "@/utils/supabase/client";
 
 export const Login = () => {
+  const supabase = createClient();
+
+  const getURL = () => {
+    let url =
+      process?.env?.NEXT_PUBLIC_LOCAL_SITE_URL ??
+      process?.env?.NEXT_PUBLIC_VERCEL_URL ??
+      "";
+
+    url = url.includes("http") ? url : `https://${url}`;
+    // Make sure to include a trailing `/`.
+    url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
+
+    console.log("url: ", url);
+    return url;
+  };
+
   const handleGoogleLogin = async () => {
-    const supabase = createClient();
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -14,6 +29,7 @@ export const Login = () => {
           access_type: "offline",
           prompt: "consent",
         },
+        redirectTo: getURL(),
       },
     });
 
