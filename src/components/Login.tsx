@@ -8,18 +8,20 @@ export const Login = () => {
   const supabase = createClient();
 
   const handleGoogleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const url =
+      process.env.NEXT_PUBLIC_LOCAL_SITE_URL ??
+      process.env.NEXT_PUBLIC_VERCEL_URL;
+
+    await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         queryParams: {
           access_type: "offline",
           prompt: "consent",
+          redirectTo: `${url}auth/callback`,
         },
       },
     });
-
-    console.log("error: ", error);
-    console.log("data: ", data);
   };
 
   return (
