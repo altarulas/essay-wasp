@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export default async function createSupabaseServerClient() {
+export function createSupabaseServerClient() {
   const cookieStore = cookies();
 
   // Create a server's supabase client with newly configured cookie,
