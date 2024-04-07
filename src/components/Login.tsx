@@ -1,24 +1,18 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import styles from "./Login.style.module.scss";
 import { createClient } from "@/utils/supabase/client";
 
 export const Login = () => {
   const supabase = createClient();
 
   const handleGoogleLogin = async () => {
-    const url =
-      process.env.NEXT_PUBLIC_LOCAL_SITE_URL ??
-      process.env.NEXT_PUBLIC_VERCEL_URL;
-
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         queryParams: {
           access_type: "offline",
           prompt: "consent",
-          redirectTo: `${url}auth/callback`,
+          redirectTo: `${location.origin}/auth/callback`,
         },
       },
     });

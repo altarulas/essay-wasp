@@ -1,3 +1,5 @@
+"use client";
+
 import { Logout } from "../components/Logout";
 
 const AppScreenPage = () => {
