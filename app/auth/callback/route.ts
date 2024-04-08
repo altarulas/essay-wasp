@@ -3,15 +3,12 @@ import { NextResponse } from "next/server";
 import { type CookieOptions, createServerClient } from "@supabase/ssr";
 
 export async function GET(request: Request) {
-  const requestUrl = new URL(request.url);
-
-  const { searchParams, origin } = requestUrl;
+  const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get("next") ?? "/";
 
   if (code) {
-    console.log("0");
     const cookieStore = cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -32,12 +29,10 @@ export async function GET(request: Request) {
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      console.log("1");
-      return NextResponse.redirect(`${requestUrl.origin}`);
+      return NextResponse.redirect(`${origin}${next}`);
     }
   }
 
-  console.log("2");
   // return the user to an error page with instructions
   return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 }
