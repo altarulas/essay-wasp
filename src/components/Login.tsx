@@ -6,6 +6,8 @@ export const Login = () => {
   const handleGoogleLogin = async () => {
     const supabase = supabaseClient();
 
+    console.log("location: ", location.origin);
+
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
