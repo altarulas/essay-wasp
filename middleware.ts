@@ -1,7 +1,9 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { authRoutes, publicRoutes, defaultLoginRoute } from "./routes";
 
 export async function middleware(request: NextRequest) {
+  const { nextUrl } = request;
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -54,9 +56,18 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const isLoggedIn = Boolean((await supabase.auth.getUser()).data.user);
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isLoginRoute = defaultLoginRoute.includes(nextUrl.pathname);
 
-  return response;
+  if (!isLoggedIn && isAuthRoute)
+    return Response.redirect(new URL("/", nextUrl));
+
+  if (isLoggedIn && isLoginRoute)
+    return Response.redirect(new URL("/app-screen", nextUrl));
+
+  return null;
 }
 
 export const config = {

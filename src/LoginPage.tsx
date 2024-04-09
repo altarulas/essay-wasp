@@ -2,19 +2,17 @@
 
 import { supabaseClient } from "@/utils/supabase/client";
 
-export const Login = () => {
+export const LoginPage = () => {
   const handleGoogleLogin = async () => {
     const supabase = supabaseClient();
-
-    console.log("location: ", location.origin);
 
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        queryParams: {
+        /* queryParams: {
           access_type: "offline",
           prompt: "consent",
-        },
+        }, */
         redirectTo: `${location.origin}/auth/callback`,
       },
     });

@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
 
-export const Home = () => {
+export const HomePage = () => {
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <div className="w-96 h-48 flex flex-col gap-10 p-4 bg-zinc-700 rounded-lg">

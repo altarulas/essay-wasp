@@ -1,9 +1,5 @@
-import { Login } from "@/src/components/Login";
+import { LoginPage } from "@/src/LoginPage";
 
-export default function LoginPage() {
-  return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <Login />
-    </div>
-  );
+export default function Login() {
+  return <LoginPage />;
 }
