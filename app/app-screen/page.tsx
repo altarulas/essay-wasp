@@ -1,4 +1,4 @@
-import { AppScreenPage } from "@/src/AppScreenPage";
+import AppScreenPage from "@/pages/AppScreenPage";
 
 export default function AppScreen() {
   return <AppScreenPage />;
