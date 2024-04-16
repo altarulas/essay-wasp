@@ -56,15 +56,14 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  const isLoggedIn = Boolean((await supabase.auth.getUser()).data.user);
+  const isAuth = Boolean((await supabase.auth.getUser()).data.user);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
 
-  if (!isLoggedIn && isAuthRoute)
-    return Response.redirect(new URL("/", nextUrl));
+  if (!isAuth && isAuthRoute) return Response.redirect(new URL("/", nextUrl));
 
-  if (isLoggedIn && isPublicRoute)
-    return Response.redirect(new URL("/app-screen", nextUrl));
+  if (isAuth && isPublicRoute)
+    return Response.redirect(new URL("/app", nextUrl));
 
   return null;
 }

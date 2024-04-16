@@ -1,3 +1,3 @@
 export const publicRoutes = ["/"];
 
-export const authRoutes = ["/app-screen"];
+export const authRoutes = ["/app"];
