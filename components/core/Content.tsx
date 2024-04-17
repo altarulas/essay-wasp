@@ -3,7 +3,7 @@
 import { supabaseClient } from "@/utils/supabase/client";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -25,49 +25,59 @@ import {
 import { Textarea } from "../ui/textarea";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addEssayAndFeedback,
-  addQuestion,
-} from "@/redux/features/tempEssaySlice";
+  createFeedback,
+  getUserEssay,
+  startEssaySession,
+} from "@/redux/features/essaySlice";
+import { getUserInfo } from "@/redux/features/userInfoSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 
 export const Content = () => {
-  const supabase = supabaseClient();
   const dispatch = useDispatch<AppDispatch>();
 
-  const essay_question = useSelector(
-    (state: RootState) => state.tempEssay.essay_question
-  );
-  const essay_feedback = useSelector(
-    (state: RootState) => state.tempEssay.essay_feedback
+  const { essay_question, essay_feedback, essay_text } = useSelector(
+    (state: RootState) => state.essay
   );
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [selectedTopic, setSelectedTopic] = useState("");
-  const [essay, setEssay] = useState("");
+  const [selectedTopic, setSelectedTopic] = useState<string>("");
+  const [essay, setEssay] = useState<string>("");
+
+  const handleFetchInitialData = async () => {
+    await dispatch(getUserInfo());
+    await dispatch(getUserEssay());
+  };
+
+  useEffect(() => {
+    essay_text && setEssay(essay_text);
+  }, [essay_text]);
+
+  useEffect(() => {
+    handleFetchInitialData();
+  }, []);
 
   const handleSelectChange = (value: string) => {
     setSelectedTopic(value);
   };
 
-  const handleTextChange = (event: any) => {
-    setEssay(event.target.value);
-  };
-
   const handleCreateTopic = async () => {
     setLoading(true);
-    await dispatch(addQuestion(selectedTopic));
+    await dispatch(startEssaySession(selectedTopic));
     setLoading(false);
   };
 
-  const handleFinishEssay = async () => {
-    alert("nice job essay is finished...");
+  const handleEssayChange = (event: any) => {
+    setEssay(event.target.value);
   };
 
-  const handleGetFeedback = async () => {
+  const handleFinishEssay = async () => {
     setLoading(true);
     await dispatch(
-      addEssayAndFeedback({ essay_text: essay, essay_question: essay_question })
+      createFeedback({
+        essay_text: essay,
+        essay_question: essay_question,
+      })
     );
     setLoading(false);
   };
@@ -102,9 +112,13 @@ export const Content = () => {
 
         {essay_question && (
           <Button onClick={handleStartTimer} disabled={loading}>
-            Create Topic
+            Start Timer
           </Button>
         )}
+
+        <Button onClick={handleFinishEssay} disabled={loading}>
+          Give Feedback
+        </Button>
       </div>
 
       <Card className="w-1/2 h-20 p-4">
@@ -113,7 +127,8 @@ export const Content = () => {
       </Card>
 
       <Textarea
-        onChange={(e) => handleTextChange(e)}
+        value={essay}
+        onChange={(e) => handleEssayChange(e)}
         className="w-1/2 h-96"
         placeholder="Type your essay here."
       />
@@ -121,7 +136,7 @@ export const Content = () => {
       {essay_feedback && (
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline">Show Feedback</Button>
+            <Button>Show Feedback</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>

@@ -1,3 +1,5 @@
+"use client";
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabaseClient } from "@/utils/supabase/client";
 
@@ -18,7 +20,7 @@ const initialState: IUserInfo = {
 export const getUserInfo = createAsyncThunk(
   "userInfoSlice/getUserInfo",
   async () => {
-    const id = (await supabase.auth.getUser()).data.user?.aud;
+    const id = (await supabase.auth.getUser()).data.user?.id;
 
     try {
       const { data, error } = await supabase
@@ -30,13 +32,12 @@ export const getUserInfo = createAsyncThunk(
       if (!error) {
         const user: IUserInfo = data;
         return user;
-      } else {
-        throw new Error(error.message);
       }
     } catch (error) {
       console.error(error);
-      throw error;
     }
+
+    return initialState;
   }
 );
 

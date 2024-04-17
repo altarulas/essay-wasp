@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import tempEssayReducer from "./features/tempEssaySlice";
+import EssayReducer from "./features/essaySlice";
+import userInfoReducer from "./features/userInfoSlice";
 
 export const store = configureStore({
   reducer: {
-    tempEssay: tempEssayReducer,
+    essay: EssayReducer,
+    userInfo: userInfoReducer,
   },
 });
 
