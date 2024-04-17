@@ -2,7 +2,7 @@
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabaseClient } from "@/utils/supabase/client";
-import { RootState } from "@/redux/store";
+import { RootState } from "@/redux-store/store";
 import { aiFeedback, aiQuestion } from "./aiFunctions";
 
 const supabase = supabaseClient();

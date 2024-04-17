@@ -1,3 +1,5 @@
+"use client";
+
 import { configureStore } from "@reduxjs/toolkit";
 import EssayReducer from "./features/essaySlice";
 import userInfoReducer from "./features/userInfoSlice";

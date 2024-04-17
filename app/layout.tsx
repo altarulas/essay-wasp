@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import ProviderRedux from "@/redux/Provider";
+import ProviderRedux from "@/redux-store/Provider";
 import { ThemeProvider } from "@/utils/ThemeProvider";
 
 const fontSans = FontSans({

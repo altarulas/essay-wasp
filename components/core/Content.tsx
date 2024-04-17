@@ -28,9 +28,9 @@ import {
   createFeedback,
   getUserEssay,
   startEssaySession,
-} from "@/redux/features/essaySlice";
-import { getUserInfo } from "@/redux/features/userInfoSlice";
-import { AppDispatch, RootState } from "@/redux/store";
+} from "@/redux-store/features/essaySlice";
+import { getUserInfo } from "@/redux-store/features/userInfoSlice";
+import { AppDispatch, RootState } from "@/redux-store/store";
 
 export const Content = () => {
   const dispatch = useDispatch<AppDispatch>();
