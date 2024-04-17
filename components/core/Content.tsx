@@ -13,13 +13,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Textarea } from "../ui/textarea";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addEssayAndFeedback,
   addQuestion,
-} from "@/store/features/tempEssaySlice";
-import { AppDispatch, RootState } from "@/store/store";
+} from "@/redux/features/tempEssaySlice";
+import { AppDispatch, RootState } from "@/redux/store";
 
 export const Content = () => {
   const supabase = supabaseClient();
@@ -63,8 +72,12 @@ export const Content = () => {
     setLoading(false);
   };
 
+  const handleStartTimer = async () => {
+    // handle start timer
+  };
+
   return (
-    <div className="flex flex-col gap-10 items-center w-full h-full py-10 px-10">
+    <div className="flex flex-col gap-10 items-center w-full py-10 px-10">
       {essay_question && "time started..."}
       <div className="w-full gap-10 flex justify-center">
         <Select onValueChange={(value) => handleSelectChange(value)}>
@@ -87,28 +100,43 @@ export const Content = () => {
           Create Topic
         </Button>
 
-        <Button onClick={handleFinishEssay} disabled={loading}>
-          Finish Essay
-        </Button>
-
-        <Button onClick={handleGetFeedback} disabled={loading}>
-          Give Feedback
-        </Button>
+        {essay_question && (
+          <Button onClick={handleStartTimer} disabled={loading}>
+            Create Topic
+          </Button>
+        )}
       </div>
 
-      <Card className="w-full h-20">
+      <Card className="w-1/2 h-20 p-4">
+        {!essay_question && `Question about essay`}
         {loading ? "Loading..." : essay_question}
       </Card>
 
       <Textarea
         onChange={(e) => handleTextChange(e)}
-        className="w-full h-96"
+        className="w-1/2 h-96"
         placeholder="Type your essay here."
       />
 
-      <Card className="w-full h-96">
-        {loading ? "Loading..." : essay_feedback}
-      </Card>
+      {essay_feedback && (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Show Feedback</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Edit profile</DialogTitle>
+              <DialogDescription>
+                Make changes to your profile here. Click save when you are done.
+              </DialogDescription>
+            </DialogHeader>
+            {essay_feedback}
+            <DialogFooter>
+              <Button type="submit">Save My Essay and Feedback</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

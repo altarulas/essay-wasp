@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import ProviderRedux from "@/store/Provider";
+import ProviderRedux from "@/redux/Provider";
+import { ThemeProvider } from "@/utils/ThemeProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,7 +28,14 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ProviderRedux>{children}</ProviderRedux>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ProviderRedux>{children}</ProviderRedux>
+        </ThemeProvider>
       </body>
     </html>
   );

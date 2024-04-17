@@ -14,7 +14,11 @@ export const Logout = () => {
   };
 
   return (
-    <Button variant="default" onClick={handleLogoutGoogle}>
+    <Button
+      className="rounded-[0px] border-none h-8"
+      variant="outline"
+      onClick={handleLogoutGoogle}
+    >
       Logout
     </Button>
   );
