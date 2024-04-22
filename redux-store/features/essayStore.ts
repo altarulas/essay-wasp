@@ -20,14 +20,14 @@ const initialState: IEssayInformation = {
 };
 
 export const startEssaySession = createAsyncThunk(
-  "tempEssaySlice/startEssaySession",
+  "essayStore/startEssaySession",
 
   async (selected_question: string, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
       const email_address = state.userInfo.user.email_address;
 
-      dispatch(EssaySlice.actions.resetState());
+      dispatch(EssayStore.actions.resetState());
       dispatch(createQuestion({ selected_question, email_address }));
     } catch (error) {
       console.error(error);
@@ -36,7 +36,7 @@ export const startEssaySession = createAsyncThunk(
 );
 
 export const createQuestion = createAsyncThunk(
-  "tempEssaySlice/createQuestion",
+  "essayStore/createQuestion",
 
   async ({
     selected_question,
@@ -66,7 +66,7 @@ export const createQuestion = createAsyncThunk(
 );
 
 export const createFeedback = createAsyncThunk(
-  "tempEssaySlice/createFeedbackAndAddEssay",
+  "essayStore/createFeedbackAndAddEssay",
 
   async (
     {
@@ -79,7 +79,7 @@ export const createFeedback = createAsyncThunk(
     { getState }
   ) => {
     const state = getState() as RootState;
-    const email_address = state.userInfo.user.email_address;
+    const email_address = state.userInfoStore.user.email_address;
 
     try {
       const response = await aiFeedback(essay_question, essay_text);
@@ -108,7 +108,7 @@ export const createFeedback = createAsyncThunk(
 );
 
 export const getUserEssay = createAsyncThunk(
-  "tempEssaySlice/getUserEssay",
+  "essayStore/getUserEssay",
 
   async (_, { getState }) => {
     const state = getState() as RootState;
@@ -135,7 +135,7 @@ export const getUserEssay = createAsyncThunk(
   }
 );
 
-export const EssaySlice = createSlice({
+export const EssayStore = createSlice({
   name: "essay",
   initialState,
   reducers: {
@@ -163,5 +163,5 @@ export const EssaySlice = createSlice({
   },
 });
 
-export const { resetState } = EssaySlice.actions;
-export default EssaySlice.reducer;
+export const { resetState } = EssayStore.actions;
+export default EssayStore.reducer;

@@ -1,13 +1,15 @@
 "use client";
 
 import { configureStore } from "@reduxjs/toolkit";
-import EssayReducer from "./features/essaySlice";
-import userInfoReducer from "./features/userInfoSlice";
+import EssayStoreReducer from "./features/essayStore";
+import userInfoStoreReducer from "./features/userInfoStore";
+import EssaySliceReducer from "./features/essaySlice";
 
 export const store = configureStore({
   reducer: {
-    essay: EssayReducer,
-    userInfo: userInfoReducer,
+    essaySlice: EssaySliceReducer,
+    essayStore: EssayStoreReducer,
+    userInfoStore: userInfoStoreReducer,
   },
 });
 

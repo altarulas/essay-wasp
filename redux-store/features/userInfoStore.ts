@@ -38,7 +38,7 @@ const initialState: IUserInfo = {
 };
 
 export const getUserInfo = createAsyncThunk(
-  "userInfoSlice/getUserInfo",
+  "userInfoStore/getUserInfo",
   async (_, { dispatch, getState }) => {
     const id = (await supabase.auth.getUser()).data.user?.id;
 
@@ -79,7 +79,7 @@ export const getUserInfo = createAsyncThunk(
 );
 
 export const getUserSubscription = createAsyncThunk(
-  "userInfoSlice/getUserSubscription",
+  "userInfoStore/getUserSubscription",
   async (email_address: string) => {
     let subscriptionInfo: ISubscriptionInfo = {
       subscription_type: null,
@@ -106,7 +106,7 @@ export const getUserSubscription = createAsyncThunk(
 );
 
 export const getUserCredits = createAsyncThunk(
-  "userInfoSlice/getUserCredits",
+  "userInfoStore/getUserCredits",
   async (email_address: string) => {
     try {
       const { data, error } = await supabase
@@ -128,7 +128,7 @@ export const getUserCredits = createAsyncThunk(
 );
 
 export const updateUserCredit = createAsyncThunk(
-  "userInfoSlice/updateUserCredit",
+  "userInfoStore/updateUserCredit",
   async ({
     email_address,
     new_credits,
@@ -154,7 +154,7 @@ export const updateUserCredit = createAsyncThunk(
   }
 );
 
-export const UserInfoSlice = createSlice({
+export const UserInfoStore = createSlice({
   name: "userInfo",
   initialState,
   reducers: {},
@@ -172,4 +172,4 @@ export const UserInfoSlice = createSlice({
   },
 });
 
-export default UserInfoSlice.reducer;
+export default UserInfoStore.reducer;
