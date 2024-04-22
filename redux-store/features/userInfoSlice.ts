@@ -5,21 +5,41 @@ import { supabaseClient } from "@/utils/supabase/client";
 
 const supabase = supabaseClient();
 
-interface IUserInfo {
+type subscriptionType = "MONTHLY" | "YEARLY" | null;
+
+interface ISubscriptionInfo {
+  subscription_type: subscriptionType;
+  status: boolean;
+}
+
+interface IUser {
   email_address: string;
   full_name: string;
   avatar_url: string;
 }
 
+interface IUserInfo {
+  user: IUser;
+  credits: number;
+  subscription_info: ISubscriptionInfo;
+}
+
 const initialState: IUserInfo = {
-  email_address: "",
-  full_name: "",
-  avatar_url: "",
+  user: {
+    email_address: "",
+    full_name: "",
+    avatar_url: "",
+  },
+  credits: 0,
+  subscription_info: {
+    subscription_type: null,
+    status: false,
+  },
 };
 
 export const getUserInfo = createAsyncThunk(
   "userInfoSlice/getUserInfo",
-  async () => {
+  async (_, { dispatch, getState }) => {
     const id = (await supabase.auth.getUser()).data.user?.id;
 
     try {
@@ -30,8 +50,25 @@ export const getUserInfo = createAsyncThunk(
         .single();
 
       if (!error) {
-        const user: IUserInfo = data;
-        return user;
+        const email_address: string = data.email_address;
+
+        const user: IUser = data;
+        const credit = await dispatch(getUserCredits(email_address));
+        const subscriptionInfo = await dispatch(
+          getUserSubscription(email_address)
+        );
+
+        const info: IUserInfo = {
+          user: {
+            email_address: user.email_address,
+            full_name: user.full_name,
+            avatar_url: user.avatar_url,
+          },
+          credits: credit.payload,
+          subscription_info: subscriptionInfo.payload as ISubscriptionInfo,
+        };
+
+        return info;
       }
     } catch (error) {
       console.error(error);
@@ -41,17 +78,97 @@ export const getUserInfo = createAsyncThunk(
   }
 );
 
+export const getUserSubscription = createAsyncThunk(
+  "userInfoSlice/getUserSubscription",
+  async (email_address: string) => {
+    let subscriptionInfo: ISubscriptionInfo = {
+      subscription_type: null,
+      status: false,
+    };
+
+    try {
+      const { data, error } = await supabase
+        .from("users_subscription")
+        .select("subscription_type, status")
+        .eq("email_address", email_address)
+        .single();
+
+      if (!error) {
+        subscriptionInfo.subscription_type = data.subscription_type;
+        subscriptionInfo.status = data.status;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return subscriptionInfo;
+  }
+);
+
+export const getUserCredits = createAsyncThunk(
+  "userInfoSlice/getUserCredits",
+  async (email_address: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("users_credit")
+        .select("credits")
+        .eq("email_address", email_address)
+        .single();
+
+      if (!error) {
+        const credit = data.credits;
+        return credit;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return 0;
+  }
+);
+
+export const updateUserCredit = createAsyncThunk(
+  "userInfoSlice/updateUserCredit",
+  async ({
+    email_address,
+    new_credits,
+  }: {
+    email_address: string;
+    new_credits: number;
+  }) => {
+    try {
+      const { data, error } = await supabase
+        .from("users_credit")
+        .update({ credits: new_credits })
+        .eq("email_address", email_address)
+        .single();
+
+      if (!error) {
+        return new_credits;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return 0;
+  }
+);
+
 export const UserInfoSlice = createSlice({
   name: "userInfo",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getUserInfo.fulfilled, (state, action) => {
-      const { email_address, full_name, avatar_url } = action.payload;
-      state.email_address = email_address;
-      state.full_name = full_name;
-      state.avatar_url = avatar_url;
-    });
+    builder
+      .addCase(getUserInfo.fulfilled, (state, action) => {
+        const { user, credits, subscription_info } = action.payload;
+        state.user = user;
+        state.credits = credits;
+        state.subscription_info = subscription_info;
+      })
+      .addCase(updateUserCredit.fulfilled, (state, action) => {
+        state.credits = action.payload;
+      });
   },
 });
 

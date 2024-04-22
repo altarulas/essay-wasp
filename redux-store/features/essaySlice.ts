@@ -25,7 +25,7 @@ export const startEssaySession = createAsyncThunk(
   async (selected_question: string, { dispatch, getState }) => {
     try {
       const state = getState() as RootState;
-      const email_address = state.userInfo.email_address;
+      const email_address = state.userInfo.user.email_address;
 
       dispatch(EssaySlice.actions.resetState());
       dispatch(createQuestion({ selected_question, email_address }));
@@ -79,7 +79,7 @@ export const createFeedback = createAsyncThunk(
     { getState }
   ) => {
     const state = getState() as RootState;
-    const email_address = state.userInfo.email_address;
+    const email_address = state.userInfo.user.email_address;
 
     try {
       const response = await aiFeedback(essay_question, essay_text);
@@ -112,7 +112,7 @@ export const getUserEssay = createAsyncThunk(
 
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const email_address = state.userInfo.email_address;
+    const email_address = state.userInfo.user.email_address;
 
     try {
       const { data, error } = await supabase
