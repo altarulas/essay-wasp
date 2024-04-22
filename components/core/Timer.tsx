@@ -4,9 +4,7 @@ import { RootState } from "@/redux-store/store";
 import { useSelector } from "react-redux";
 
 export const Timer = () => {
-  const { essay_question } = useSelector(
-    (state: RootState) => state.essayStore
-  );
+  const { essayInfo } = useSelector((state: RootState) => state.essayStore);
 
   const handleStartTimer = async () => {
     // handle start timer
@@ -16,5 +14,5 @@ export const Timer = () => {
     // stop timer
   };
 
-  return <div> {essay_question && "Timer..."} </div>;
+  return <div> {essayInfo.essay_question && "Timer..."} </div>;
 };

@@ -2,25 +2,41 @@
 
 import { useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
-import { RootState } from "@/redux-store/store";
-import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux-store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { setEssayContent } from "@/redux-store/features/essayStore";
 
 export const EssayContent = () => {
-  const { essay_text } = useSelector((state: RootState) => state.essayStore);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const [essay, setEssay] = useState<string>("");
+  const { essayInfo, is_session_finished } = useSelector(
+    (state: RootState) => state.essayStore
+  );
+
+  const [essayText, setEssayText] = useState<string>("");
 
   useEffect(() => {
-    essay_text && setEssay(essay_text);
-  }, [essay_text]);
+    if (essayInfo.essay_text && essayInfo.essay_text !== "") {
+      setEssayText(essayInfo.essay_text);
+    } else {
+      setEssayText("");
+    }
+  }, [essayInfo.essay_text]);
+
+  useEffect(() => {
+    if (is_session_finished) {
+      dispatch(setEssayContent(essayText));
+    }
+    return;
+  }, [is_session_finished]);
 
   const handleEssayChange = (event: any) => {
-    setEssay(event.target.value);
+    setEssayText(event.target.value);
   };
 
   return (
     <Textarea
-      value={essay}
+      value={essayText}
       onChange={(e) => handleEssayChange(e)}
       className="w-1/2 h-96"
       placeholder="Type your essay here."

@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import {
   createFeedback,
+  finishSession,
+  resetState,
   startEssaySession,
 } from "@/redux-store/features/essayStore";
 import { Timer } from "./Timer";
@@ -24,30 +26,33 @@ export const Menu = () => {
 
   const [selectedTopic, setSelectedTopic] = useState<string>("");
 
-  const { essay_question, essay_text } = useSelector(
-    (state: RootState) => state.essayStore
-  );
+  const { essayInfo } = useSelector((state: RootState) => state.essayStore);
 
   const handleSelectChange = (value: string) => {
     setSelectedTopic(value);
   };
 
   const handleCreateTopic = async () => {
+    dispatch(resetState());
     await dispatch(startEssaySession(selectedTopic));
   };
 
-  const handleFinishEssay = async () => {
+  const handleGiveFeedback = async () => {
     await dispatch(
       createFeedback({
-        essay_text: essay_text,
-        essay_question: essay_question,
+        essay_text: essayInfo.essay_text,
+        essay_question: essayInfo.essay_question,
       })
     );
   };
 
+  const handleFinishSession = () => {
+    dispatch(finishSession());
+  };
+
   return (
     <>
-      {essay_question && "time started..."}
+      {essayInfo.essay_question && "time started..."}
 
       <div className="w-full gap-10 flex justify-center">
         <Select onValueChange={(value) => handleSelectChange(value)}>
@@ -68,7 +73,9 @@ export const Menu = () => {
 
         <Button onClick={handleCreateTopic}>Create Topic</Button>
 
-        <Button onClick={handleFinishEssay}>Give Feedback</Button>
+        <Button onClick={handleFinishSession}>Finish Session</Button>
+
+        <Button onClick={handleGiveFeedback}>Give Feedback</Button>
 
         <Timer />
       </div>

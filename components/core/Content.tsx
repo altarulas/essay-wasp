@@ -13,9 +13,7 @@ import { Feedback } from "./Feedback";
 export const Content = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { essay_question, essay_feedback } = useSelector(
-    (state: RootState) => state.essayStore
-  );
+  const { essayInfo } = useSelector((state: RootState) => state.essayStore);
 
   const handleFetchInitialData = async () => {
     await dispatch(getUserInfo());
@@ -31,12 +29,14 @@ export const Content = () => {
       <Menu />
 
       <Card className="w-1/2 h-20 p-4">
-        {!essay_question && `Question about essay`}
+        {essayInfo.essay_question
+          ? essayInfo.essay_question
+          : `Question about essay`}
       </Card>
 
       <EssayContent />
 
-      {essay_feedback && <Feedback />}
+      {essayInfo.essay_feedback && <Feedback />}
     </div>
   );
 };

@@ -14,9 +14,7 @@ import { RootState } from "@/redux-store/store";
 import { useSelector } from "react-redux";
 
 export const Feedback = () => {
-  const { essay_feedback } = useSelector(
-    (state: RootState) => state.essayStore
-  );
+  const { essayInfo } = useSelector((state: RootState) => state.essayStore);
 
   return (
     <Dialog>
@@ -30,7 +28,7 @@ export const Feedback = () => {
             Make changes to your profile here. Click save when you are done.
           </DialogDescription>
         </DialogHeader>
-        {essay_feedback}
+        {essayInfo.essay_feedback}
         <DialogFooter>
           <Button type="submit">Save My Essay and Feedback</Button>
         </DialogFooter>

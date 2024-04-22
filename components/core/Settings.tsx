@@ -13,7 +13,7 @@ export const Settings = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user, credits, subscription_info } = useSelector(
-    (state: RootState) => state.userInfo
+    (state: RootState) => state.userInfoStore
   );
 
   const handleFetchInitialData = async () => {
