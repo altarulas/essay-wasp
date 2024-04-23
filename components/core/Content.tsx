@@ -3,7 +3,7 @@
 import { Card } from "../ui/card";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserEssay } from "@/redux-store/features/essayStore";
+import { getUserTempEssay } from "@/redux-store/features/essayStore";
 import { getUserInfo } from "@/redux-store/features/userInfoStore";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { Menu } from "./Menu";
@@ -17,7 +17,7 @@ export const Content = () => {
 
   const handleFetchInitialData = async () => {
     await dispatch(getUserInfo());
-    await dispatch(getUserEssay());
+    await dispatch(getUserTempEssay());
   };
 
   useEffect(() => {

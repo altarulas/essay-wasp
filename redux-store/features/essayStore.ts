@@ -13,8 +13,16 @@ interface IEssay {
   essay_feedback: string;
 }
 
+interface ISavedEssay {
+  essay_question: string;
+  essay_text: string;
+  essay_feedback: string;
+  created_at: Date | null;
+}
+
 interface IEssayInfo {
   essayInfo: IEssay;
+  savedEssayInfo: ISavedEssay[] | [];
   is_session_finished: boolean;
 }
 
@@ -24,6 +32,7 @@ const initialState: IEssayInfo = {
     essay_text: "",
     essay_feedback: "",
   },
+  savedEssayInfo: [],
   is_session_finished: false,
 };
 
@@ -34,8 +43,11 @@ export const startEssaySession = createAsyncThunk(
     try {
       const state = getState() as RootState;
       const email_address = state.userInfoStore.user.email_address;
+      const credit = state.userInfoStore.credits;
 
-      dispatch(createQuestion({ selected_question, email_address }));
+      if (credit >= 10) {
+        dispatch(createQuestion({ selected_question, email_address }));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -73,7 +85,7 @@ export const createQuestion = createAsyncThunk(
 );
 
 export const createFeedback = createAsyncThunk(
-  "essayStore/createFeedbackAndAddEssay",
+  "essayStore/createFeedback",
 
   async (
     {
@@ -112,7 +124,61 @@ export const createFeedback = createAsyncThunk(
   }
 );
 
-export const getUserEssay = createAsyncThunk(
+export const saveEssayInfo = createAsyncThunk(
+  "essayStore/saveEssayInfo",
+
+  async (_, { getState }) => {
+    const state = getState() as RootState;
+
+    const email_address = state.userInfoStore.user.email_address;
+    const essay_question = state.essayStore.essayInfo.essay_question;
+    const essay_text = state.essayStore.essayInfo.essay_text;
+    const essay_feedback = state.essayStore.essayInfo.essay_feedback;
+
+    try {
+      const { data, error } = await supabase
+        .from("users_essay")
+        .insert({ email_address, essay_question, essay_text, essay_feedback });
+
+      if (!error) {
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return;
+  }
+);
+
+export const getUserSavedEssay = createAsyncThunk(
+  "essayStore/getUserSavedEssay",
+
+  async (_, { getState }) => {
+    const state = getState() as RootState;
+    const email_address = state.userInfoStore.user.email_address;
+
+    let essay: ISavedEssay[] = [];
+
+    try {
+      const { data, error } = await supabase
+        .from("users_essay")
+        .select("essay_question, essay_text, essay_feedback, created_at")
+        .eq("email_address", email_address);
+
+      if (!error) {
+        essay = data;
+        return essay;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return essay;
+  }
+);
+
+export const getUserTempEssay = createAsyncThunk(
   "essayStore/getUserEssay",
 
   async (_, { getState }) => {
@@ -171,11 +237,14 @@ export const EssayStore = createSlice({
       .addCase(createFeedback.fulfilled, (state, action) => {
         state.essayInfo.essay_feedback = action.payload;
       })
-      .addCase(getUserEssay.fulfilled, (state, action) => {
+      .addCase(getUserTempEssay.fulfilled, (state, action) => {
         const { essay_question, essay_text, essay_feedback } = action.payload;
         state.essayInfo.essay_question = essay_question;
         state.essayInfo.essay_text = essay_text;
         state.essayInfo.essay_feedback = essay_feedback;
+      })
+      .addCase(getUserSavedEssay.fulfilled, (state, action) => {
+        state.savedEssayInfo = action.payload;
       });
   },
 });
