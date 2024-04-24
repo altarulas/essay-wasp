@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/core/Navbar";
-import { Settings } from "@/components/core/Settings";
+import { Settings } from "@/components/core/SettingsContent";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";

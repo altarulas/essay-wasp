@@ -26,7 +26,7 @@ export const Menu = () => {
 
   const [selectedTopic, setSelectedTopic] = useState<string>("");
 
-  const { essayInfo } = useSelector((state: RootState) => state.essayStore);
+  const { tempEssayInfo } = useSelector((state: RootState) => state.essayStore);
 
   const handleSelectChange = (value: string) => {
     setSelectedTopic(value);
@@ -40,8 +40,8 @@ export const Menu = () => {
   const handleGiveFeedback = async () => {
     await dispatch(
       createFeedback({
-        essay_text: essayInfo.essay_text,
-        essay_question: essayInfo.essay_question,
+        essay_text: tempEssayInfo.essay_text,
+        essay_question: tempEssayInfo.essay_question,
       })
     );
   };
@@ -52,7 +52,7 @@ export const Menu = () => {
 
   return (
     <>
-      {essayInfo.essay_question && "time started..."}
+      {tempEssayInfo.essay_question && "time started..."}
 
       <div className="w-full gap-10 flex justify-center">
         <Select onValueChange={(value) => handleSelectChange(value)}>

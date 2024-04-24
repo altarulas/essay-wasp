@@ -3,7 +3,7 @@ import { Navbar } from "./core/Navbar";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { FaArrowLeft } from "react-icons/fa";
-import { Reports } from "./core/Reports";
+import { Reports } from "./core/ReportsContent";
 
 const ReportsPage = () => {
   return (

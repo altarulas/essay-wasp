@@ -42,36 +42,32 @@ export const getUserInfo = createAsyncThunk(
   async (_, { dispatch, getState }) => {
     const id = (await supabase.auth.getUser()).data.user?.id;
 
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("email_address, full_name, avatar_url")
-        .eq("id", id)
-        .single();
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("email_address, full_name, avatar_url")
+      .eq("id", id)
+      .single();
 
-      if (!error) {
-        const email_address: string = data.email_address;
+    if (!error) {
+      const email_address: string = data.email_address;
 
-        const user: IUser = data;
-        const credit = await dispatch(getUserCredits(email_address));
-        const subscriptionInfo = await dispatch(
-          getUserSubscription(email_address)
-        );
+      const user: IUser = data;
+      const credit = await dispatch(getUserCredits(email_address));
+      const subscriptionInfo = await dispatch(
+        getUserSubscription(email_address)
+      );
 
-        const info: IUserInfo = {
-          user: {
-            email_address: user.email_address,
-            full_name: user.full_name,
-            avatar_url: user.avatar_url,
-          },
-          credits: credit.payload,
-          subscription_info: subscriptionInfo.payload as ISubscriptionInfo,
-        };
+      const info: IUserInfo = {
+        user: {
+          email_address: user.email_address,
+          full_name: user.full_name,
+          avatar_url: user.avatar_url,
+        },
+        credits: credit.payload,
+        subscription_info: subscriptionInfo.payload as ISubscriptionInfo,
+      };
 
-        return info;
-      }
-    } catch (error) {
-      console.error(error);
+      return info;
     }
 
     return initialState;
@@ -86,19 +82,15 @@ export const getUserSubscription = createAsyncThunk(
       status: false,
     };
 
-    try {
-      const { data, error } = await supabase
-        .from("users_subscription")
-        .select("subscription_type, status")
-        .eq("email_address", email_address)
-        .single();
+    const { data, error } = await supabase
+      .from("users_subscription")
+      .select("subscription_type, status")
+      .eq("email_address", email_address)
+      .single();
 
-      if (!error) {
-        subscriptionInfo.subscription_type = data.subscription_type;
-        subscriptionInfo.status = data.status;
-      }
-    } catch (error) {
-      console.error(error);
+    if (!error) {
+      subscriptionInfo.subscription_type = data.subscription_type;
+      subscriptionInfo.status = data.status;
     }
 
     return subscriptionInfo;

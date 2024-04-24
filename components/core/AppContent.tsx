@@ -7,13 +7,13 @@ import { getUserTempEssay } from "@/redux-store/features/essayStore";
 import { getUserInfo } from "@/redux-store/features/userInfoStore";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { Menu } from "./Menu";
-import { EssayContent } from "./EssayContent";
+import { EssayText } from "./EssayText";
 import { Feedback } from "./Feedback";
 
-export const Content = () => {
+export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { essayInfo } = useSelector((state: RootState) => state.essayStore);
+  const { tempEssayInfo } = useSelector((state: RootState) => state.essayStore);
 
   const handleFetchInitialData = async () => {
     await dispatch(getUserInfo());
@@ -29,14 +29,14 @@ export const Content = () => {
       <Menu />
 
       <Card className="w-1/2 h-20 p-4">
-        {essayInfo.essay_question
-          ? essayInfo.essay_question
+        {tempEssayInfo.essay_question
+          ? tempEssayInfo.essay_question
           : `Question about essay`}
       </Card>
 
-      <EssayContent />
+      <EssayText />
 
-      {essayInfo.essay_feedback && <Feedback />}
+      {tempEssayInfo.essay_feedback && <Feedback />}
     </div>
   );
 };

@@ -7,7 +7,7 @@ import { aiFeedback, aiQuestion } from "./aiFunctions";
 
 const supabase = supabaseClient();
 
-interface IEssay {
+interface ITempEssay {
   essay_question: string;
   essay_text: string;
   essay_feedback: string;
@@ -21,13 +21,13 @@ interface ISavedEssay {
 }
 
 interface IEssayInfo {
-  essayInfo: IEssay;
+  tempEssayInfo: ITempEssay;
   savedEssayInfo: ISavedEssay[] | [];
   is_session_finished: boolean;
 }
 
 const initialState: IEssayInfo = {
-  essayInfo: {
+  tempEssayInfo: {
     essay_question: "",
     essay_text: "",
     essay_feedback: "",
@@ -64,23 +64,28 @@ export const createQuestion = createAsyncThunk(
     selected_question: string;
     email_address: string;
   }) => {
+    let essay_question: string = "";
+
     try {
       const response = await aiQuestion(selected_question);
 
-      if (!response) return initialState.essayInfo.essay_question;
-      if (!email_address) return initialState.essayInfo.essay_question;
+      if (response?.error) {
+        return response.error?.message;
+      }
+
+      essay_question = response?.data;
 
       const { data, error } = await supabase
         .from("temp_users_essay")
-        .insert({ email_address, essay_question: response });
+        .insert({ email_address, essay_question: essay_question });
 
       if (!error) {
-        return response;
+        return essay_question;
       }
     } catch (error) {
       console.error(error);
     }
-    return initialState.essayInfo.essay_question;
+    return essay_question;
   }
 );
 
@@ -104,7 +109,11 @@ export const createFeedback = createAsyncThunk(
     try {
       const response = await aiFeedback(essay_question, essay_text);
 
-      if (!response) return essay_feedback;
+      if (response?.error) {
+        return response.error.message;
+      }
+
+      essay_feedback = response?.data;
 
       const { data, error } = await supabase
         .from("temp_users_essay")
@@ -131,9 +140,9 @@ export const saveEssayInfo = createAsyncThunk(
     const state = getState() as RootState;
 
     const email_address = state.userInfoStore.user.email_address;
-    const essay_question = state.essayStore.essayInfo.essay_question;
-    const essay_text = state.essayStore.essayInfo.essay_text;
-    const essay_feedback = state.essayStore.essayInfo.essay_feedback;
+    const essay_question = state.essayStore.tempEssayInfo.essay_question;
+    const essay_text = state.essayStore.tempEssayInfo.essay_text;
+    const essay_feedback = state.essayStore.tempEssayInfo.essay_feedback;
 
     try {
       const { data, error } = await supabase
@@ -185,7 +194,7 @@ export const getUserTempEssay = createAsyncThunk(
     const state = getState() as RootState;
     const email_address = state.userInfoStore.user.email_address;
 
-    let essay: IEssay = {
+    let essay: ITempEssay = {
       essay_question: "",
       essay_text: "",
       essay_feedback: "",
@@ -217,31 +226,30 @@ export const EssayStore = createSlice({
   initialState,
   reducers: {
     resetState: (state) => {
-      state.essayInfo = initialState.essayInfo;
+      state.tempEssayInfo = initialState.tempEssayInfo;
       state.is_session_finished = initialState.is_session_finished;
     },
     finishSession: (state) => {
       state.is_session_finished = true;
     },
     setEssayContent: (state, action: PayloadAction<string>) => {
-      state.essayInfo.essay_text = action.payload;
+      state.tempEssayInfo.essay_text = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(startEssaySession.fulfilled, () => {})
-
       .addCase(createQuestion.fulfilled, (state, action) => {
-        state.essayInfo.essay_question = action.payload;
+        state.tempEssayInfo.essay_question = action.payload;
       })
       .addCase(createFeedback.fulfilled, (state, action) => {
-        state.essayInfo.essay_feedback = action.payload;
+        state.tempEssayInfo.essay_feedback = action.payload;
       })
       .addCase(getUserTempEssay.fulfilled, (state, action) => {
         const { essay_question, essay_text, essay_feedback } = action.payload;
-        state.essayInfo.essay_question = essay_question;
-        state.essayInfo.essay_text = essay_text;
-        state.essayInfo.essay_feedback = essay_feedback;
+        state.tempEssayInfo.essay_question = essay_question;
+        state.tempEssayInfo.essay_text = essay_text;
+        state.tempEssayInfo.essay_feedback = essay_feedback;
       })
       .addCase(getUserSavedEssay.fulfilled, (state, action) => {
         state.savedEssayInfo = action.payload;

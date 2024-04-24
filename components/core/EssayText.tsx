@@ -6,22 +6,22 @@ import { AppDispatch, RootState } from "@/redux-store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setEssayContent } from "@/redux-store/features/essayStore";
 
-export const EssayContent = () => {
+export const EssayText = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { essayInfo, is_session_finished } = useSelector(
+  const { tempEssayInfo, is_session_finished } = useSelector(
     (state: RootState) => state.essayStore
   );
 
   const [essayText, setEssayText] = useState<string>("");
 
   useEffect(() => {
-    if (essayInfo.essay_text && essayInfo.essay_text !== "") {
-      setEssayText(essayInfo.essay_text);
+    if (tempEssayInfo.essay_text && tempEssayInfo.essay_text !== "") {
+      setEssayText(tempEssayInfo.essay_text);
     } else {
       setEssayText("");
     }
-  }, [essayInfo.essay_text]);
+  }, [tempEssayInfo.essay_text]);
 
   useEffect(() => {
     if (is_session_finished) {
