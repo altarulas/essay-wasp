@@ -10,9 +10,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
+import dayjs from "dayjs";
 
 interface ReportProps {
-  createdAt: string;
+  createdAt: Date | null;
   essayQuestion: string;
   essayText: string;
   essayFeedback: string;
@@ -20,10 +21,11 @@ interface ReportProps {
 
 export const Report = (props: ReportProps) => {
   const { createdAt, essayQuestion, essayText, essayFeedback } = props;
+  const formattedCreatedAt = dayjs(createdAt).format("YYYY-MM-DD HH:mm");
 
   return (
-    <>
-      <Button> {createdAt} </Button>
+    <div className="w-full flex items-center justify-between">
+      <Button> {formattedCreatedAt} </Button>
 
       <Dialog>
         <DialogTrigger asChild>
@@ -60,6 +62,6 @@ export const Report = (props: ReportProps) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };

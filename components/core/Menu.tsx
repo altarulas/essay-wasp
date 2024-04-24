@@ -15,18 +15,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import {
   createFeedback,
+  deleteAllTempEssayInfo,
   finishSession,
   resetState,
+  saveEssayInfo,
+  saveEssayText,
   startEssaySession,
+  startSession,
 } from "@/redux-store/features/essayStore";
-import { Timer } from "./Timer";
 
 export const Menu = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [selectedTopic, setSelectedTopic] = useState<string>("");
 
-  const { tempEssayInfo } = useSelector((state: RootState) => state.essayStore);
+  const { tempEssayInfo, is_timer_running, is_session_finished } = useSelector(
+    (state: RootState) => state.essayStore
+  );
 
   const handleSelectChange = (value: string) => {
     setSelectedTopic(value);
@@ -38,47 +43,83 @@ export const Menu = () => {
   };
 
   const handleGiveFeedback = async () => {
-    await dispatch(
-      createFeedback({
-        essay_text: tempEssayInfo.essay_text,
-        essay_question: tempEssayInfo.essay_question,
-      })
-    );
+    await dispatch(createFeedback());
   };
 
-  const handleFinishSession = () => {
+  const handleFinishSession = async () => {
     dispatch(finishSession());
   };
 
+  const handleStartSession = () => {
+    dispatch(startSession());
+  };
+
+  const isSessionSaveable = (): boolean => {
+    if (
+      tempEssayInfo.essay_feedback &&
+      tempEssayInfo.essay_text &&
+      tempEssayInfo.essay_question
+    ) {
+      return true;
+    } else return false;
+  };
+
+  const handleSaveSession = async () => {
+    await dispatch(saveEssayInfo());
+    await dispatch(deleteAllTempEssayInfo());
+    dispatch(resetState());
+  };
+
   return (
-    <>
-      {tempEssayInfo.essay_question && "time started..."}
+    <div className="w-full gap-10 flex justify-center">
+      <Select
+        disabled={is_timer_running}
+        onValueChange={(value) => handleSelectChange(value)}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select an Essay Type" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Essay Type</SelectLabel>
+            <SelectItem value="opinion">Opinion</SelectItem>
+            <SelectItem value="discussion">Discussion</SelectItem>
+            <SelectItem value="solution">Solution</SelectItem>
+            <SelectItem value="direct">Direct</SelectItem>
+            <SelectItem value="adv">Advantages / Disadvantages</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
-      <div className="w-full gap-10 flex justify-center">
-        <Select onValueChange={(value) => handleSelectChange(value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select an Essay Type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Essay Type</SelectLabel>
-              <SelectItem value="opinion">Opinion</SelectItem>
-              <SelectItem value="discussion">Discussion</SelectItem>
-              <SelectItem value="solution">Solution</SelectItem>
-              <SelectItem value="direct">Direct</SelectItem>
-              <SelectItem value="adv">Advantages / Disadvantages</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <Button disabled={is_timer_running} onClick={handleCreateTopic}>
+        Create Topic
+      </Button>
 
-        <Button onClick={handleCreateTopic}>Create Topic</Button>
+      <Button
+        disabled={
+          !tempEssayInfo.essay_question ||
+          is_timer_running ||
+          is_session_finished
+        }
+        onClick={handleStartSession}
+      >
+        Start Session
+      </Button>
 
-        <Button onClick={handleFinishSession}>Finish Session</Button>
+      <Button disabled={!is_timer_running} onClick={handleFinishSession}>
+        Finish Session
+      </Button>
 
-        <Button onClick={handleGiveFeedback}>Give Feedback</Button>
+      <Button
+        disabled={!is_session_finished || !tempEssayInfo.essay_text}
+        onClick={handleGiveFeedback}
+      >
+        Give Feedback
+      </Button>
 
-        <Timer />
-      </div>
-    </>
+      <Button disabled={!isSessionSaveable()} onClick={handleSaveSession}>
+        Save Session
+      </Button>
+    </div>
   );
 };

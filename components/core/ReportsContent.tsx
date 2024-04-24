@@ -24,11 +24,11 @@ export const Reports = () => {
 
   return (
     <Card className="p-10 h-[500px] w-[750px] flex flex-col justify-between">
-      <CardContent className="flex items-center justify-between">
+      <CardContent className="flex flex-col items-start overflow-y-auto gap-8">
         {savedEssayInfo.map((essay, index) => (
           <Report
             key={String(essay.created_at)}
-            createdAt={String(essay.created_at)}
+            createdAt={essay.created_at}
             essayQuestion={essay.essay_question}
             essayText={essay.essay_text}
             essayFeedback={essay.essay_feedback}

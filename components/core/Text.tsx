@@ -4,16 +4,27 @@ import { useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setEssayContent } from "@/redux-store/features/essayStore";
+import {
+  saveEssayText,
+  setEssayContent,
+} from "@/redux-store/features/essayStore";
 
-export const EssayText = () => {
+export const Text = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { tempEssayInfo, is_session_finished } = useSelector(
+  const { tempEssayInfo, is_session_finished, is_timer_running } = useSelector(
     (state: RootState) => state.essayStore
   );
 
   const [essayText, setEssayText] = useState<string>("");
+
+  const handleEssayChange = (event: any) => {
+    setEssayText(event.target.value);
+  };
+
+  const handleSaveEssayText = async (text: string) => {
+    await dispatch(saveEssayText(text));
+  };
 
   useEffect(() => {
     if (tempEssayInfo.essay_text && tempEssayInfo.essay_text !== "") {
@@ -26,16 +37,14 @@ export const EssayText = () => {
   useEffect(() => {
     if (is_session_finished) {
       dispatch(setEssayContent(essayText));
+      handleSaveEssayText(essayText);
     }
     return;
   }, [is_session_finished]);
 
-  const handleEssayChange = (event: any) => {
-    setEssayText(event.target.value);
-  };
-
   return (
     <Textarea
+      disabled={!is_timer_running}
       value={essayText}
       onChange={(e) => handleEssayChange(e)}
       className="w-1/2 h-96"
