@@ -15,13 +15,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import {
   createFeedback,
+  createSession,
   deleteAllTempEssayInfo,
   finishSession,
   resetState,
   saveEssayInfo,
   saveEssayText,
-  startEssaySession,
+  createEssaySession,
   startSession,
+  postSaveSession,
 } from "@/redux-store/features/essayStore";
 
 export const Menu = () => {
@@ -29,9 +31,12 @@ export const Menu = () => {
 
   const [selectedTopic, setSelectedTopic] = useState<string>("");
 
-  const { tempEssayInfo, is_timer_running, is_session_finished } = useSelector(
-    (state: RootState) => state.essayStore
-  );
+  const {
+    tempEssayInfo,
+    is_session_started,
+    is_timer_running,
+    is_session_finished,
+  } = useSelector((state: RootState) => state.essayStore);
 
   const handleSelectChange = (value: string) => {
     setSelectedTopic(value);
@@ -39,7 +44,7 @@ export const Menu = () => {
 
   const handleCreateTopic = async () => {
     dispatch(resetState());
-    await dispatch(startEssaySession(selectedTopic));
+    await dispatch(createEssaySession(selectedTopic));
   };
 
   const handleGiveFeedback = async () => {
@@ -51,6 +56,7 @@ export const Menu = () => {
   };
 
   const handleStartSession = () => {
+    dispatch(createSession());
     dispatch(startSession());
   };
 
@@ -68,12 +74,13 @@ export const Menu = () => {
     await dispatch(saveEssayInfo());
     await dispatch(deleteAllTempEssayInfo());
     dispatch(resetState());
+    dispatch(postSaveSession());
   };
 
   return (
     <div className="w-full gap-10 flex justify-center">
       <Select
-        disabled={is_timer_running}
+        disabled={is_timer_running || !!tempEssayInfo.essay_text}
         onValueChange={(value) => handleSelectChange(value)}
       >
         <SelectTrigger className="w-[180px]">
@@ -91,15 +98,18 @@ export const Menu = () => {
         </SelectContent>
       </Select>
 
-      <Button disabled={is_timer_running} onClick={handleCreateTopic}>
+      <Button
+        disabled={is_timer_running || !!tempEssayInfo.essay_text}
+        onClick={handleCreateTopic}
+      >
         Create Topic
       </Button>
 
       <Button
         disabled={
-          !tempEssayInfo.essay_question ||
-          is_timer_running ||
-          is_session_finished
+          (!is_session_started && !tempEssayInfo.essay_question) ||
+          is_session_finished ||
+          is_timer_running
         }
         onClick={handleStartSession}
       >
@@ -111,7 +121,11 @@ export const Menu = () => {
       </Button>
 
       <Button
-        disabled={!is_session_finished || !tempEssayInfo.essay_text}
+        disabled={
+          !is_session_finished ||
+          !tempEssayInfo.essay_text ||
+          !!tempEssayInfo.essay_feedback
+        }
         onClick={handleGiveFeedback}
       >
         Give Feedback

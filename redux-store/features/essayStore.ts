@@ -23,6 +23,7 @@ interface ISavedEssay {
 interface IEssayInfo {
   tempEssayInfo: ITempEssay;
   savedEssayInfo: ISavedEssay[] | [];
+  is_session_started: boolean;
   is_timer_running: boolean;
   is_session_finished: boolean;
 }
@@ -34,12 +35,13 @@ const initialState: IEssayInfo = {
     essay_feedback: "",
   },
   savedEssayInfo: [],
+  is_session_started: false,
   is_timer_running: false,
   is_session_finished: false,
 };
 
-export const startEssaySession = createAsyncThunk(
-  "essayStore/startEssaySession",
+export const createEssaySession = createAsyncThunk(
+  "essayStore/createEssaySession",
 
   async (selected_question: string, { dispatch, getState }) => {
     try {
@@ -276,6 +278,10 @@ export const EssayStore = createSlice({
       state.tempEssayInfo = initialState.tempEssayInfo;
       state.is_session_finished = initialState.is_session_finished;
     },
+    createSession: (state) => {
+      localStorage.setItem("is_session_started", "true");
+      state.is_session_started = true;
+    },
     startSession: (state) => {
       localStorage.setItem("is_session_finished", "false");
       localStorage.setItem("is_timer_running", "true");
@@ -286,18 +292,27 @@ export const EssayStore = createSlice({
       state.is_timer_running = true;
     },
     finishSession: (state) => {
+      localStorage.setItem("is_session_started", "false");
       localStorage.setItem("is_session_finished", "true");
       localStorage.setItem("is_timer_running", "false");
 
+      state.is_session_started = false;
       state.is_session_finished = true;
       state.is_timer_running = false;
     },
+    postSaveSession: (state) => {
+      state.is_session_started = false;
+      state.is_session_finished = false;
+      state.is_timer_running = false;
+    },
     getSession: (state) => {
-      const isFinished = localStorage.getItem("is_session_finished") === "true";
-      const isStarted = localStorage.getItem("is_timer_running") === "true";
+      const start = localStorage.getItem("is_session_finished") === "true";
+      const finish = localStorage.getItem("is_session_finished") === "true";
+      const timer = localStorage.getItem("is_timer_running") === "true";
 
-      state.is_timer_running = isStarted;
-      state.is_session_finished = isFinished;
+      state.is_timer_running = timer;
+      state.is_session_started = start;
+      state.is_session_finished = finish;
     },
     setEssayContent: (state, action: PayloadAction<string>) => {
       state.tempEssayInfo.essay_text = action.payload;
@@ -305,7 +320,7 @@ export const EssayStore = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(startEssaySession.fulfilled, () => {})
+      .addCase(createEssaySession.fulfilled, () => {})
       .addCase(createQuestion.fulfilled, (state, action) => {
         state.tempEssayInfo.essay_question = action.payload;
       })
@@ -329,9 +344,11 @@ export const EssayStore = createSlice({
 
 export const {
   resetState,
-  finishSession,
   setEssayContent,
+  createSession,
   startSession,
+  finishSession,
+  postSaveSession,
   getSession,
 } = EssayStore.actions;
 export default EssayStore.reducer;
