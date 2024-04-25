@@ -4,8 +4,15 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabaseClient } from "@/utils/supabase/client";
 import { RootState } from "@/redux-store/store";
 import { aiFeedback, aiQuestion } from "./aiFunctions";
+import { updateUserCredit } from "./userInfoStore";
 
 const supabase = supabaseClient();
+
+interface ICost {
+  create_question_cost: number | null;
+  create_feedback_cost: number | null;
+  save_essay_cost: number | null;
+}
 
 interface ITempEssay {
   essay_question: string;
@@ -23,6 +30,7 @@ interface ISavedEssay {
 interface IEssayInfo {
   tempEssayInfo: ITempEssay;
   savedEssayInfo: ISavedEssay[] | [];
+  operationCosts: ICost;
   is_session_started: boolean;
   is_timer_running: boolean;
   is_session_finished: boolean;
@@ -35,6 +43,11 @@ const initialState: IEssayInfo = {
     essay_feedback: "",
   },
   savedEssayInfo: [],
+  operationCosts: {
+    create_question_cost: null,
+    create_feedback_cost: null,
+    save_essay_cost: null,
+  },
   is_session_started: false,
   is_timer_running: false,
   is_session_finished: false,
@@ -61,23 +74,41 @@ export const createEssaySession = createAsyncThunk(
 export const createQuestion = createAsyncThunk(
   "essayStore/createQuestion",
 
-  async ({
-    selected_question,
-    email_address,
-  }: {
-    selected_question: string;
-    email_address: string;
-  }) => {
+  async (
+    {
+      selected_question,
+      email_address,
+    }: {
+      selected_question: string;
+      email_address: string;
+    },
+    { dispatch, getState }
+  ) => {
     let essay_question: string = "";
+    const state = getState() as RootState;
+    const cost = state.essayStore.operationCosts.create_question_cost;
+
+    if (!cost) return;
 
     try {
-      const response = await aiQuestion(selected_question);
+      const creditResponse = await dispatch(
+        updateUserCredit({
+          email_address: email_address,
+          spend_credits: cost,
+        })
+      );
 
-      if (response?.error) {
-        return response.error?.message;
+      if (!creditResponse.payload) {
+        return "Credit error";
       }
 
-      essay_question = response?.data;
+      const aiResponse = await aiQuestion(selected_question);
+
+      if (aiResponse?.error) {
+        return aiResponse.error?.message;
+      }
+
+      essay_question = aiResponse?.data;
 
       const { data, error } = await supabase
         .from("temp_users_essay")
@@ -93,35 +124,10 @@ export const createQuestion = createAsyncThunk(
   }
 );
 
-export const saveEssayText = createAsyncThunk(
-  "essayStore/saveEssayText",
-
-  async (essay_text: string, { getState }) => {
-    const state = getState() as RootState;
-    const email_address = state.userInfoStore.user.email_address;
-
-    try {
-      const { data, error } = await supabase
-        .from("temp_users_essay")
-        .update({ essay_text: essay_text })
-        .eq("email_address", email_address)
-        .order("created_at", { ascending: false })
-        .limit(1);
-
-      if (!error) {
-        return essay_text;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    return essay_text || "";
-  }
-);
-
 export const createFeedback = createAsyncThunk(
   "essayStore/createFeedback",
 
-  async (_, { getState }) => {
+  async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
     const email_address = state.userInfoStore.user.email_address;
     const essay_question = state.essayStore.tempEssayInfo.essay_question;
@@ -129,7 +135,21 @@ export const createFeedback = createAsyncThunk(
 
     let essay_feedback: string = "";
 
+    const cost = state.essayStore.operationCosts.create_feedback_cost;
+    if (!cost) return;
+
     try {
+      const creditResponse = await dispatch(
+        updateUserCredit({
+          email_address: email_address,
+          spend_credits: cost,
+        })
+      );
+
+      if (!creditResponse.payload) {
+        return "Credit error";
+      }
+
       const response = await aiFeedback(essay_question, essay_text);
 
       if (response?.error) {
@@ -156,18 +176,57 @@ export const createFeedback = createAsyncThunk(
   }
 );
 
+export const saveEssayText = createAsyncThunk(
+  "essayStore/saveEssayText",
+
+  async (essay_text: string, { getState, dispatch }) => {
+    const state = getState() as RootState;
+    const email_address = state.userInfoStore.user.email_address;
+
+    try {
+      const { data, error } = await supabase
+        .from("temp_users_essay")
+        .update({ essay_text: essay_text })
+        .eq("email_address", email_address)
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      if (!error) {
+        return essay_text;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return essay_text || "";
+  }
+);
+
 export const saveEssayInfo = createAsyncThunk(
   "essayStore/saveEssayInfo",
 
-  async (_, { getState }) => {
+  async (_, { getState, dispatch }) => {
     const state = getState() as RootState;
 
     const email_address = state.userInfoStore.user.email_address;
     const essay_question = state.essayStore.tempEssayInfo.essay_question;
     const essay_text = state.essayStore.tempEssayInfo.essay_text;
     const essay_feedback = state.essayStore.tempEssayInfo.essay_feedback;
+    const cost = state.essayStore.operationCosts.save_essay_cost;
+
+    if (!cost) return;
 
     try {
+      const creditResponse = await dispatch(
+        updateUserCredit({
+          email_address: email_address,
+          spend_credits: cost,
+        })
+      );
+
+      if (!creditResponse.payload) {
+        return "Credit error";
+      }
+
       const { data, error } = await supabase
         .from("users_essay")
         .insert({ email_address, essay_question, essay_text, essay_feedback });
@@ -204,6 +263,34 @@ export const deleteAllTempEssayInfo = createAsyncThunk(
     }
 
     return;
+  }
+);
+
+export const getOperationCosts = createAsyncThunk(
+  "essayStore/getOperationCosts",
+
+  async () => {
+    let costs: ICost = {
+      create_question_cost: null,
+      create_feedback_cost: null,
+      save_essay_cost: null,
+    };
+
+    try {
+      const { data, error } = await supabase
+        .from("operation_costs")
+        .select("create_question_cost, create_feedback_cost, save_essay_cost")
+        .single();
+
+      if (!error) {
+        costs = data;
+        return costs;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return costs;
   }
 );
 
@@ -329,6 +416,9 @@ export const EssayStore = createSlice({
       })
       .addCase(createFeedback.fulfilled, (state, action) => {
         state.tempEssayInfo.essay_feedback = action.payload;
+      })
+      .addCase(getOperationCosts.fulfilled, (state, action) => {
+        state.operationCosts = action.payload;
       })
       .addCase(getUserTempEssay.fulfilled, (state, action) => {
         const { essay_question, essay_text, essay_feedback } = action.payload;

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getOperationCosts,
   getSession,
   getUserTempEssay,
 } from "@/redux-store/features/essayStore";
@@ -19,6 +20,7 @@ export const AppContent = () => {
   const { tempEssayInfo } = useSelector((state: RootState) => state.essayStore);
 
   const handleFetchInitialData = async () => {
+    await dispatch(getOperationCosts());
     await dispatch(getSession());
     await dispatch(getUserInfo());
     await dispatch(getUserTempEssay());

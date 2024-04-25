@@ -2,6 +2,7 @@
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabaseClient } from "@/utils/supabase/client";
+import { RootState } from "../store";
 
 const supabase = supabaseClient();
 
@@ -121,13 +122,23 @@ export const getUserCredits = createAsyncThunk(
 
 export const updateUserCredit = createAsyncThunk(
   "userInfoStore/updateUserCredit",
-  async ({
-    email_address,
-    new_credits,
-  }: {
-    email_address: string;
-    new_credits: number;
-  }) => {
+  async (
+    {
+      email_address,
+      spend_credits,
+    }: {
+      email_address: string;
+      spend_credits: number;
+    },
+    { getState }
+  ) => {
+    const state = getState() as RootState;
+    const current_credits = state.userInfoStore.credits;
+    const new_credits = current_credits - spend_credits;
+
+    console.log("current_credits", current_credits);
+    console.log("spend_credits", spend_credits);
+
     try {
       const { data, error } = await supabase
         .from("users_credit")
@@ -142,7 +153,7 @@ export const updateUserCredit = createAsyncThunk(
       console.error(error);
     }
 
-    return 0;
+    return current_credits;
   }
 );
 
