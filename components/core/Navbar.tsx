@@ -8,6 +8,8 @@ import { useTheme } from "next-themes";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -15,6 +17,12 @@ export const Navbar = () => {
   const { is_timer_running, is_session_finished } = useSelector(
     (state: RootState) => state.essayStore
   );
+
+  const { status, subscription_type } = useSelector(
+    (state: RootState) => state.userInfoStore.subscription_info
+  );
+
+  const { credits } = useSelector((state: RootState) => state.userInfoStore);
 
   const { setTheme, theme } = useTheme();
 
@@ -73,6 +81,19 @@ export const Navbar = () => {
       <div>{is_timer_running && formatTime(remainingTime)}</div>
 
       <div className="flex items-center gap-4">
+        {!status && (
+          <>
+            <Button>Remain Credits: {credits} </Button>
+
+            <Link
+              target="_blank"
+              href="https://buymeacoffee.com/natural.lang/membership"
+            >
+              <Button variant="destructive">Use Unlimited</Button>
+            </Link>
+          </>
+        )}
+
         <CiLight
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
           className="h-6 w-6 cursor-pointer"

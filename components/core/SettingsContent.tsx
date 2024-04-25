@@ -53,7 +53,7 @@ export const Settings = () => {
       {subscription_info.status && (
         <>
           <div className="flex items-center gap-10">
-            <span>Sub statu</span>
+            <span>Sub status</span>
             <Button variant="default"> {subscription_info.status} </Button>
           </div>
 

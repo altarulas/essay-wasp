@@ -61,8 +61,13 @@ export const createEssaySession = createAsyncThunk(
       const state = getState() as RootState;
       const email_address = state.userInfoStore.user.email_address;
       const credit = state.userInfoStore.credits;
+      const isUserSub = state.userInfoStore.subscription_info.status;
 
-      if (credit >= 10) {
+      if (!isUserSub) {
+        if (credit >= 10) {
+          dispatch(createQuestion({ selected_question, email_address }));
+        }
+      } else {
         dispatch(createQuestion({ selected_question, email_address }));
       }
     } catch (error) {
@@ -86,20 +91,23 @@ export const createQuestion = createAsyncThunk(
   ) => {
     let essay_question: string = "";
     const state = getState() as RootState;
+    const isUserSub = state.userInfoStore.subscription_info.status;
     const cost = state.essayStore.operationCosts.create_question_cost;
 
     if (!cost) return;
 
     try {
-      const creditResponse = await dispatch(
-        updateUserCredit({
-          email_address: email_address,
-          spend_credits: cost,
-        })
-      );
+      if (!isUserSub) {
+        const creditResponse = await dispatch(
+          updateUserCredit({
+            email_address: email_address,
+            spend_credits: cost,
+          })
+        );
 
-      if (!creditResponse.payload) {
-        return "Credit error";
+        if (!creditResponse.payload) {
+          return "Credit error";
+        }
       }
 
       const aiResponse = await aiQuestion(selected_question);
@@ -132,6 +140,7 @@ export const createFeedback = createAsyncThunk(
     const email_address = state.userInfoStore.user.email_address;
     const essay_question = state.essayStore.tempEssayInfo.essay_question;
     const essay_text = state.essayStore.tempEssayInfo.essay_text;
+    const isUserSub = state.userInfoStore.subscription_info.status;
 
     let essay_feedback: string = "";
 
@@ -139,15 +148,17 @@ export const createFeedback = createAsyncThunk(
     if (!cost) return;
 
     try {
-      const creditResponse = await dispatch(
-        updateUserCredit({
-          email_address: email_address,
-          spend_credits: cost,
-        })
-      );
+      if (!isUserSub) {
+        const creditResponse = await dispatch(
+          updateUserCredit({
+            email_address: email_address,
+            spend_credits: cost,
+          })
+        );
 
-      if (!creditResponse.payload) {
-        return "Credit error";
+        if (!creditResponse.payload) {
+          return "Credit error";
+        }
       }
 
       const response = await aiFeedback(essay_question, essay_text);
@@ -212,19 +223,22 @@ export const saveEssayInfo = createAsyncThunk(
     const essay_text = state.essayStore.tempEssayInfo.essay_text;
     const essay_feedback = state.essayStore.tempEssayInfo.essay_feedback;
     const cost = state.essayStore.operationCosts.save_essay_cost;
+    const isUserSub = state.userInfoStore.subscription_info.status;
 
     if (!cost) return;
 
     try {
-      const creditResponse = await dispatch(
-        updateUserCredit({
-          email_address: email_address,
-          spend_credits: cost,
-        })
-      );
+      if (!isUserSub) {
+        const creditResponse = await dispatch(
+          updateUserCredit({
+            email_address: email_address,
+            spend_credits: cost,
+          })
+        );
 
-      if (!creditResponse.payload) {
-        return "Credit error";
+        if (!creditResponse.payload) {
+          return "Credit error";
+        }
       }
 
       const { data, error } = await supabase

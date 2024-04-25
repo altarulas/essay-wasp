@@ -3,6 +3,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabaseClient } from "@/utils/supabase/client";
 import { RootState } from "../store";
+import dayjs from "dayjs";
 
 const supabase = supabaseClient();
 
@@ -135,14 +136,12 @@ export const updateUserCredit = createAsyncThunk(
     const state = getState() as RootState;
     const current_credits = state.userInfoStore.credits;
     const new_credits = current_credits - spend_credits;
-
-    console.log("current_credits", current_credits);
-    console.log("spend_credits", spend_credits);
+    const updated_at = dayjs().format("YYYY-MM-DD HH:mm:ss");
 
     try {
       const { data, error } = await supabase
         .from("users_credit")
-        .update({ credits: new_credits })
+        .update({ credits: new_credits, updated_at: updated_at })
         .eq("email_address", email_address)
         .single();
 
