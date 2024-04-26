@@ -39,43 +39,6 @@ const initialState: IUserInfo = {
   },
 };
 
-export const getUserInfo = createAsyncThunk(
-  "userInfoStore/getUserInfo",
-  async (_, { dispatch, getState }) => {
-    const id = (await supabase.auth.getUser()).data.user?.id;
-
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("email_address, full_name, avatar_url")
-      .eq("id", id)
-      .single();
-
-    if (!error) {
-      const email_address: string = data.email_address;
-
-      const user: IUser = data;
-      const credit = await dispatch(getUserCredits(email_address));
-      const subscriptionInfo = await dispatch(
-        getUserSubscription(email_address)
-      );
-
-      const info: IUserInfo = {
-        user: {
-          email_address: user.email_address,
-          full_name: user.full_name,
-          avatar_url: user.avatar_url,
-        },
-        credits: credit.payload,
-        subscription_info: subscriptionInfo.payload as ISubscriptionInfo,
-      };
-
-      return info;
-    }
-
-    return initialState;
-  }
-);
-
 export const getUserSubscription = createAsyncThunk(
   "userInfoStore/getUserSubscription",
   async (email_address: string) => {
@@ -156,13 +119,50 @@ export const updateUserCredit = createAsyncThunk(
   }
 );
 
+export const getUserInfoStore = createAsyncThunk(
+  "userInfoStore/getUserInfoStore",
+  async (_, { dispatch, getState }) => {
+    const id = (await supabase.auth.getUser()).data.user?.id;
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("email_address, full_name, avatar_url")
+      .eq("id", id)
+      .single();
+
+    if (!error) {
+      const email_address: string = data.email_address;
+
+      const user: IUser = data;
+      const credit = await dispatch(getUserCredits(email_address));
+      const subscriptionInfo = await dispatch(
+        getUserSubscription(email_address)
+      );
+
+      const info: IUserInfo = {
+        user: {
+          email_address: user.email_address,
+          full_name: user.full_name,
+          avatar_url: user.avatar_url,
+        },
+        credits: credit.payload,
+        subscription_info: subscriptionInfo.payload as ISubscriptionInfo,
+      };
+
+      return info;
+    }
+
+    return initialState;
+  }
+);
+
 export const UserInfoStore = createSlice({
   name: "userInfo",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getUserInfo.fulfilled, (state, action) => {
+      .addCase(getUserInfoStore.fulfilled, (state, action) => {
         const { user, credits, subscription_info } = action.payload;
         state.user = user;
         state.credits = credits;

@@ -24,6 +24,7 @@ import {
   createEssaySession,
   startSession,
   postSaveSession,
+  setShowFeedbackDialog,
 } from "@/redux-store/features/essayStore";
 
 export const Menu = () => {
@@ -48,6 +49,7 @@ export const Menu = () => {
   };
 
   const handleGiveFeedback = async () => {
+    dispatch(setShowFeedbackDialog(true));
     await dispatch(createFeedback());
   };
 
@@ -58,23 +60,6 @@ export const Menu = () => {
   const handleStartSession = () => {
     dispatch(createSession());
     dispatch(startSession());
-  };
-
-  const isSessionSaveable = (): boolean => {
-    if (
-      tempEssayInfo.essay_feedback &&
-      tempEssayInfo.essay_text &&
-      tempEssayInfo.essay_question
-    ) {
-      return true;
-    } else return false;
-  };
-
-  const handleSaveSession = async () => {
-    await dispatch(saveEssayInfo());
-    await dispatch(deleteAllTempEssayInfo());
-    dispatch(resetState());
-    dispatch(postSaveSession());
   };
 
   return (
@@ -129,10 +114,6 @@ export const Menu = () => {
         onClick={handleGiveFeedback}
       >
         Give Feedback
-      </Button>
-
-      <Button disabled={!isSessionSaveable()} onClick={handleSaveSession}>
-        Save Session
       </Button>
     </div>
   );

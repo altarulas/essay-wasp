@@ -27,6 +27,13 @@ interface ISavedEssay {
   created_at: Date | null;
 }
 
+interface ILoading {
+  isQuestionLoading: boolean;
+  isFeedbackLoading: boolean;
+  isSavedSessionLoading: boolean | null;
+  isDialogOpen: boolean;
+}
+
 interface IEssayInfo {
   tempEssayInfo: ITempEssay;
   savedEssayInfo: ISavedEssay[] | [];
@@ -34,6 +41,7 @@ interface IEssayInfo {
   is_session_started: boolean;
   is_timer_running: boolean;
   is_session_finished: boolean;
+  loadingStates: ILoading;
 }
 
 const initialState: IEssayInfo = {
@@ -51,6 +59,12 @@ const initialState: IEssayInfo = {
   is_session_started: false,
   is_timer_running: false,
   is_session_finished: false,
+  loadingStates: {
+    isQuestionLoading: false,
+    isFeedbackLoading: false,
+    isSavedSessionLoading: null,
+    isDialogOpen: false,
+  },
 };
 
 export const createEssaySession = createAsyncThunk(
@@ -65,10 +79,10 @@ export const createEssaySession = createAsyncThunk(
 
       if (!isUserSub) {
         if (credit >= 10) {
-          dispatch(createQuestion({ selected_question, email_address }));
+          await dispatch(createQuestion({ selected_question, email_address }));
         }
       } else {
-        dispatch(createQuestion({ selected_question, email_address }));
+        await dispatch(createQuestion({ selected_question, email_address }));
       }
     } catch (error) {
       console.error(error);
@@ -171,7 +185,7 @@ export const createFeedback = createAsyncThunk(
 
       const { data, error } = await supabase
         .from("temp_users_essay")
-        .update({ essay_text, essay_feedback: response })
+        .update({ essay_text, essay_feedback: essay_feedback })
         .eq("email_address", email_address)
         .order("created_at", { ascending: false })
         .limit(1);
@@ -322,9 +336,6 @@ export const getUserSavedEssay = createAsyncThunk(
         .select("essay_question, essay_text, essay_feedback, created_at")
         .eq("email_address", email_address);
 
-      console.log("data", data);
-      console.log("error", error);
-
       if (!error) {
         essay = data;
         return essay;
@@ -368,6 +379,16 @@ export const getUserTempEssay = createAsyncThunk(
     }
 
     return essay;
+  }
+);
+
+export const getEssayStore = createAsyncThunk(
+  "essayStore/getEssayStore",
+
+  async (_, { getState, dispatch }) => {
+    await dispatch(getOperationCosts());
+    await dispatch(getSession());
+    await dispatch(getUserTempEssay());
   }
 );
 
@@ -418,18 +439,29 @@ export const EssayStore = createSlice({
     setEssayContent: (state, action: PayloadAction<string>) => {
       state.tempEssayInfo.essay_text = action.payload;
     },
+    setShowFeedbackDialog: (state, action: PayloadAction<boolean>) => {
+      state.loadingStates.isDialogOpen = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createEssaySession.fulfilled, () => {})
+      .addCase(createEssaySession.pending, (state, action) => {
+        state.loadingStates.isQuestionLoading = true;
+      })
+      .addCase(createEssaySession.fulfilled, (state, action) => {})
       .addCase(createQuestion.fulfilled, (state, action) => {
         state.tempEssayInfo.essay_question = action.payload;
+        state.loadingStates.isQuestionLoading = false;
       })
       .addCase(saveEssayText.fulfilled, (state, action) => {
         state.tempEssayInfo.essay_text = action.payload;
       })
+      .addCase(createFeedback.pending, (state, action) => {
+        state.loadingStates.isFeedbackLoading = true;
+      })
       .addCase(createFeedback.fulfilled, (state, action) => {
         state.tempEssayInfo.essay_feedback = action.payload;
+        state.loadingStates.isFeedbackLoading = false;
       })
       .addCase(getOperationCosts.fulfilled, (state, action) => {
         state.operationCosts = action.payload;
@@ -440,8 +472,12 @@ export const EssayStore = createSlice({
         state.tempEssayInfo.essay_text = essay_text;
         state.tempEssayInfo.essay_feedback = essay_feedback;
       })
+      .addCase(getUserSavedEssay.pending, (state, action) => {
+        state.loadingStates.isSavedSessionLoading = true;
+      })
       .addCase(getUserSavedEssay.fulfilled, (state, action) => {
         state.savedEssayInfo = action.payload;
+        state.loadingStates.isSavedSessionLoading = false;
       });
   },
 });
@@ -449,6 +485,7 @@ export const EssayStore = createSlice({
 export const {
   resetState,
   setEssayContent,
+  setShowFeedbackDialog,
   createSession,
   startSession,
   finishSession,

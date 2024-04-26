@@ -2,12 +2,8 @@
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getOperationCosts,
-  getSession,
-  getUserTempEssay,
-} from "@/redux-store/features/essayStore";
-import { getUserInfo } from "@/redux-store/features/userInfoStore";
+import { getEssayStore } from "@/redux-store/features/essayStore";
+import { getUserInfoStore } from "@/redux-store/features/userInfoStore";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { Menu } from "./Menu";
 import { Text } from "./Text";
@@ -17,13 +13,13 @@ import { Question } from "./Question";
 export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { tempEssayInfo } = useSelector((state: RootState) => state.essayStore);
+  const { tempEssayInfo, loadingStates } = useSelector(
+    (state: RootState) => state.essayStore
+  );
 
   const handleFetchInitialData = async () => {
-    await dispatch(getOperationCosts());
-    await dispatch(getSession());
-    await dispatch(getUserInfo());
-    await dispatch(getUserTempEssay());
+    await dispatch(getUserInfoStore());
+    await dispatch(getEssayStore());
   };
 
   useEffect(() => {
@@ -38,7 +34,7 @@ export const AppContent = () => {
 
       <Text />
 
-      {tempEssayInfo.essay_feedback && <Feedback />}
+      <Feedback />
     </div>
   );
 };

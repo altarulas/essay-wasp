@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import Image from "next/image";
-import { getUserInfo } from "@/redux-store/features/userInfoStore";
+import { getUserInfoStore } from "@/redux-store/features/userInfoStore";
 import { useEffect } from "react";
 
 export const Settings = () => {
@@ -17,7 +17,7 @@ export const Settings = () => {
   );
 
   const handleFetchInitialData = async () => {
-    await dispatch(getUserInfo());
+    await dispatch(getUserInfoStore());
   };
 
   useEffect(() => {
