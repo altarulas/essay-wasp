@@ -16,14 +16,10 @@ import { Button } from "../ui/button";
 import {
   createFeedback,
   createSession,
-  deleteAllTempEssayInfo,
   finishSession,
   resetState,
-  saveEssayInfo,
-  saveEssayText,
   createEssaySession,
   startSession,
-  postSaveSession,
   setShowFeedbackDialog,
 } from "@/redux-store/features/essayStore";
 

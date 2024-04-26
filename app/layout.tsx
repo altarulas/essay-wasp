@@ -4,7 +4,6 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import ProviderRedux from "@/redux-store/Provider";
 import { ThemeProvider } from "@/utils/ThemeProvider";
-import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["latin"],

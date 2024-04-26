@@ -24,6 +24,7 @@ interface IUserInfo {
   user: IUser;
   credits: number;
   subscription_info: ISubscriptionInfo;
+  isUserInfoLoading?: boolean;
 }
 
 const initialState: IUserInfo = {
@@ -37,6 +38,7 @@ const initialState: IUserInfo = {
     subscription_type: null,
     status: false,
   },
+  isUserInfoLoading: true,
 };
 
 export const getUserSubscription = createAsyncThunk(
@@ -162,11 +164,15 @@ export const UserInfoStore = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(getUserInfoStore.pending, (state, action) => {
+        state.isUserInfoLoading = true;
+      })
       .addCase(getUserInfoStore.fulfilled, (state, action) => {
         const { user, credits, subscription_info } = action.payload;
         state.user = user;
         state.credits = credits;
         state.subscription_info = subscription_info;
+        state.isUserInfoLoading = false;
       })
       .addCase(updateUserCredit.fulfilled, (state, action) => {
         state.credits = action.payload;

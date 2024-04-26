@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from "@/redux-store/store";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { Skeleton } from "../ui/skeleton";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -22,7 +23,9 @@ export const Navbar = () => {
     (state: RootState) => state.userInfoStore.subscription_info
   );
 
-  const { credits } = useSelector((state: RootState) => state.userInfoStore);
+  const { credits, isUserInfoLoading } = useSelector(
+    (state: RootState) => state.userInfoStore
+  );
 
   const { setTheme, theme } = useTheme();
 
@@ -81,18 +84,21 @@ export const Navbar = () => {
       <div>{is_timer_running && formatTime(remainingTime)}</div>
 
       <div className="flex items-center gap-4">
-        {!status && (
-          <>
-            <Button>Remain Credits: {credits} </Button>
+        {!status &&
+          (isUserInfoLoading ? (
+            <Skeleton className="w-60 h-10" />
+          ) : (
+            <>
+              <Button>Remain Credits: {credits} </Button>
 
-            <Link
-              target="_blank"
-              href="https://buymeacoffee.com/natural.lang/membership"
-            >
-              <Button variant="destructive">Use Unlimited</Button>
-            </Link>
-          </>
-        )}
+              <Link
+                target="_blank"
+                href="https://buymeacoffee.com/natural.lang/membership"
+              >
+                <Button variant="destructive">Use Unlimited</Button>
+              </Link>
+            </>
+          ))}
 
         <CiLight
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}

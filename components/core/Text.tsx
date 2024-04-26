@@ -35,7 +35,7 @@ export const Text = () => {
   }, [tempEssayInfo.essay_text]);
 
   useEffect(() => {
-    if (is_session_finished) {
+    if (is_session_finished && essayText) {
       dispatch(setEssayContent(essayText));
       handleSaveEssayText(essayText);
     }

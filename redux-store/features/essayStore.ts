@@ -423,6 +423,10 @@ export const EssayStore = createSlice({
       state.is_timer_running = false;
     },
     postSaveSession: (state) => {
+      localStorage.setItem("is_session_started", "false");
+      localStorage.setItem("is_session_finished", "false");
+      localStorage.setItem("is_timer_running", "false");
+
       state.is_session_started = false;
       state.is_session_finished = false;
       state.is_timer_running = false;

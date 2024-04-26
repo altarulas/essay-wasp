@@ -20,7 +20,6 @@ import {
   setShowFeedbackDialog,
 } from "@/redux-store/features/essayStore";
 import { Skeleton } from "../ui/skeleton";
-import { ToastAction } from "../ui/toast";
 import { useToast } from "../ui/use-toast";
 
 export const Feedback = () => {
@@ -58,12 +57,14 @@ export const Feedback = () => {
       onOpenChange={(value) => dispatch(setShowFeedbackDialog(value))}
       open={loadingStates.isDialogOpen}
     >
-      <DialogTrigger
-        onClick={() => dispatch(setShowFeedbackDialog(true))}
-        asChild
-      >
-        <Button>Show Feedback</Button>
-      </DialogTrigger>
+      {tempEssayInfo.essay_feedback && (
+        <DialogTrigger
+          onClick={() => dispatch(setShowFeedbackDialog(true))}
+          asChild
+        >
+          <Button>Show Feedback</Button>
+        </DialogTrigger>
+      )}
 
       <DialogContent className="max-w-[700px] max-h-[750px] overflow-y-auto">
         <DialogHeader>
