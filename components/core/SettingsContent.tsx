@@ -4,7 +4,6 @@ import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -34,7 +33,7 @@ export const Settings = () => {
   }, []);
 
   return (
-    <Card className="p-6 space-y-8 w-full h-full flex flex-col justify-between">
+    <Card className="p-6 space-y-8 w-full h-full flex flex-col justify-between border-2">
       {isUserInfoLoading ? (
         <div className="h-full w-full flex flex-row space-x-10">
           <Skeleton className="w-1/2 h-full" />

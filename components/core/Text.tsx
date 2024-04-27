@@ -47,8 +47,8 @@ export const Text = () => {
       disabled={!is_timer_running}
       value={essayText}
       onChange={(e) => handleEssayChange(e)}
-      className="w-1/2 h-[70%]"
-      placeholder="Type your essay here."
+      className="w-1/2 h-[70%] p-4 border-[3.5px]"
+      placeholder="Type your essay here..."
     />
   );
 };

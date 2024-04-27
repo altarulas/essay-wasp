@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from "@/redux-store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { Report } from "./Report";
 import { Skeleton } from "../ui/skeleton";
+import styles from "./ReportsContent.module.scss";
 
 export const Reports = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,7 +25,7 @@ export const Reports = () => {
   }, []);
 
   return (
-    <Card className="p-10 h-full w-full flex flex-col justify-between">
+    <Card className="p-10 h-full w-full flex flex-col justify-between border-2">
       {loadingStates.isSavedSessionLoading ? (
         <div className="w-full h-full flex flex-col items-center space-y-6">
           <Skeleton className="w-full h-1/6" />
@@ -34,7 +35,7 @@ export const Reports = () => {
           <Skeleton className="w-full h-1/6" />
         </div>
       ) : (
-        <CardContent className="flex flex-col items-start overflow-y-auto gap-8">
+        <CardContent className={styles.container}>
           {savedEssayInfo.map((essay, index) => (
             <Report
               key={String(essay.created_at)}

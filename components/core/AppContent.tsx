@@ -35,7 +35,7 @@ export const AppContent = () => {
     <div className="w-full h-4/5 flex flex-col justify-center items-center gap-8">
       {loading ? <Skeleton className="w-1/2 h-[10%]" /> : <Menu />}
 
-      {loading ? <Skeleton className="w-1/2 h-[20%]" /> : <Question />}
+      {loading ? <Skeleton className="w-1/2 h-1/5" /> : <Question />}
 
       {loading ? <Skeleton className="w-1/2 h-[70%]" /> : <Text />}
 

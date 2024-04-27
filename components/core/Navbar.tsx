@@ -67,13 +67,11 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="w-full flex justify-between items-center px-10 py-6">
+    <div className="w-full h-full flex justify-between items-center px-10 py-6">
       <div className="flex justify-center items-center gap-10">
-        <Link href="/">
-          <div className="scroll-m-20 bg-background text-foreground pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-            Natural Lang
-          </div>
-        </Link>
+        <div className="scroll-m-20 bg-background text-foreground pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+          Natural Lang
+        </div>
         {is_timer_running && (
           <div className="text-2xl bg-zinc-900 rounded-lg py-1 w-36 flex items-center justify-center">
             {formatTime(remainingTime)}
