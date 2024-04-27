@@ -74,8 +74,8 @@ export const createEssaySession = createAsyncThunk(
     try {
       const state = getState() as RootState;
       const email_address = state.userInfoStore.user.email_address;
-      const credit = state.userInfoStore.credits;
-      const isUserSub = state.userInfoStore.subscription_info.status;
+      const credit = state.userInfoStore.user.credits;
+      const isUserSub = state.userInfoStore.user.subscription_info.status;
 
       if (!isUserSub) {
         if (credit >= 10) {
@@ -105,7 +105,7 @@ export const createQuestion = createAsyncThunk(
   ) => {
     let essay_question: string = "";
     const state = getState() as RootState;
-    const isUserSub = state.userInfoStore.subscription_info.status;
+    const isUserSub = state.userInfoStore.user.subscription_info.status;
     const cost = state.essayStore.operationCosts.create_question_cost;
 
     if (!cost) return;
@@ -154,7 +154,7 @@ export const createFeedback = createAsyncThunk(
     const email_address = state.userInfoStore.user.email_address;
     const essay_question = state.essayStore.tempEssayInfo.essay_question;
     const essay_text = state.essayStore.tempEssayInfo.essay_text;
-    const isUserSub = state.userInfoStore.subscription_info.status;
+    const isUserSub = state.userInfoStore.user.subscription_info.status;
 
     let essay_feedback: string = "";
 
@@ -237,7 +237,7 @@ export const saveEssayInfo = createAsyncThunk(
     const essay_text = state.essayStore.tempEssayInfo.essay_text;
     const essay_feedback = state.essayStore.tempEssayInfo.essay_feedback;
     const cost = state.essayStore.operationCosts.save_essay_cost;
-    const isUserSub = state.userInfoStore.subscription_info.status;
+    const isUserSub = state.userInfoStore.user.subscription_info.status;
 
     if (!cost) return;
 

@@ -20,7 +20,7 @@ import { Skeleton } from "../ui/skeleton";
 export const Settings = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { user, credits, subscription_info, isUserInfoLoading } = useSelector(
+  const { user, isLoadingInfoStore } = useSelector(
     (state: RootState) => state.userInfoStore
   );
 
@@ -34,7 +34,7 @@ export const Settings = () => {
 
   return (
     <Card className="p-6 space-y-8 w-full h-full flex flex-col justify-between border-2">
-      {isUserInfoLoading ? (
+      {isLoadingInfoStore ? (
         <div className="h-full w-full flex flex-row space-x-10">
           <Skeleton className="w-1/2 h-full" />
           <div className="h-full w-1/2 flex flex-col space-y-10 justify-center items-center">
@@ -59,7 +59,7 @@ export const Settings = () => {
             </CardHeader>
 
             <CardContent className="space-y-6">
-              {subscription_info.status ? (
+              {user.subscription_info.status ? (
                 <div className="flex items-center gap-8">
                   <div className="mr-6">Subscription</div>
 
@@ -93,14 +93,14 @@ export const Settings = () => {
               <div className="flex items-center gap-[32px]">
                 <span>Remain Credits</span>
                 <Button disabled variant="outline">
-                  {credits}
+                  {user.credits}
                 </Button>
               </div>
             </CardContent>
           </div>
 
           <CardFooter className="w-full flex justify-end gap-8">
-            {subscription_info.status && (
+            {user.subscription_info.status && (
               <Link
                 target="_blank"
                 href="https://studio.buymeacoffee.com/my-account/payments/memberships"

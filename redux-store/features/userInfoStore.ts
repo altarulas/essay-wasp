@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabaseClient } from "@/utils/supabase/client";
 import { RootState } from "../store";
 import dayjs from "dayjs";
+import { toast, useToast } from "@/components/ui/use-toast";
 
 const supabase = supabaseClient();
 
@@ -18,13 +19,14 @@ interface IUser {
   email_address: string;
   full_name: string;
   avatar_url: string;
+  credits: number;
+  subscription_info: ISubscriptionInfo;
 }
 
 interface IUserInfo {
   user: IUser;
-  credits: number;
-  subscription_info: ISubscriptionInfo;
-  isUserInfoLoading?: boolean;
+  isLoadingInfoStore: boolean;
+  updateCreditsError: string | null;
 }
 
 const initialState: IUserInfo = {
@@ -32,13 +34,14 @@ const initialState: IUserInfo = {
     email_address: "",
     full_name: "",
     avatar_url: "",
+    credits: 0,
+    subscription_info: {
+      subscription_type: null,
+      status: false,
+    },
   },
-  credits: 0,
-  subscription_info: {
-    subscription_type: null,
-    status: false,
-  },
-  isUserInfoLoading: true,
+  isLoadingInfoStore: true,
+  updateCreditsError: null,
 };
 
 export const getUserSubscription = createAsyncThunk(
@@ -66,6 +69,7 @@ export const getUserSubscription = createAsyncThunk(
 
 export const getUserCredits = createAsyncThunk(
   "userInfoStore/getUserCredits",
+
   async (email_address: string) => {
     try {
       const { data, error } = await supabase
@@ -96,10 +100,10 @@ export const updateUserCredit = createAsyncThunk(
       email_address: string;
       spend_credits: number;
     },
-    { getState }
+    { getState, rejectWithValue }
   ) => {
     const state = getState() as RootState;
-    const current_credits = state.userInfoStore.credits;
+    const current_credits = state.userInfoStore.user.credits;
     const new_credits = current_credits - spend_credits;
     const updated_at = dayjs().format("YYYY-MM-DD HH:mm:ss");
 
@@ -107,7 +111,7 @@ export const updateUserCredit = createAsyncThunk(
       const { data, error } = await supabase
         .from("users_credit")
         .update({ credits: new_credits, updated_at: updated_at })
-        .eq("email_address", email_address)
+        .eq("email_address", "asd")
         .single();
 
       if (!error) {
@@ -115,15 +119,27 @@ export const updateUserCredit = createAsyncThunk(
       }
     } catch (error) {
       console.error(error);
+      toast({ title: "Something went wrong" });
     }
 
-    return current_credits;
+    return 0;
   }
 );
 
 export const getUserInfoStore = createAsyncThunk(
   "userInfoStore/getUserInfoStore",
   async (_, { dispatch, getState }) => {
+    let info: IUser = {
+      email_address: "",
+      full_name: "",
+      avatar_url: "",
+      credits: 0,
+      subscription_info: {
+        subscription_type: null,
+        status: false,
+      },
+    };
+
     const id = (await supabase.auth.getUser()).data.user?.id;
 
     const { data, error } = await supabase
@@ -135,18 +151,15 @@ export const getUserInfoStore = createAsyncThunk(
     if (!error) {
       const email_address: string = data.email_address;
 
-      const user: IUser = data;
       const credit = await dispatch(getUserCredits(email_address));
       const subscriptionInfo = await dispatch(
         getUserSubscription(email_address)
       );
 
-      const info: IUserInfo = {
-        user: {
-          email_address: user.email_address,
-          full_name: user.full_name,
-          avatar_url: user.avatar_url,
-        },
+      info = {
+        email_address: data.email_address,
+        full_name: data.full_name,
+        avatar_url: data.avatar_url,
         credits: credit.payload,
         subscription_info: subscriptionInfo.payload as ISubscriptionInfo,
       };
@@ -154,7 +167,7 @@ export const getUserInfoStore = createAsyncThunk(
       return info;
     }
 
-    return initialState;
+    return info;
   }
 );
 
@@ -165,17 +178,20 @@ export const UserInfoStore = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getUserInfoStore.pending, (state, action) => {
-        state.isUserInfoLoading = true;
+        state.isLoadingInfoStore = true;
       })
       .addCase(getUserInfoStore.fulfilled, (state, action) => {
-        const { user, credits, subscription_info } = action.payload;
-        state.user = user;
-        state.credits = credits;
-        state.subscription_info = subscription_info;
-        state.isUserInfoLoading = false;
+        state.user = action.payload;
+        state.isLoadingInfoStore = false;
+      })
+      .addCase(getUserInfoStore.rejected, (state, action) => {
+        state.isLoadingInfoStore = false;
       })
       .addCase(updateUserCredit.fulfilled, (state, action) => {
-        state.credits = action.payload;
+        state.user.credits = action.payload;
+      })
+      .addCase(updateUserCredit.rejected, (state, action) => {
+        state.updateCreditsError = String(action.payload);
       });
   },
 });

@@ -13,10 +13,10 @@ import { useEffect, useState } from "react";
 
 export const Navbar = () => {
   const { status } = useSelector(
-    (state: RootState) => state.userInfoStore.subscription_info
+    (state: RootState) => state.userInfoStore.user.subscription_info
   );
 
-  const { credits, isUserInfoLoading } = useSelector(
+  const { user, isLoadingInfoStore } = useSelector(
     (state: RootState) => state.userInfoStore
   );
 
@@ -82,11 +82,11 @@ export const Navbar = () => {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-4 mr-10">
           {!status &&
-            (isUserInfoLoading ? (
+            (isLoadingInfoStore ? (
               <Skeleton className="w-72 h-10" />
             ) : (
               <>
-                <Button>Credits: {credits} </Button>
+                <Button>Credits: {user.credits} </Button>
 
                 <Link
                   target="_blank"
