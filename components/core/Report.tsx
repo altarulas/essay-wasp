@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -25,23 +24,23 @@ export const Report = (props: ReportProps) => {
 
   return (
     <div className="w-full flex items-center justify-between">
-      <Button> {formattedCreatedAt} </Button>
+      <Button className="w-40"> {formattedCreatedAt} </Button>
 
       <Dialog>
         <DialogTrigger asChild>
           <Button>Show Essay</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle> {essayQuestion} </DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you are done.
-            </DialogDescription>
+
+        <DialogContent className="max-w-[750px] space-y-4 overflow-y-auto">
+          <DialogHeader className="space-y-6">
+            <DialogTitle> Essay Topic </DialogTitle>
+            <DialogDescription>{essayQuestion}</DialogDescription>
           </DialogHeader>
-          {essayText}
-          <DialogFooter>
-            <Button type="submit">Save My Essay and Feedback</Button>
-          </DialogFooter>
+
+          <div className="flex flex-col gap-6">
+            <DialogTitle> Essay Content </DialogTitle>
+            <DialogDescription>{essayText}</DialogDescription>
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -49,17 +48,14 @@ export const Report = (props: ReportProps) => {
         <DialogTrigger asChild>
           <Button>Show Feedback</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you are done.
+
+        <DialogContent className="max-w-[750px] space-y-4 overflow-y-auto">
+          <DialogHeader className="space-y-6">
+            <DialogTitle> Essay Feedback </DialogTitle>
+            <DialogDescription className="whitespace-pre-wrap">
+              {essayFeedback}
             </DialogDescription>
           </DialogHeader>
-          {essayFeedback}
-          <DialogFooter>
-            <Button type="submit">Save My Essay and Feedback</Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

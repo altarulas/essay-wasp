@@ -11,7 +11,7 @@ export const Question = () => {
   );
 
   return (
-    <Card className="w-1/2 h-24 p-4 text-sm text-gray-500">
+    <Card className="w-1/2 h-32 p-4 text-sm text-gray-500 flex justify-center items-center">
       {loadingStates.isQuestionLoading ? (
         <div className="w-full h-full flex flex-col space-y-2 items-center">
           <Skeleton className="h-1/2 w-full" />

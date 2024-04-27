@@ -42,7 +42,28 @@ export const Feedback = () => {
     });
   };
 
+  const handleResetSession = async () => {
+    dispatch(setShowFeedbackDialog(false));
+    await dispatch(deleteAllTempEssayInfo());
+    dispatch(resetState());
+    dispatch(postSaveSession());
+
+    toast({
+      title: "Essay session is reseated",
+    });
+  };
+
   const isSessionSaveable = (): boolean => {
+    if (
+      tempEssayInfo.essay_feedback &&
+      tempEssayInfo.essay_text &&
+      tempEssayInfo.essay_question
+    ) {
+      return true;
+    } else return false;
+  };
+
+  const isSessionResettable = (): boolean => {
     if (
       tempEssayInfo.essay_feedback &&
       tempEssayInfo.essay_text &&
@@ -71,7 +92,7 @@ export const Feedback = () => {
           <DialogTitle className="pb-8 w-full text-center">
             Essay Feedback
           </DialogTitle>
-          <DialogDescription className="whitespace-pre-wrap rounded-2xl p-4">
+          <DialogDescription className="whitespace-pre-wrap p-4">
             {loadingStates.isFeedbackLoading ? (
               <div className="space-y-4">
                 <Skeleton className="w-full h-10" />
@@ -86,7 +107,16 @@ export const Feedback = () => {
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="py-4">
+        <DialogFooter className="py-4 gap-4">
+          <Button
+            disabled={!isSessionResettable()}
+            onClick={() => {
+              handleResetSession();
+            }}
+            type="submit"
+          >
+            Reset This Session
+          </Button>
           <Button
             disabled={!isSessionSaveable()}
             onClick={() => {
