@@ -31,7 +31,7 @@ export const Report = (props: ReportProps) => {
           <Button>Show Essay</Button>
         </DialogTrigger>
 
-        <DialogContent className="max-w-[750px] space-y-4 overflow-y-auto">
+        <DialogContent className="max-w-[750px] h-fit space-y-4 overflow-y-auto">
           <DialogHeader className="space-y-6">
             <DialogTitle> Essay Topic </DialogTitle>
             <DialogDescription>{essayQuestion}</DialogDescription>
@@ -49,7 +49,7 @@ export const Report = (props: ReportProps) => {
           <Button>Show Feedback</Button>
         </DialogTrigger>
 
-        <DialogContent className="max-w-[750px] space-y-4 overflow-y-auto">
+        <DialogContent className="max-w-[750px] h-fit space-y-4 overflow-y-auto">
           <DialogHeader className="space-y-6">
             <DialogTitle> Essay Feedback </DialogTitle>
             <DialogDescription className="whitespace-pre-wrap">

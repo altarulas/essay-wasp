@@ -24,14 +24,14 @@ export const Reports = () => {
   }, []);
 
   return (
-    <Card className="p-10 h-[500px] w-[750px] flex flex-col justify-between">
+    <Card className="p-10 h-full w-full flex flex-col justify-between">
       {loadingStates.isSavedSessionLoading ? (
-        <div className="flex flex-col items-center space-y-6">
-          <Skeleton className="w-full h-14" />
-          <Skeleton className="w-full h-14" />
-          <Skeleton className="w-full h-14" />
-          <Skeleton className="w-full h-14" />
-          <Skeleton className="w-full h-14" />
+        <div className="w-full h-full flex flex-col items-center space-y-6">
+          <Skeleton className="w-full h-1/6" />
+          <Skeleton className="w-full h-1/6" />
+          <Skeleton className="w-full h-1/6" />
+          <Skeleton className="w-full h-1/6" />
+          <Skeleton className="w-full h-1/6" />
         </div>
       ) : (
         <CardContent className="flex flex-col items-start overflow-y-auto gap-8">

@@ -87,7 +87,7 @@ export const Feedback = () => {
         </DialogTrigger>
       )}
 
-      <DialogContent className="max-w-[700px] max-h-[750px] overflow-y-auto">
+      <DialogContent className="max-w-[700px] h-fit overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="pb-8 w-full text-center">
             Essay Feedback

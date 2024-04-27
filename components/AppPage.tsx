@@ -4,8 +4,12 @@ import { Navbar } from "@/components/core/Navbar";
 const AppPage = () => {
   return (
     <div className="w-screen h-screen overflow-y-auto">
-      <Navbar />
-      <AppContent />
+      <div className="h-[10%]">
+        <Navbar />
+      </div>
+      <div className="w-full h-[90%] flex justify-center items-center">
+        <AppContent />
+      </div>
     </div>
   );
 };

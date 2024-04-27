@@ -34,15 +34,15 @@ export const Settings = () => {
   }, []);
 
   return (
-    <Card className="p-6 space-y-8 w-[750px] flex flex-col justify-between">
+    <Card className="p-6 space-y-8 w-full h-full flex flex-col justify-between">
       {isUserInfoLoading ? (
-        <div className="flex flex-row space-x-10">
-          <Skeleton className="w-[350px] h-[450px]" />
-          <div className="flex flex-col space-y-10 h-[400px] justify-center items-center">
-            <Skeleton className="w-[350px] h-[150px]" />
-            <Skeleton className="w-[350px] h-[90px]" />
-            <Skeleton className="w-[350px] h-[60px]" />
-            <Skeleton className="w-[350px] h-[30px]" />
+        <div className="h-full w-full flex flex-row space-x-10">
+          <Skeleton className="w-1/2 h-full" />
+          <div className="h-full w-1/2 flex flex-col space-y-10 justify-center items-center">
+            <Skeleton className="w-full h-1/3" />
+            <Skeleton className="w-full h-1/4" />
+            <Skeleton className="w-full h-1/5" />
+            <Skeleton className="w-full h-1/6" />
           </div>
         </div>
       ) : (

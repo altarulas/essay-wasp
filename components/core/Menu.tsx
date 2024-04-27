@@ -59,7 +59,7 @@ export const Menu = () => {
   };
 
   return (
-    <div className="w-full gap-10 flex justify-center">
+    <div className="w-full h-[10%] gap-10 flex justify-center">
       <Select
         disabled={is_timer_running || !!tempEssayInfo.essay_text}
         onValueChange={(value) => handleSelectChange(value)}

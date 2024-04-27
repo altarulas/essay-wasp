@@ -14,6 +14,10 @@ import { Skeleton } from "../ui/skeleton";
 export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();
 
+  const { is_timer_running } = useSelector(
+    (state: RootState) => state.essayStore
+  );
+
   const [loading, setLoading] = useState<boolean>(true);
 
   const handleFetchInitialData = async () => {
@@ -28,12 +32,12 @@ export const AppContent = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-10 items-center w-full py-10 px-10">
-      {loading ? <Skeleton className="w-2/3 h-10" /> : <Menu />}
+    <div className="w-full h-4/5 flex flex-col justify-center items-center gap-8">
+      {loading ? <Skeleton className="w-1/2 h-[10%]" /> : <Menu />}
 
-      {loading ? <Skeleton className="w-2/3 h-20" /> : <Question />}
+      {loading ? <Skeleton className="w-1/2 h-[20%]" /> : <Question />}
 
-      {loading ? <Skeleton className="w-2/3 h-[500px]" /> : <Text />}
+      {loading ? <Skeleton className="w-1/2 h-[70%]" /> : <Text />}
 
       <Feedback />
     </div>
