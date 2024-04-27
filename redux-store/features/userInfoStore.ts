@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabaseClient } from "@/utils/supabase/client";
 import { RootState } from "../store";
 import dayjs from "dayjs";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 const supabase = supabaseClient();
 
@@ -19,7 +19,7 @@ interface IUser {
   email_address: string;
   full_name: string;
   avatar_url: string;
-  credits: number;
+  credits: number | null;
   subscription_info: ISubscriptionInfo;
 }
 
@@ -34,7 +34,7 @@ const initialState: IUserInfo = {
     email_address: "",
     full_name: "",
     avatar_url: "",
-    credits: 0,
+    credits: null,
     subscription_info: {
       subscription_type: null,
       status: false,
@@ -100,10 +100,17 @@ export const updateUserCredit = createAsyncThunk(
       email_address: string;
       spend_credits: number;
     },
-    { getState, rejectWithValue }
+    { getState }
   ) => {
     const state = getState() as RootState;
+
     const current_credits = state.userInfoStore.user.credits;
+
+    if (!current_credits) {
+      toast({ title: "Something went wrong" });
+      return null;
+    }
+
     const new_credits = current_credits - spend_credits;
     const updated_at = dayjs().format("YYYY-MM-DD HH:mm:ss");
 
@@ -111,24 +118,26 @@ export const updateUserCredit = createAsyncThunk(
       const { data, error } = await supabase
         .from("users_credit")
         .update({ credits: new_credits, updated_at: updated_at })
-        .eq("email_address", "asd")
+        .eq("email_address", email_address)
         .single();
 
       if (!error) {
         return new_credits;
+      } else {
+        toast({ title: "Something went wrong" });
+        return null;
       }
     } catch (error) {
       console.error(error);
-      toast({ title: "Something went wrong" });
     }
 
-    return 0;
+    return null;
   }
 );
 
 export const getUserInfoStore = createAsyncThunk(
   "userInfoStore/getUserInfoStore",
-  async (_, { dispatch, getState }) => {
+  async (_, { dispatch }) => {
     let info: IUser = {
       email_address: "",
       full_name: "",
@@ -142,29 +151,33 @@ export const getUserInfoStore = createAsyncThunk(
 
     const id = (await supabase.auth.getUser()).data.user?.id;
 
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("email_address, full_name, avatar_url")
-      .eq("id", id)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("email_address, full_name, avatar_url")
+        .eq("id", id)
+        .single();
 
-    if (!error) {
-      const email_address: string = data.email_address;
+      if (!error) {
+        const email_address: string = data.email_address;
 
-      const credit = await dispatch(getUserCredits(email_address));
-      const subscriptionInfo = await dispatch(
-        getUserSubscription(email_address)
-      );
+        const credit = await dispatch(getUserCredits(email_address));
+        const subscriptionInfo = await dispatch(
+          getUserSubscription(email_address)
+        );
 
-      info = {
-        email_address: data.email_address,
-        full_name: data.full_name,
-        avatar_url: data.avatar_url,
-        credits: credit.payload,
-        subscription_info: subscriptionInfo.payload as ISubscriptionInfo,
-      };
+        info = {
+          email_address: data.email_address,
+          full_name: data.full_name,
+          avatar_url: data.avatar_url,
+          credits: credit.payload,
+          subscription_info: subscriptionInfo.payload as ISubscriptionInfo,
+        };
 
-      return info;
+        return info;
+      }
+    } catch (error) {
+      console.error(error);
     }
 
     return info;
@@ -189,9 +202,6 @@ export const UserInfoStore = createSlice({
       })
       .addCase(updateUserCredit.fulfilled, (state, action) => {
         state.user.credits = action.payload;
-      })
-      .addCase(updateUserCredit.rejected, (state, action) => {
-        state.updateCreditsError = String(action.payload);
       });
   },
 });
