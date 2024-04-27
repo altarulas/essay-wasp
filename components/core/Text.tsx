@@ -8,7 +8,6 @@ import {
   saveEssayText,
   setEssayContent,
 } from "@/redux-store/features/essayStore";
-import { toast } from "../ui/use-toast";
 
 export const Text = () => {
   const dispatch = useDispatch<AppDispatch>();

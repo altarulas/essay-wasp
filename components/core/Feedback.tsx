@@ -50,10 +50,10 @@ export const Feedback = () => {
       tempEssayInfo.essay_text &&
       tempEssayInfo.essay_question
     ) {
-      return true;
+      return false;
     } else if (loadingStates.isSavingAllEssayInfo) {
-      return true;
-    } else return false;
+      return false;
+    } else return true;
   };
 
   const isSessionResettable = (): boolean => {
@@ -62,10 +62,10 @@ export const Feedback = () => {
       tempEssayInfo.essay_text &&
       tempEssayInfo.essay_question
     ) {
-      return true;
+      return false;
     } else if (loadingStates.isDeletingAllEssayInfo) {
-      return true;
-    } else return false;
+      return false;
+    } else return true;
   };
 
   return (
@@ -103,7 +103,7 @@ export const Feedback = () => {
 
         <DialogFooter className="py-4 gap-4">
           <Button
-            disabled={!isSessionResettable()}
+            disabled={isSessionResettable()}
             onClick={() => {
               handleResetSession();
             }}
@@ -115,7 +115,7 @@ export const Feedback = () => {
             )}
           </Button>
           <Button
-            disabled={!isSessionSaveable()}
+            disabled={isSessionSaveable()}
             onClick={() => {
               handleSaveSession();
             }}

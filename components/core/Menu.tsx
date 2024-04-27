@@ -22,7 +22,6 @@ import {
   startSession,
   setShowFeedbackDialog,
 } from "@/redux-store/features/essayStore";
-import { toast } from "../ui/use-toast";
 
 export const Menu = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -57,6 +56,16 @@ export const Menu = () => {
   const handleStartSession = () => {
     dispatch(createSession());
     dispatch(startSession());
+  };
+
+  const isFeedbackAvailable = (): boolean => {
+    if (
+      !is_session_finished ||
+      !tempEssayInfo.essay_text ||
+      !!tempEssayInfo.essay_feedback
+    ) {
+      return true;
+    } else return false;
   };
 
   return (
@@ -102,14 +111,7 @@ export const Menu = () => {
         Finish Session
       </Button>
 
-      <Button
-        disabled={
-          !is_session_finished ||
-          !tempEssayInfo.essay_text ||
-          !!tempEssayInfo.essay_feedback
-        }
-        onClick={handleGiveFeedback}
-      >
+      <Button disabled={isFeedbackAvailable()} onClick={handleGiveFeedback}>
         Give Feedback
       </Button>
     </div>
