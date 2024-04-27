@@ -16,14 +16,13 @@ import {
   deleteAllTempEssayInfo,
   postSaveSession,
   resetState,
-  saveEssayInfo,
+  saveAllEssayInfo,
   setShowFeedbackDialog,
 } from "@/redux-store/features/essayStore";
 import { Skeleton } from "../ui/skeleton";
-import { useToast } from "../ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 export const Feedback = () => {
-  const { toast } = useToast();
   const dispatch = useDispatch<AppDispatch>();
 
   const { tempEssayInfo, loadingStates } = useSelector(
@@ -32,14 +31,10 @@ export const Feedback = () => {
 
   const handleSaveSession = async () => {
     dispatch(setShowFeedbackDialog(false));
-    await dispatch(saveEssayInfo());
+    await dispatch(saveAllEssayInfo());
     await dispatch(deleteAllTempEssayInfo());
     dispatch(resetState());
     dispatch(postSaveSession());
-
-    toast({
-      title: "Essay session is saved",
-    });
   };
 
   const handleResetSession = async () => {
@@ -47,10 +42,6 @@ export const Feedback = () => {
     await dispatch(deleteAllTempEssayInfo());
     dispatch(resetState());
     dispatch(postSaveSession());
-
-    toast({
-      title: "Essay session is reseated",
-    });
   };
 
   const isSessionSaveable = (): boolean => {
@@ -59,6 +50,8 @@ export const Feedback = () => {
       tempEssayInfo.essay_text &&
       tempEssayInfo.essay_question
     ) {
+      return true;
+    } else if (loadingStates.isSavingAllEssayInfo) {
       return true;
     } else return false;
   };
@@ -69,6 +62,8 @@ export const Feedback = () => {
       tempEssayInfo.essay_text &&
       tempEssayInfo.essay_question
     ) {
+      return true;
+    } else if (loadingStates.isDeletingAllEssayInfo) {
       return true;
     } else return false;
   };
@@ -115,6 +110,9 @@ export const Feedback = () => {
             type="submit"
           >
             Reset This Session
+            {loadingStates.isDeletingAllEssayInfo && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
           </Button>
           <Button
             disabled={!isSessionSaveable()}
@@ -124,6 +122,9 @@ export const Feedback = () => {
             type="submit"
           >
             Save This Session
+            {loadingStates.isSavingAllEssayInfo && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

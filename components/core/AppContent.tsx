@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getEssayStore } from "@/redux-store/features/essayStore";
 import { getUserInfoStore } from "@/redux-store/features/userInfoStore";
-import { AppDispatch, RootState } from "@/redux-store/store";
+import { AppDispatch } from "@/redux-store/store";
 import { Menu } from "./Menu";
 import { Text } from "./Text";
 import { Feedback } from "./Feedback";
@@ -13,10 +13,6 @@ import { Skeleton } from "../ui/skeleton";
 
 export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();
-
-  const { is_timer_running } = useSelector(
-    (state: RootState) => state.essayStore
-  );
 
   const [loading, setLoading] = useState<boolean>(true);
 

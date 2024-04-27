@@ -8,6 +8,7 @@ import {
   saveEssayText,
   setEssayContent,
 } from "@/redux-store/features/essayStore";
+import { toast } from "../ui/use-toast";
 
 export const Text = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,6 +40,7 @@ export const Text = () => {
       dispatch(setEssayContent(essayText));
       handleSaveEssayText(essayText);
     }
+
     return;
   }, [is_session_finished]);
 

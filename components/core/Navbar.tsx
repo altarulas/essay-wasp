@@ -12,6 +12,8 @@ import { Skeleton } from "../ui/skeleton";
 import { useEffect, useState } from "react";
 
 export const Navbar = () => {
+  const { setTheme, theme } = useTheme();
+
   const { status } = useSelector(
     (state: RootState) => state.userInfoStore.user.subscription_info
   );
@@ -23,8 +25,6 @@ export const Navbar = () => {
   const { is_timer_running } = useSelector(
     (state: RootState) => state.essayStore
   );
-
-  const { setTheme, theme } = useTheme();
 
   const [remainingTime, setRemainingTime] = useState<number>(0);
 

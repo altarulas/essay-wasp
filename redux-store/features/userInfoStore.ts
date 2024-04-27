@@ -8,7 +8,7 @@ import { toast } from "@/components/ui/use-toast";
 
 const supabase = supabaseClient();
 
-type subscriptionType = "MONTHLY" | "YEARLY" | null;
+type subscriptionType = "MONTHLY" | "UNKNOWN" | null;
 
 interface ISubscriptionInfo {
   subscription_type: subscriptionType;
@@ -26,7 +26,6 @@ interface IUser {
 interface IUserInfo {
   user: IUser;
   isLoadingInfoStore: boolean;
-  updateCreditsError: string | null;
 }
 
 const initialState: IUserInfo = {
@@ -41,26 +40,32 @@ const initialState: IUserInfo = {
     },
   },
   isLoadingInfoStore: true,
-  updateCreditsError: null,
 };
 
 export const getUserSubscription = createAsyncThunk(
   "userInfoStore/getUserSubscription",
+
   async (email_address: string) => {
     let subscriptionInfo: ISubscriptionInfo = {
       subscription_type: null,
       status: false,
     };
 
-    const { data, error } = await supabase
-      .from("users_subscription")
-      .select("subscription_type, status")
-      .eq("email_address", email_address)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("users_subscription")
+        .select("subscription_type, status")
+        .eq("email_address", email_address)
+        .single();
 
-    if (!error) {
-      subscriptionInfo.subscription_type = data.subscription_type;
-      subscriptionInfo.status = data.status;
+      if (!error) {
+        subscriptionInfo.subscription_type = data.subscription_type;
+        subscriptionInfo.status = data.status;
+
+        return subscriptionInfo;
+      }
+    } catch (error) {
+      console.error(error);
     }
 
     return subscriptionInfo;
@@ -86,7 +91,7 @@ export const getUserCredits = createAsyncThunk(
       console.error(error);
     }
 
-    return 0;
+    return null;
   }
 );
 
