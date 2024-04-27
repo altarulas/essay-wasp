@@ -22,14 +22,14 @@ export const Navbar = () => {
     (state: RootState) => state.userInfoStore
   );
 
-  const { is_timer_running } = useSelector(
+  const { sessionConditions } = useSelector(
     (state: RootState) => state.essayStore
   );
 
   const [remainingTime, setRemainingTime] = useState<number>(0);
 
   useEffect(() => {
-    if (is_timer_running) {
+    if (sessionConditions.is_timer_running) {
       // Function to calculate remaining time
       const calculateRemainingTime = () => {
         const endTimeStr = localStorage.getItem("countdown_end_time");
@@ -54,7 +54,7 @@ export const Navbar = () => {
       // Cleanup interval
       return () => clearInterval(interval);
     } else return;
-  }, [is_timer_running]);
+  }, [sessionConditions.is_timer_running]);
 
   const formatTime = (time: number) => {
     const hours = Math.floor(time / 3600);
@@ -72,7 +72,7 @@ export const Navbar = () => {
         <div className="scroll-m-20 bg-background text-foreground pb-2 text-3xl font-semibold tracking-tight first:mt-0">
           Natural Lang
         </div>
-        {is_timer_running && (
+        {sessionConditions.show_timer && (
           <div className="text-2xl bg-zinc-900 rounded-lg py-1 w-36 flex items-center justify-center">
             {formatTime(remainingTime)}
           </div>

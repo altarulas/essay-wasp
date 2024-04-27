@@ -28,12 +28,9 @@ export const Menu = () => {
 
   const [selectedTopic, setSelectedTopic] = useState<string>("");
 
-  const {
-    tempEssayInfo,
-    is_session_started,
-    is_timer_running,
-    is_session_finished,
-  } = useSelector((state: RootState) => state.essayStore);
+  const { tempEssayInfo, sessionConditions } = useSelector(
+    (state: RootState) => state.essayStore
+  );
 
   const handleSelectChange = (value: string) => {
     setSelectedTopic(value);
@@ -60,7 +57,7 @@ export const Menu = () => {
 
   const isFeedbackAvailable = (): boolean => {
     if (
-      !is_session_finished ||
+      !sessionConditions.is_session_finished ||
       !tempEssayInfo.essay_text ||
       !!tempEssayInfo.essay_feedback
     ) {
@@ -68,10 +65,25 @@ export const Menu = () => {
     } else return false;
   };
 
+  const isStartSessionAvailable = () => {
+    if (
+      (!sessionConditions.is_session_started &&
+        !tempEssayInfo.essay_question) ||
+      sessionConditions.is_session_finished ||
+      sessionConditions.is_timer_running
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <div className="w-full h-[10%] gap-10 flex justify-center">
       <Select
-        disabled={is_timer_running || !!tempEssayInfo.essay_text}
+        disabled={
+          sessionConditions.is_timer_running || !!tempEssayInfo.essay_text
+        }
         onValueChange={(value) => handleSelectChange(value)}
       >
         <SelectTrigger className="w-[180px]">
@@ -90,24 +102,22 @@ export const Menu = () => {
       </Select>
 
       <Button
-        disabled={is_timer_running || !!tempEssayInfo.essay_text}
+        disabled={
+          sessionConditions.is_timer_running || !!tempEssayInfo.essay_text
+        }
         onClick={handleCreateTopic}
       >
         Create Topic
       </Button>
 
-      <Button
-        disabled={
-          (!is_session_started && !tempEssayInfo.essay_question) ||
-          is_session_finished ||
-          is_timer_running
-        }
-        onClick={handleStartSession}
-      >
+      <Button disabled={isStartSessionAvailable()} onClick={handleStartSession}>
         Start Session
       </Button>
 
-      <Button disabled={!is_timer_running} onClick={handleFinishSession}>
+      <Button
+        disabled={!sessionConditions.is_timer_running}
+        onClick={handleFinishSession}
+      >
         Finish Session
       </Button>
 

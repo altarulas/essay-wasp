@@ -12,7 +12,7 @@ import {
 export const Text = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { tempEssayInfo, is_session_finished, is_timer_running } = useSelector(
+  const { tempEssayInfo, sessionConditions } = useSelector(
     (state: RootState) => state.essayStore
   );
 
@@ -35,17 +35,17 @@ export const Text = () => {
   }, [tempEssayInfo.essay_text]);
 
   useEffect(() => {
-    if (is_session_finished && essayText) {
+    if (sessionConditions.is_session_finished && essayText) {
       dispatch(setEssayContent(essayText));
       handleSaveEssayText(essayText);
     }
 
     return;
-  }, [is_session_finished]);
+  }, [sessionConditions.is_session_finished]);
 
   return (
     <Textarea
-      disabled={!is_timer_running}
+      disabled={!sessionConditions.is_timer_running}
       value={essayText}
       onChange={(e) => handleEssayChange(e)}
       className="w-1/2 h-[70%] p-4 border-[3.5px]"

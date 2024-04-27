@@ -28,6 +28,14 @@ interface ISavedEssay {
   created_at: Date | null;
 }
 
+interface ISessionConditions {
+  is_session_started: boolean;
+  is_timer_running: boolean;
+  show_timer: boolean;
+  is_session_finished: boolean;
+  left_time: string | null;
+}
+
 interface ILoading {
   isEssayStoreLoading: boolean;
   isQuestionLoading: boolean;
@@ -43,9 +51,7 @@ interface IEssayInfo {
   tempEssayInfo: ITempEssay;
   savedEssayInfo: ISavedEssay[] | [];
   operationCosts: ICost;
-  is_session_started: boolean;
-  is_timer_running: boolean;
-  is_session_finished: boolean;
+  sessionConditions: ISessionConditions;
   loadingStates: ILoading;
 }
 
@@ -61,9 +67,13 @@ const initialState: IEssayInfo = {
     create_feedback_cost: null,
     save_essay_cost: null,
   },
-  is_session_started: false,
-  is_timer_running: false,
-  is_session_finished: false,
+  sessionConditions: {
+    is_session_started: false,
+    is_timer_running: false,
+    show_timer: false,
+    is_session_finished: false,
+    left_time: null,
+  },
   loadingStates: {
     isEssayStoreLoading: true,
     isQuestionLoading: false,
@@ -486,47 +496,79 @@ export const EssayStore = createSlice({
   reducers: {
     resetState: (state) => {
       state.tempEssayInfo = initialState.tempEssayInfo;
-      state.is_session_finished = initialState.is_session_finished;
+      state.sessionConditions = initialState.sessionConditions;
     },
     createSession: (state) => {
       localStorage.setItem("is_session_started", "true");
-      state.is_session_started = true;
+      state.sessionConditions.is_session_started = true;
     },
     startSession: (state) => {
       localStorage.setItem("is_session_finished", "false");
       localStorage.setItem("is_timer_running", "true");
+      localStorage.setItem("show_timer", "true");
 
       const endTime = Date.now() + 40 * 60 * 1000; // 40 minutes in milliseconds
       localStorage.setItem("countdown_end_time", endTime.toString());
 
-      state.is_timer_running = true;
+      state.sessionConditions.is_session_finished = false;
+      state.sessionConditions.is_timer_running = true;
+      state.sessionConditions.show_timer = true;
     },
     finishSession: (state) => {
       localStorage.setItem("is_session_started", "false");
       localStorage.setItem("is_session_finished", "true");
       localStorage.setItem("is_timer_running", "false");
 
-      state.is_session_started = false;
-      state.is_session_finished = true;
-      state.is_timer_running = false;
+      state.sessionConditions.is_session_started = false;
+      state.sessionConditions.is_session_finished = true;
+      state.sessionConditions.is_timer_running = false;
     },
     postSaveSession: (state) => {
       localStorage.setItem("is_session_started", "false");
       localStorage.setItem("is_session_finished", "false");
       localStorage.setItem("is_timer_running", "false");
+      localStorage.setItem("show_timer", "false");
 
-      state.is_session_started = false;
-      state.is_session_finished = false;
-      state.is_timer_running = false;
+      state.sessionConditions.is_session_started = false;
+      state.sessionConditions.is_session_finished = false;
+      state.sessionConditions.is_timer_running = false;
+      state.sessionConditions.show_timer = false;
     },
     getSession: (state) => {
+      const timer = localStorage.getItem("is_timer_running") === "true";
+      const showTimer = localStorage.getItem("show_timer") === "true";
+      const leftTime = localStorage.getItem("countdown_end_time");
       const start = localStorage.getItem("is_session_finished") === "true";
       const finish = localStorage.getItem("is_session_finished") === "true";
-      const timer = localStorage.getItem("is_timer_running") === "true";
 
-      state.is_timer_running = timer;
-      state.is_session_started = start;
-      state.is_session_finished = finish;
+      /* let time: number = 0;
+
+      if (leftTime) {
+        const endTime = parseInt(leftTime, 10);
+        const currentTime = Date.now();
+        const timeDifference = endTime - currentTime;
+        if (timeDifference > 0) {
+          time = Math.floor(timeDifference / 1000); // Convert milliseconds to seconds
+        } else {
+          time = 0;
+        }
+      }
+
+      const formatTime = (time: number) => {
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor((time % 3600) / 60);
+        const seconds = time % 60;
+
+        return `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      };
+      */
+      state.sessionConditions.is_timer_running = timer;
+      state.sessionConditions.show_timer = showTimer;
+      state.sessionConditions.is_session_started = start;
+      state.sessionConditions.is_session_finished = finish;
+      /* state.sessionConditions.left_time = time; */
     },
     setEssayContent: (state, action: PayloadAction<string>) => {
       state.tempEssayInfo.essay_text = action.payload;
