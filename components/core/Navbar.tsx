@@ -4,14 +4,17 @@ import { Logout } from "./Logout";
 import { CiLight } from "react-icons/ci";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useTheme } from "next-themes";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux-store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux-store/store";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 import { useEffect, useState } from "react";
+import { saveLeftTime } from "@/redux-store/features/essayStore";
 
 export const Navbar = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const { setTheme, theme } = useTheme();
 
   const { status } = useSelector(
@@ -26,7 +29,8 @@ export const Navbar = () => {
     (state: RootState) => state.essayStore
   );
 
-  const [remainingTime, setRemainingTime] = useState<number>(0);
+  const [time, setTime] = useState<number>(0);
+  const [remainingTime, setRemainingTime] = useState<string | null>(null);
 
   useEffect(() => {
     if (sessionConditions.is_timer_running) {
@@ -38,9 +42,9 @@ export const Navbar = () => {
           const currentTime = Date.now();
           const timeDifference = endTime - currentTime;
           if (timeDifference > 0) {
-            setRemainingTime(Math.floor(timeDifference / 1000)); // Convert milliseconds to seconds
+            setTime(Math.floor(timeDifference / 1000)); // Convert milliseconds to seconds
           } else {
-            setRemainingTime(0);
+            setTime(0);
           }
         }
       };
@@ -55,6 +59,28 @@ export const Navbar = () => {
       return () => clearInterval(interval);
     } else return;
   }, [sessionConditions.is_timer_running]);
+
+  useEffect(() => {
+    if (
+      sessionConditions.is_session_finished &&
+      sessionConditions.show_timer &&
+      !sessionConditions.left_timer
+    ) {
+      const leftTime = formatTime(time);
+      dispatch(saveLeftTime(leftTime));
+    } else return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    sessionConditions.is_session_finished,
+    sessionConditions.show_timer,
+    sessionConditions.left_timer,
+  ]);
+
+  useEffect(() => {
+    if (sessionConditions.left_timer) {
+      setRemainingTime(sessionConditions.left_timer);
+    }
+  }, [sessionConditions.left_timer]);
 
   const formatTime = (time: number) => {
     const hours = Math.floor(time / 3600);
@@ -72,11 +98,20 @@ export const Navbar = () => {
         <div className="scroll-m-20 bg-background text-foreground pb-2 text-3xl font-semibold tracking-tight first:mt-0">
           Natural Lang
         </div>
-        {sessionConditions.show_timer && (
-          <div className="text-2xl bg-zinc-900 rounded-lg py-1 w-36 flex items-center justify-center">
-            {formatTime(remainingTime)}
-          </div>
-        )}
+        {(sessionConditions.show_timer || sessionConditions.is_timer_running) &&
+          !sessionConditions.left_timer && (
+            <div className="text-2xl bg-zinc-900 rounded-lg py-1 w-36 flex items-center justify-center">
+              {formatTime(time)}
+            </div>
+          )}
+
+        {sessionConditions.show_timer &&
+          !sessionConditions.is_timer_running &&
+          sessionConditions.left_timer && (
+            <div className="text-2xl bg-zinc-900 rounded-lg py-1 w-36 flex items-center justify-center">
+              {remainingTime}
+            </div>
+          )}
       </div>
 
       <div className="flex items-center gap-4">

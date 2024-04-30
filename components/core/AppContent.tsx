@@ -10,6 +10,7 @@ import { Text } from "./Text";
 import { Feedback } from "./Feedback";
 import { Question } from "./Question";
 import { Skeleton } from "../ui/skeleton";
+import { LoadingDialog } from "./LoadingDialog";
 
 export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();

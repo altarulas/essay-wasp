@@ -15,18 +15,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import {
   createFeedback,
-  createSession,
   finishSession,
   resetState,
   createEssaySession,
   startSession,
   setShowFeedbackDialog,
+  resetSessionInfo,
 } from "@/redux-store/features/essayStore";
+import { LoadingDialog } from "./LoadingDialog";
 
 export const Menu = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [selectedTopic, setSelectedTopic] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { tempEssayInfo, sessionConditions } = useSelector(
     (state: RootState) => state.essayStore
@@ -36,8 +38,13 @@ export const Menu = () => {
     setSelectedTopic(value);
   };
 
+  const handleResetSession = async () => {
+    setLoading(true);
+    await dispatch(resetSessionInfo());
+    setLoading(false);
+  };
+
   const handleCreateTopic = async () => {
-    dispatch(resetState());
     await dispatch(createEssaySession(selectedTopic));
   };
 
@@ -51,7 +58,6 @@ export const Menu = () => {
   };
 
   const handleStartSession = () => {
-    dispatch(createSession());
     dispatch(startSession());
   };
 
@@ -66,11 +72,15 @@ export const Menu = () => {
   };
 
   const isStartSessionAvailable = () => {
+    if (sessionConditions.is_timer_running) {
+      return true;
+    }
+
     if (
       (!sessionConditions.is_session_started &&
         !tempEssayInfo.essay_question) ||
       sessionConditions.is_session_finished ||
-      sessionConditions.is_timer_running
+      !!tempEssayInfo.essay_feedback
     ) {
       return true;
     } else {
@@ -80,10 +90,11 @@ export const Menu = () => {
 
   return (
     <div className="w-full h-[10%] gap-10 flex justify-center">
+      <LoadingDialog open={loading} />
+      <Button onClick={handleResetSession}>Reset Session</Button>
+
       <Select
-        disabled={
-          sessionConditions.is_timer_running || !!tempEssayInfo.essay_text
-        }
+        disabled={sessionConditions.is_timer_running}
         onValueChange={(value) => handleSelectChange(value)}
       >
         <SelectTrigger className="w-[180px]">
@@ -102,9 +113,7 @@ export const Menu = () => {
       </Select>
 
       <Button
-        disabled={
-          sessionConditions.is_timer_running || !!tempEssayInfo.essay_text
-        }
+        disabled={sessionConditions.is_timer_running}
         onClick={handleCreateTopic}
       >
         Create Topic

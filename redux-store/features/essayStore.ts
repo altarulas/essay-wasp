@@ -30,10 +30,10 @@ interface ISavedEssay {
 
 interface ISessionConditions {
   is_session_started: boolean;
+  is_session_finished: boolean;
   is_timer_running: boolean;
   show_timer: boolean;
-  is_session_finished: boolean;
-  left_time: string | null;
+  left_timer: string | null;
 }
 
 interface ILoading {
@@ -69,10 +69,10 @@ const initialState: IEssayInfo = {
   },
   sessionConditions: {
     is_session_started: false,
+    is_session_finished: false,
     is_timer_running: false,
     show_timer: false,
-    is_session_finished: false,
-    left_time: null,
+    left_timer: null,
   },
   loadingStates: {
     isEssayStoreLoading: true,
@@ -90,29 +90,51 @@ export const createEssaySession = createAsyncThunk(
   "essayStore/createEssaySession",
 
   async (selected_question: string, { dispatch, getState }) => {
-    try {
-      const state = getState() as RootState;
+    const state = getState() as RootState;
+    const current_essay_question =
+      state.essayStore.tempEssayInfo.essay_question;
 
+    let essay_question: string = "";
+
+    if (!selected_question) {
+      toast({ title: "Please select an essay topic type" });
+      return current_essay_question;
+    }
+
+    dispatch(resetState());
+
+    try {
       const email_address = state.userInfoStore.user.email_address;
       const credit = state.userInfoStore.user.credits;
       const isUserSub = state.userInfoStore.user.subscription_info.status;
 
       if (!email_address || !credit) {
-        return toast({ title: "Something went wrong" });
+        toast({ title: "Something went wrong" });
+        return current_essay_question;
       }
 
       if (!isUserSub) {
         if (credit >= 10) {
-          await dispatch(createQuestion({ selected_question, email_address }));
+          const data = await dispatch(
+            createQuestion({ selected_question, email_address })
+          );
+          essay_question = data.payload as string;
+          return essay_question;
         } else {
-          return toast({ title: "Credits are not enough" });
+          toast({ title: "Credits are not enough" });
+          return current_essay_question;
         }
       } else {
-        await dispatch(createQuestion({ selected_question, email_address }));
+        const data = await dispatch(
+          createQuestion({ selected_question, email_address })
+        );
+        essay_question = data.payload as string;
+        return essay_question;
       }
     } catch (error) {
       console.error(error);
       toast({ title: "Something went wrong" });
+      return current_essay_question;
     }
   }
 );
@@ -136,11 +158,6 @@ export const createQuestion = createAsyncThunk(
 
     const isUserSub = state.userInfoStore.user.subscription_info.status;
     const cost = state.essayStore.operationCosts.create_question_cost;
-
-    if (!selected_question) {
-      toast({ title: "Please select an essay topic type" });
-      return essay_question;
-    }
 
     if (!email_address || !cost) {
       toast({ title: "Something went wrong" });
@@ -392,6 +409,42 @@ export const deleteAllTempEssayInfo = createAsyncThunk(
   }
 );
 
+export const resetSessionInfo = createAsyncThunk(
+  "essayStore/resetSessionInfo",
+
+  async (_, { getState, dispatch }) => {
+    const state = getState() as RootState;
+
+    const email_address = state.userInfoStore.user.email_address;
+
+    if (!email_address) {
+      toast({ title: "Something went wrong" });
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("temp_users_essay")
+        .delete()
+        .eq("email_address", email_address);
+
+      if (!error) {
+        dispatch(resetState());
+        toast({ title: "Essay session is deleted" });
+        return;
+      } else {
+        toast({ title: "Something went wrong" });
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+      toast({ title: "Something went wrong" });
+    }
+
+    return;
+  }
+);
+
 export const getOperationCosts = createAsyncThunk(
   "essayStore/getOperationCosts",
 
@@ -497,37 +550,44 @@ export const EssayStore = createSlice({
     resetState: (state) => {
       state.tempEssayInfo = initialState.tempEssayInfo;
       state.sessionConditions = initialState.sessionConditions;
-    },
-    createSession: (state) => {
-      localStorage.setItem("is_session_started", "true");
-      state.sessionConditions.is_session_started = true;
+
+      localStorage.removeItem("is_session_started");
+      localStorage.removeItem("is_session_finished");
+      localStorage.removeItem("is_timer_running");
+      localStorage.removeItem("show_timer");
+      localStorage.removeItem("countdown_end_time");
+      localStorage.removeItem("left_time");
     },
     startSession: (state) => {
-      localStorage.setItem("is_session_finished", "false");
+      localStorage.setItem("is_session_started", "true");
       localStorage.setItem("is_timer_running", "true");
       localStorage.setItem("show_timer", "true");
 
       const endTime = Date.now() + 40 * 60 * 1000; // 40 minutes in milliseconds
       localStorage.setItem("countdown_end_time", endTime.toString());
 
-      state.sessionConditions.is_session_finished = false;
+      state.sessionConditions.is_session_started = true;
       state.sessionConditions.is_timer_running = true;
       state.sessionConditions.show_timer = true;
     },
+    saveLeftTime: (state, action: PayloadAction<string>) => {
+      localStorage.setItem("left_time", action.payload);
+    },
     finishSession: (state) => {
-      localStorage.setItem("is_session_started", "false");
+      localStorage.removeItem("is_session_started");
       localStorage.setItem("is_session_finished", "true");
-      localStorage.setItem("is_timer_running", "false");
+      localStorage.removeItem("is_timer_running");
+      localStorage.removeItem("countdown_end_time");
 
       state.sessionConditions.is_session_started = false;
       state.sessionConditions.is_session_finished = true;
       state.sessionConditions.is_timer_running = false;
     },
     postSaveSession: (state) => {
-      localStorage.setItem("is_session_started", "false");
-      localStorage.setItem("is_session_finished", "false");
-      localStorage.setItem("is_timer_running", "false");
-      localStorage.setItem("show_timer", "false");
+      localStorage.removeItem("is_session_started");
+      localStorage.removeItem("is_session_finished");
+      localStorage.removeItem("is_timer_running");
+      localStorage.removeItem("show_timer");
 
       state.sessionConditions.is_session_started = false;
       state.sessionConditions.is_session_finished = false;
@@ -535,40 +595,17 @@ export const EssayStore = createSlice({
       state.sessionConditions.show_timer = false;
     },
     getSession: (state) => {
-      const timer = localStorage.getItem("is_timer_running") === "true";
-      const showTimer = localStorage.getItem("show_timer") === "true";
-      const leftTime = localStorage.getItem("countdown_end_time");
-      const start = localStorage.getItem("is_session_finished") === "true";
-      const finish = localStorage.getItem("is_session_finished") === "true";
+      const isStarted = localStorage.getItem("is_session_started") === "true";
+      const isFinished = localStorage.getItem("is_session_finished") === "true";
+      const isTimer = localStorage.getItem("is_timer_running") === "true";
+      const isShowTimer = localStorage.getItem("show_timer") === "true";
+      const leftTime = localStorage.getItem("left_time");
 
-      /* let time: number = 0;
-
-      if (leftTime) {
-        const endTime = parseInt(leftTime, 10);
-        const currentTime = Date.now();
-        const timeDifference = endTime - currentTime;
-        if (timeDifference > 0) {
-          time = Math.floor(timeDifference / 1000); // Convert milliseconds to seconds
-        } else {
-          time = 0;
-        }
-      }
-
-      const formatTime = (time: number) => {
-        const hours = Math.floor(time / 3600);
-        const minutes = Math.floor((time % 3600) / 60);
-        const seconds = time % 60;
-
-        return `${hours.toString().padStart(2, "0")}:${minutes
-          .toString()
-          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-      };
-      */
-      state.sessionConditions.is_timer_running = timer;
-      state.sessionConditions.show_timer = showTimer;
-      state.sessionConditions.is_session_started = start;
-      state.sessionConditions.is_session_finished = finish;
-      /* state.sessionConditions.left_time = time; */
+      state.sessionConditions.is_session_started = isStarted;
+      state.sessionConditions.is_session_finished = isFinished;
+      state.sessionConditions.is_timer_running = isTimer;
+      state.sessionConditions.show_timer = isShowTimer;
+      state.sessionConditions.left_timer = leftTime;
     },
     setEssayContent: (state, action: PayloadAction<string>) => {
       state.tempEssayInfo.essay_text = action.payload;
@@ -582,11 +619,11 @@ export const EssayStore = createSlice({
       .addCase(createEssaySession.pending, (state, action) => {
         state.loadingStates.isQuestionLoading = true;
       })
-      .addCase(createQuestion.fulfilled, (state, action) => {
+      .addCase(createEssaySession.fulfilled, (state, action) => {
         state.tempEssayInfo.essay_question = action.payload;
         state.loadingStates.isQuestionLoading = false;
       })
-      .addCase(createQuestion.rejected, (state, action) => {
+      .addCase(createEssaySession.rejected, (state, action) => {
         state.loadingStates.isQuestionLoading = false;
       })
       .addCase(saveEssayText.pending, (state, action) => {
@@ -626,6 +663,15 @@ export const EssayStore = createSlice({
       .addCase(deleteAllTempEssayInfo.rejected, (state, action) => {
         state.loadingStates.isDeletingAllEssayInfo = false;
       })
+      .addCase(resetSessionInfo.pending, (state, action) => {
+        state.loadingStates.isDeletingAllEssayInfo = true;
+      })
+      .addCase(resetSessionInfo.fulfilled, (state, action) => {
+        state.loadingStates.isDeletingAllEssayInfo = false;
+      })
+      .addCase(resetSessionInfo.rejected, (state, action) => {
+        state.loadingStates.isDeletingAllEssayInfo = false;
+      })
       .addCase(getOperationCosts.fulfilled, (state, action) => {
         state.operationCosts = action.payload;
       })
@@ -658,8 +704,8 @@ export const {
   resetState,
   setEssayContent,
   setShowFeedbackDialog,
-  createSession,
   startSession,
+  saveLeftTime,
   finishSession,
   postSaveSession,
   getSession,
