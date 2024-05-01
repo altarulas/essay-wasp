@@ -16,13 +16,19 @@ import { Button } from "../ui/button";
 import {
   createFeedback,
   finishSession,
-  resetState,
   createEssaySession,
   startSession,
   setShowFeedbackDialog,
   resetSessionInfo,
 } from "@/redux-store/features/essayStore";
 import { LoadingDialog } from "./LoadingDialog";
+import { RiRefreshLine } from "react-icons/ri";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Menu = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -90,11 +96,23 @@ export const Menu = () => {
 
   return (
     <div className="w-full h-[10%] gap-10 flex justify-center">
-      <LoadingDialog open={loading} />
-      <Button onClick={handleResetSession}>Reset Session</Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="outline" size="icon" onClick={handleResetSession}>
+              <RiRefreshLine className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Reset Session</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <Select
-        disabled={sessionConditions.is_timer_running}
+        disabled={
+          sessionConditions.is_timer_running || !!tempEssayInfo.essay_text
+        }
         onValueChange={(value) => handleSelectChange(value)}
       >
         <SelectTrigger className="w-[180px]">
@@ -113,7 +131,9 @@ export const Menu = () => {
       </Select>
 
       <Button
-        disabled={sessionConditions.is_timer_running}
+        disabled={
+          sessionConditions.is_timer_running || !!tempEssayInfo.essay_question
+        }
         onClick={handleCreateTopic}
       >
         Create Topic
@@ -133,6 +153,8 @@ export const Menu = () => {
       <Button disabled={isFeedbackAvailable()} onClick={handleGiveFeedback}>
         Give Feedback
       </Button>
+
+      <LoadingDialog open={loading} />
     </div>
   );
 };

@@ -25,7 +25,7 @@ export const Reports = () => {
   }, []);
 
   return (
-    <Card className="p-10 h-full w-full flex flex-col justify-between border-2">
+    <Card className="p-10 h-full w-full flex flex-col justify-between bg-zinc-50 dark:bg-zinc-900">
       {loadingStates.isSavedSessionLoading ? (
         <div className="w-full h-full flex flex-col items-center space-y-6">
           <Skeleton className="w-full h-1/6" />
@@ -34,11 +34,12 @@ export const Reports = () => {
           <Skeleton className="w-full h-1/6" />
           <Skeleton className="w-full h-1/6" />
         </div>
-      ) : (
+      ) : savedEssayInfo.length > 0 ? (
         <CardContent className={styles.container}>
           {savedEssayInfo.map((essay, index) => (
             <Report
               key={String(essay.created_at)}
+              leftTime={essay.left_time}
               createdAt={essay.created_at}
               essayQuestion={essay.essay_question}
               essayText={essay.essay_text}
@@ -46,6 +47,10 @@ export const Reports = () => {
             />
           ))}
         </CardContent>
+      ) : (
+        <div className="h-full w-full flex justify-center items-center">
+          <span className="text-lg">You have no reports currently</span>
+        </div>
       )}
     </Card>
   );

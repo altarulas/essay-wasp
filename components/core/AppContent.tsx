@@ -10,7 +10,6 @@ import { Text } from "./Text";
 import { Feedback } from "./Feedback";
 import { Question } from "./Question";
 import { Skeleton } from "../ui/skeleton";
-import { LoadingDialog } from "./LoadingDialog";
 
 export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,6 +34,13 @@ export const AppContent = () => {
       {loading ? <Skeleton className="w-1/2 h-1/5" /> : <Question />}
 
       {loading ? <Skeleton className="w-1/2 h-[70%]" /> : <Text />}
+
+      <span className="text-sm text-gray-500">
+        Natural Lang is an experimental tool. Please do not completely trust AI
+        results.
+      </span>
+
+      <span className="text-sm text-gray-500">Powered by GPT-4</span>
 
       <Feedback />
     </div>

@@ -33,7 +33,7 @@ export const Settings = () => {
   }, []);
 
   return (
-    <Card className="p-6 space-y-8 w-full h-full flex flex-col justify-between border-2">
+    <Card className="p-6 space-y-8 w-full h-full flex flex-col justify-between bg-zinc-50 dark:bg-zinc-900">
       {isLoadingInfoStore ? (
         <div className="h-full w-full flex flex-row space-x-10">
           <Skeleton className="w-1/2 h-full" />

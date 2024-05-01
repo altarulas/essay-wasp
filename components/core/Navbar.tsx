@@ -100,7 +100,7 @@ export const Navbar = () => {
         </div>
         {(sessionConditions.show_timer || sessionConditions.is_timer_running) &&
           !sessionConditions.left_timer && (
-            <div className="text-2xl bg-zinc-900 rounded-lg py-1 w-36 flex items-center justify-center">
+            <div className="text-2xl bg-background rounded-lg py-1 w-36 flex items-center justify-center">
               {formatTime(time)}
             </div>
           )}
@@ -108,7 +108,7 @@ export const Navbar = () => {
         {sessionConditions.show_timer &&
           !sessionConditions.is_timer_running &&
           sessionConditions.left_timer && (
-            <div className="text-2xl bg-zinc-900 rounded-lg py-1 w-36 flex items-center justify-center">
+            <div className="text-2xl bg-background rounded-lg py-1 w-36 flex items-center justify-center">
               {remainingTime}
             </div>
           )}
@@ -127,7 +127,7 @@ export const Navbar = () => {
                   target="_blank"
                   href="https://buymeacoffee.com/natural.lang/membership"
                 >
-                  <Button variant="destructive">Use Unlimited</Button>
+                  <Button variant="premium">Premium</Button>
                 </Link>
               </>
             ))}

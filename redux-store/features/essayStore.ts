@@ -25,6 +25,7 @@ interface ISavedEssay {
   essay_question: string;
   essay_text: string;
   essay_feedback: string;
+  left_time: string;
   created_at: Date | null;
 }
 
@@ -330,6 +331,8 @@ export const saveAllEssayInfo = createAsyncThunk(
     const cost = state.essayStore.operationCosts.save_essay_cost;
     const isUserSub = state.userInfoStore.user.subscription_info.status;
 
+    const leftTime = String(localStorage.getItem("left_time"));
+
     if (!email_address || !cost) {
       toast({ title: "Something went wrong" });
       return;
@@ -354,9 +357,13 @@ export const saveAllEssayInfo = createAsyncThunk(
         }
       }
 
-      const { data, error } = await supabase
-        .from("users_essay")
-        .insert({ email_address, essay_question, essay_text, essay_feedback });
+      const { data, error } = await supabase.from("users_essay").insert({
+        email_address,
+        left_time: leftTime,
+        essay_question,
+        essay_text,
+        essay_feedback,
+      });
 
       if (!error) {
         toast({ title: "Essay session is saved" });
@@ -484,7 +491,9 @@ export const getUserSavedEssay = createAsyncThunk(
     try {
       const { data, error } = await supabase
         .from("users_essay")
-        .select("essay_question, essay_text, essay_feedback, created_at")
+        .select(
+          " essay_question, essay_text, essay_feedback, created_at, left_time"
+        )
         .eq("email_address", email_address);
 
       if (!error) {
