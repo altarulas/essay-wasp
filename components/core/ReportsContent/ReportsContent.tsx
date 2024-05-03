@@ -5,7 +5,7 @@ import { Card, CardContent } from "../../ui/card";
 import { getUserSavedEssay } from "@/redux-store/features/essayStore";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { Report } from "../Reports/Report";
+import { Report } from "../Report/Report";
 import { Skeleton } from "../../ui/skeleton";
 import styles from "./ReportsContent.module.scss";
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "../../ui/button";
 import { FaArrowLeft } from "react-icons/fa";
-import { Reports } from "./core/ReportsContent/ReportsContent";
+import { Reports } from "../../core/ReportsContent/ReportsContent";
 
 const ReportsPage = () => {
   return (
