@@ -28,19 +28,21 @@ export const AppContent = () => {
   }, []);
 
   return (
-    <div className="w-full h-4/5 flex flex-col justify-center items-center gap-8">
+    <div className="w-full h-[90%] flex flex-col justify-center items-center gap-8">
       {loading ? <Skeleton className="w-1/2 h-[10%]" /> : <Menu />}
 
-      {loading ? <Skeleton className="w-1/2 h-1/5" /> : <Question />}
+      {loading ? <Skeleton className="w-1/2 h-[15%]" /> : <Question />}
 
-      {loading ? <Skeleton className="w-1/2 h-[70%]" /> : <Text />}
+      {loading ? <Skeleton className="w-1/2 h-[75%]" /> : <Text />}
 
-      <span className="text-sm text-gray-500">
-        Natural Lang is an experimental tool. Please do not completely trust AI
-        results.
-      </span>
+      <div className="flex justify-center items-center flex-col gap-1">
+        <span className="text-[12px] text-gray-500">
+          Natural Lang is an experimental tool. Please do not completely trust
+          AI results.
+        </span>
 
-      <span className="text-sm text-gray-500">Powered by GPT-4</span>
+        <span className="text-[12px] text-gray-500">Powered by GPT-4</span>
+      </div>
 
       <Feedback />
     </div>

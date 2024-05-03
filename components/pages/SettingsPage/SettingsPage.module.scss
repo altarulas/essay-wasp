@@ -5,7 +5,7 @@
     @apply h-full w-full flex justify-center items-center;
 
     .content {
-      @apply h-2/3 w-1/2 flex flex-col justify-center items-start gap-10;
+      @apply h-fit w-fit flex flex-col justify-center items-start gap-10;
     }
   }
 }

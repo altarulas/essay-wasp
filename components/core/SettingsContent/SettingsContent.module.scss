@@ -1,23 +1,52 @@
 .container {
   @apply p-6 space-y-8 w-full h-full flex flex-col justify-between;
 
-  .loadingContainer {
-    @apply h-full w-full flex flex-row space-x-10;
+  .loadingWrapper {
+    @apply h-[400px] w-[450px] flex flex-col space-y-4;
 
-    .loadingWrapper {
-      @apply h-full w-1/2 flex flex-col space-y-10 justify-center items-center;
+    .loading {
+      @apply w-full h-1/4;
     }
   }
 
-  .cardContent {
-    @apply flex flex-row justify-between;
+  .cardContentWrapper {
+    @apply w-full h-full flex items-center justify-center;
 
-    .cardHeader {
-      @apply w-fit flex flex-col items-start gap-10;
+    .content {
+      @apply flex flex-col space-y-6;
+    }
+
+    .subscription {
+      @apply flex items-center gap-8;
+
+      .button {
+        @apply text-center w-fit h-[42px] shadow-2xl;
+
+        background: linear-gradient(135deg, #341c75, #183467, #271965, #433d3d);
+        background-size: 300% auto;
+        color: #fff;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .button:hover {
+        background-position: 100% 0;
+        transform: translateY(-1px); /* Adjusted for smoother hover animation */
+        border-image: linear-gradient(
+          to right,
+          #000000 #110740,
+          #0b214b,
+          #1e0b51
+        ); /* Reversed gradient for border animation */
+        border-image-slice: 1;
+      }
     }
   }
 
   .cardFooter {
-    @apply w-full flex justify-end gap-8;
+    @apply w-full flex justify-end gap-8 p-0;
   }
 }

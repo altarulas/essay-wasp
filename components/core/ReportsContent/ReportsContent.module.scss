@@ -1,8 +1,16 @@
 .container {
-  @apply p-10 h-full w-full flex flex-col justify-between;
+  @apply px-4 py-8 h-full w-full flex flex-col justify-between;
 
   .loadingWrapper {
     @apply w-full h-full flex flex-col items-center space-y-6;
+
+    .loading {
+      @apply w-full h-1/6;
+    }
+  }
+
+  .content {
+    @apply flex flex-col items-start overflow-y-auto gap-8 min-w-[500px] p-2;
   }
 
   .emptyInfoWrapper {

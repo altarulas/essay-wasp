@@ -134,23 +134,33 @@ export const Menu = () => {
         disabled={
           sessionConditions.is_timer_running || !!tempEssayInfo.essay_question
         }
+        variant="ghost"
         onClick={handleCreateTopic}
       >
         Create Topic
       </Button>
 
-      <Button disabled={isStartSessionAvailable()} onClick={handleStartSession}>
+      <Button
+        variant="ghost"
+        disabled={isStartSessionAvailable()}
+        onClick={handleStartSession}
+      >
         Start Session
       </Button>
 
       <Button
+        variant="ghost"
         disabled={!sessionConditions.is_timer_running}
         onClick={handleFinishSession}
       >
         Finish Session
       </Button>
 
-      <Button disabled={isFeedbackAvailable()} onClick={handleGiveFeedback}>
+      <Button
+        variant="ghost"
+        disabled={isFeedbackAvailable()}
+        onClick={handleGiveFeedback}
+      >
         Give Feedback
       </Button>
 

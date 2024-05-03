@@ -12,6 +12,17 @@ import { Skeleton } from "../../ui/skeleton";
 import { useEffect, useState } from "react";
 import { saveLeftTime } from "@/redux-store/features/essayStore";
 import styles from "./Navbar.module.scss";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -118,12 +129,42 @@ export const Navbar = () => {
               <>
                 <span className="text-sm">credits: {user.credits}</span>
 
-                <Link
-                  target="_blank"
-                  href="https://buymeacoffee.com/natural.lang/membership"
-                >
-                  <Button className={styles.button}>Go Premium</Button>
-                </Link>
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <Button className={styles.button}>Premium</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>About Premium Usage</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        We are using Buy Me Coffee as a payment method. To
+                        understand your sales purchase, enter the e-mail address
+                        of your gmail account that you registered with Natural
+                        Lang. By doing this, you are creating a Buy Me Coffee
+                        account with that e-mail. In Buy Me Coffee, you will be
+                        able to manage all subscription operations.
+                      </AlertDialogDescription>
+                      <AlertDialogTitle>Important!!!</AlertDialogTitle>
+                      <AlertDialogDescription className="text-red-700 font-bold">
+                        If you purchase a membership from Buy Me Coffee with a
+                        different e-mail address than the e-mail address you
+                        entered in Natural Lang, you will not be able to get
+                        premium rights and you will also waste your money.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <Link
+                        target="_blank"
+                        href="https://buymeacoffee.com/natural.lang/membership"
+                      >
+                        <AlertDialogAction>
+                          Go to Buy Me Coffee
+                        </AlertDialogAction>
+                      </Link>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </>
             ))}
         </div>

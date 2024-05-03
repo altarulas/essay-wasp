@@ -27,12 +27,12 @@ export const Report = (props: ReportProps) => {
 
   return (
     <div className={styles.container}>
-      <Button className="w-fit"> {formattedCreatedAt} </Button>
-      <Button className="w-fit"> {leftTime} </Button>
+      <div className={styles.date}>{formattedCreatedAt}</div>
+      <div className={styles.time}>{leftTime}</div>
 
       <Dialog>
         <DialogTrigger asChild>
-          <Button>Show Essay</Button>
+          <Button variant="outline">Show Essay</Button>
         </DialogTrigger>
 
         <DialogContent className={styles.dialogContent}>
@@ -50,7 +50,7 @@ export const Report = (props: ReportProps) => {
 
       <Dialog>
         <DialogTrigger asChild>
-          <Button>Show Feedback</Button>
+          <Button variant="outline">Show Feedback</Button>
         </DialogTrigger>
 
         <DialogContent className={styles.dialogContent}>

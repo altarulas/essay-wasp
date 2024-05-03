@@ -29,14 +29,14 @@ export const Reports = () => {
     <Card className={cn(styles.container, "bg-zinc-50 dark:bg-zinc-900")}>
       {loadingStates.isSavedSessionLoading ? (
         <div className={styles.loadingWrapper}>
-          <Skeleton className="w-full h-1/6" />
-          <Skeleton className="w-full h-1/6" />
-          <Skeleton className="w-full h-1/6" />
-          <Skeleton className="w-full h-1/6" />
-          <Skeleton className="w-full h-1/6" />
+          <Skeleton className={styles.loading} />
+          <Skeleton className={styles.loading} />
+          <Skeleton className={styles.loading} />
+          <Skeleton className={styles.loading} />
+          <Skeleton className={styles.loading} />
         </div>
       ) : savedEssayInfo.length > 0 ? (
-        <CardContent className={styles.container}>
+        <CardContent className={styles.content}>
           {savedEssayInfo.map((essay, index) => (
             <Report
               key={String(essay.created_at)}
