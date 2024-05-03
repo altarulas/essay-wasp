@@ -2,7 +2,7 @@
 
 import { supabaseClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 export const Logout = () => {
   const router = useRouter();
@@ -15,7 +15,7 @@ export const Logout = () => {
 
   return (
     <Button
-      className="rounded-[0px] border-none h-8"
+      className="rounded-sm border-none h-8"
       variant="outline"
       onClick={handleLogoutGoogle}
     >

@@ -12,7 +12,7 @@ import {
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {
   createFeedback,
   finishSession,
@@ -21,7 +21,7 @@ import {
   setShowFeedbackDialog,
   resetSessionInfo,
 } from "@/redux-store/features/essayStore";
-import { LoadingDialog } from "./LoadingDialog";
+import { LoadingDialog } from "../LoadingDialog/LoadingDialog";
 import { RiRefreshLine } from "react-icons/ri";
 import {
   Tooltip,

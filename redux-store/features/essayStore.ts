@@ -401,7 +401,7 @@ export const deleteAllTempEssayInfo = createAsyncThunk(
         .eq("email_address", email_address);
 
       if (!error) {
-        toast({ title: "Essay session is deleted" });
+        toast({ title: "Essay session is reseated" });
         return;
       } else {
         toast({ title: "Something went wrong" });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../ui/textarea";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {

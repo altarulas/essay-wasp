@@ -1,4 +1,4 @@
-import { Settings } from "@/components/core/SettingsContent";
+import { Settings } from "@/components/core/SettingsContent/SettingsContent";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";

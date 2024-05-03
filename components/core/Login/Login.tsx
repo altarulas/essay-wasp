@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { supabaseClient } from "@/utils/supabase/client";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 export const Login = () => {
   const handleGoogleLogin = async () => {

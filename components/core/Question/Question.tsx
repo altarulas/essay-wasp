@@ -1,9 +1,9 @@
 "use client";
 
 import { useSelector } from "react-redux";
-import { Card } from "../ui/card";
+import { Card } from "../../ui/card";
 import { RootState } from "@/redux-store/store";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../ui/skeleton";
 
 export const Question = () => {
   const { tempEssayInfo, loadingStates } = useSelector(

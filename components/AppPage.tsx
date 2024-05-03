@@ -1,5 +1,5 @@
-import { AppContent } from "@/components/core/AppContent";
-import { Navbar } from "@/components/core/Navbar";
+import { AppContent } from "@/components/core/AppContent/AppContent";
+import { Navbar } from "@/components/core/Navbar/Navbar";
 
 const AppPage = () => {
   return (

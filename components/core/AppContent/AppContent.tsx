@@ -5,11 +5,11 @@ import { useDispatch } from "react-redux";
 import { getEssayStore } from "@/redux-store/features/essayStore";
 import { getUserInfoStore } from "@/redux-store/features/userInfoStore";
 import { AppDispatch } from "@/redux-store/store";
-import { Menu } from "./Menu";
-import { Text } from "./Text";
-import { Feedback } from "./Feedback";
-import { Question } from "./Question";
-import { Skeleton } from "../ui/skeleton";
+import { Menu } from "../Menu/Menu";
+import { Text } from "../Text/Text";
+import { Feedback } from "../Feedback/Feedback";
+import { Question } from "../Question/Question";
+import { Skeleton } from "../../ui/skeleton";
 
 export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();

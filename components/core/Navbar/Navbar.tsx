@@ -1,16 +1,17 @@
 "use client";
 
-import { Logout } from "./Logout";
+import { Logout } from "../Logout/Logout";
 import { CiLight } from "react-icons/ci";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useTheme } from "next-themes";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux-store/store";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import Link from "next/link";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../ui/skeleton";
 import { useEffect, useState } from "react";
 import { saveLeftTime } from "@/redux-store/features/essayStore";
+import styles from "./Navbar.module.scss";
 
 export const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -118,23 +119,25 @@ export const Navbar = () => {
         <div className="flex items-center gap-4 mr-10">
           {!status &&
             (isLoadingInfoStore ? (
-              <Skeleton className="w-72 h-10" />
+              <Skeleton className="w-60 h-10" />
             ) : (
               <>
-                <Button>Credits: {user.credits} </Button>
+                <span className="text-sm">credits: {user.credits}</span>
 
                 <Link
                   target="_blank"
                   href="https://buymeacoffee.com/natural.lang/membership"
                 >
-                  <Button variant="premium">Premium</Button>
+                  <Button className={styles.button}>Go Premium</Button>
                 </Link>
               </>
             ))}
         </div>
 
         <Link href="/reports">
-          <Button>My Reports</Button>
+          <Button className="border-none rounded-sm h-8" variant="outline">
+            Reports
+          </Button>
         </Link>
 
         <CiLight

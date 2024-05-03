@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "../../ui/card";
 import { Input } from "@/components/ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux-store/store";
@@ -15,7 +15,7 @@ import Image from "next/image";
 import { getUserInfoStore } from "@/redux-store/features/userInfoStore";
 import { useEffect } from "react";
 import Link from "next/link";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../ui/skeleton";
 
 export const Settings = () => {
   const dispatch = useDispatch<AppDispatch>();
