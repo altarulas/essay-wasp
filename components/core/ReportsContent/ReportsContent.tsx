@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Report } from "../Report/Report";
 import { Skeleton } from "../../ui/skeleton";
 import styles from "./ReportsContent.module.scss";
+import { cn } from "@/lib/utils";
 
 export const Reports = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,9 +26,9 @@ export const Reports = () => {
   }, []);
 
   return (
-    <Card className="p-10 h-full w-full flex flex-col justify-between bg-zinc-50 dark:bg-zinc-900">
+    <Card className={cn(styles.container, "bg-zinc-50 dark:bg-zinc-900")}>
       {loadingStates.isSavedSessionLoading ? (
-        <div className="w-full h-full flex flex-col items-center space-y-6">
+        <div className={styles.loadingWrapper}>
           <Skeleton className="w-full h-1/6" />
           <Skeleton className="w-full h-1/6" />
           <Skeleton className="w-full h-1/6" />
@@ -48,7 +49,7 @@ export const Reports = () => {
           ))}
         </CardContent>
       ) : (
-        <div className="h-full w-full flex justify-center items-center">
+        <div className={styles.emptyInfoWrapper}>
           <span className="text-lg">You have no reports currently</span>
         </div>
       )}

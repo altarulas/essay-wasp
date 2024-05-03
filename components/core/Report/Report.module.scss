@@ -1,0 +1,11 @@
+.container {
+  @apply w-full flex items-center justify-between;
+
+  .dialogContent {
+    @apply max-w-[750px] h-fit space-y-4 overflow-y-auto;
+
+    .essayInfoWrapper {
+      @apply flex flex-col gap-6;
+    }
+  }
+}

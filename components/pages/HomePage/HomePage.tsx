@@ -1,4 +1,5 @@
 import { Login } from "@/components/core/Login/Login";
+import styles from "./HomePage.module.scss";
 
 const HomePage = () => {
   return (

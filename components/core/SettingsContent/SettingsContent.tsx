@@ -16,6 +16,8 @@ import { getUserInfoStore } from "@/redux-store/features/userInfoStore";
 import { useEffect } from "react";
 import Link from "next/link";
 import { Skeleton } from "../../ui/skeleton";
+import { cn } from "@/lib/utils";
+import styles from "./SettingsContent.module.scss";
 
 export const Settings = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,11 +35,11 @@ export const Settings = () => {
   }, []);
 
   return (
-    <Card className="p-6 space-y-8 w-full h-full flex flex-col justify-between bg-zinc-50 dark:bg-zinc-900">
+    <Card className={cn(styles.container, "bg-zinc-50 dark:bg-zinc-900")}>
       {isLoadingInfoStore ? (
-        <div className="h-full w-full flex flex-row space-x-10">
+        <div className={styles.loadingContainer}>
           <Skeleton className="w-1/2 h-full" />
-          <div className="h-full w-1/2 flex flex-col space-y-10 justify-center items-center">
+          <div className={styles.loadingWrapper}>
             <Skeleton className="w-full h-1/3" />
             <Skeleton className="w-full h-1/4" />
             <Skeleton className="w-full h-1/5" />
@@ -47,8 +49,8 @@ export const Settings = () => {
       ) : (
         <>
           <CardTitle className="w-full p-6">My Profile</CardTitle>
-          <div className="flex flex-row justify-between">
-            <CardHeader className="w-fit flex flex-col items-start gap-10">
+          <div className={styles.cardContent}>
+            <CardHeader className={styles.cardHeader}>
               <Image
                 className="rounded-full"
                 width={150}
@@ -99,7 +101,7 @@ export const Settings = () => {
             </CardContent>
           </div>
 
-          <CardFooter className="w-full flex justify-end gap-8">
+          <CardFooter className={styles.cardFooter}>
             {user.subscription_info.status && (
               <Link
                 target="_blank"

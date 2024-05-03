@@ -94,29 +94,23 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="w-full h-full flex justify-between items-center px-10 py-6">
-      <div className="flex justify-center items-center gap-10">
-        <div className="scroll-m-20 bg-background text-foreground pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-          Natural Lang
-        </div>
+    <div className={styles.container}>
+      <div className={styles.logoWrapper}>
+        <div className={styles.logo}>Natural Lang</div>
         {(sessionConditions.show_timer || sessionConditions.is_timer_running) &&
           !sessionConditions.left_timer && (
-            <div className="text-2xl bg-background rounded-lg py-1 w-36 flex items-center justify-center">
-              {formatTime(time)}
-            </div>
+            <div className={styles.time}>{formatTime(time)}</div>
           )}
 
         {sessionConditions.show_timer &&
           !sessionConditions.is_timer_running &&
           sessionConditions.left_timer && (
-            <div className="text-2xl bg-background rounded-lg py-1 w-36 flex items-center justify-center">
-              {remainingTime}
-            </div>
+            <div className={styles.time}>{remainingTime}</div>
           )}
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-4 mr-10">
+      <div className={styles.menuWrapper}>
+        <div className={styles.creditWrapper}>
           {!status &&
             (isLoadingInfoStore ? (
               <Skeleton className="w-60 h-10" />
@@ -135,18 +129,18 @@ export const Navbar = () => {
         </div>
 
         <Link href="/reports">
-          <Button className="border-none rounded-sm h-8" variant="outline">
+          <Button className={styles.reports} variant="outline">
             Reports
           </Button>
         </Link>
 
         <CiLight
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          className="h-6 w-6 cursor-pointer"
+          className={styles.theme}
         />
 
         <Link href="/settings">
-          <IoSettingsOutline className="h-5 w-5 cursor-pointer" />
+          <IoSettingsOutline className={styles.settings} />
         </Link>
 
         <Logout />

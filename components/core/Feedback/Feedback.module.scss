@@ -1,0 +1,11 @@
+.dialogContent {
+  @apply max-w-[700px] h-fit overflow-y-auto;
+
+  .dialogTitle {
+    @apply pb-8 w-full text-center;
+  }
+
+  .loading {
+    @apply mr-2 h-4 w-4 animate-spin;
+  }
+}

@@ -2,12 +2,13 @@ import Link from "next/link";
 import { Button } from "../../ui/button";
 import { FaArrowLeft } from "react-icons/fa";
 import { Reports } from "../../core/ReportsContent/ReportsContent";
+import styles from "./ReportsPage.module.scss";
 
 const ReportsPage = () => {
   return (
-    <div className="w-screen h-screen">
-      <div className="h-full w-full flex justify-center items-center">
-        <div className="h-2/3 w-1/2 flex flex-col justify-center items-start gap-10">
+    <div className={styles.container}>
+      <div className={styles.contentWrapper}>
+        <div className={styles.content}>
           <Link className="font-bold text-3xl" href="/">
             <Button
               className="bg-zinc-50 dark:bg-zinc-900"

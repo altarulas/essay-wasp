@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../../ui/button";
 import dayjs from "dayjs";
+import styles from "./Report.module.scss";
 
 interface ReportProps {
   createdAt: Date | null;
@@ -25,7 +26,7 @@ export const Report = (props: ReportProps) => {
   const formattedCreatedAt = dayjs(createdAt).format("YYYY-MM-DD");
 
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className={styles.container}>
       <Button className="w-fit"> {formattedCreatedAt} </Button>
       <Button className="w-fit"> {leftTime} </Button>
 
@@ -34,13 +35,13 @@ export const Report = (props: ReportProps) => {
           <Button>Show Essay</Button>
         </DialogTrigger>
 
-        <DialogContent className="max-w-[750px] h-fit space-y-4 overflow-y-auto">
+        <DialogContent className={styles.dialogContent}>
           <DialogHeader className="space-y-6">
             <DialogTitle> Essay Topic </DialogTitle>
             <DialogDescription>{essayQuestion}</DialogDescription>
           </DialogHeader>
 
-          <div className="flex flex-col gap-6">
+          <div className={styles.essayInfoWrapper}>
             <DialogTitle> Essay Content </DialogTitle>
             <DialogDescription>{essayText}</DialogDescription>
           </div>
@@ -52,7 +53,7 @@ export const Report = (props: ReportProps) => {
           <Button>Show Feedback</Button>
         </DialogTrigger>
 
-        <DialogContent className="max-w-[750px] h-fit space-y-4 overflow-y-auto">
+        <DialogContent className={styles.dialogContent}>
           <DialogHeader className="space-y-6">
             <DialogTitle> Essay Feedback </DialogTitle>
             <DialogDescription className="whitespace-pre-wrap">

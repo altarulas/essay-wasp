@@ -3,6 +3,7 @@
 import { Loader2 } from "lucide-react";
 
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
+import styles from "./LoadingDialog.module.scss";
 
 export const LoadingDialog = ({ open }: { open: boolean }) => {
   if (!open) {
@@ -11,8 +12,8 @@ export const LoadingDialog = ({ open }: { open: boolean }) => {
 
   return (
     <AlertDialog open={open}>
-      <AlertDialogContent className="bg-transparent border-none w-fit h-fit flex justify-center items-center">
-        <Loader2 className="h-10 w-10 animate-spin" />
+      <AlertDialogContent className={styles.alertContent}>
+        <Loader2 className={styles.loading} />
       </AlertDialogContent>
     </AlertDialog>
   );

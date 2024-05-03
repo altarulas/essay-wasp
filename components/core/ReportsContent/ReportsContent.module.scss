@@ -1,5 +1,13 @@
 .container {
-  @apply flex flex-col items-start overflow-y-auto gap-8;
+  @apply p-10 h-full w-full flex flex-col justify-between;
+
+  .loadingWrapper {
+    @apply w-full h-full flex flex-col items-center space-y-6;
+  }
+
+  .emptyInfoWrapper {
+    @apply h-full w-full flex justify-center items-center;
+  }
 
   /* Hiding scrollbar for Chrome, Safari and Opera */
   ::-webkit-scrollbar {

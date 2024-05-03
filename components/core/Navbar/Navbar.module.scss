@@ -1,24 +1,60 @@
-.button {
-  @apply text-center w-fit h-8 shadow-2xl;
+.container {
+  @apply w-full h-full flex justify-between items-center px-10 py-6;
 
-  background: linear-gradient(135deg, #341c75, #183467, #271965, #433d3d);
-  background-size: 300% auto;
-  color: #fff;
-  padding: 12px 18px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
+  .logoWrapper {
+    @apply flex justify-center items-center gap-10;
 
-.button:hover {
-  background-position: 100% 0;
-  transform: translateY(-1px); /* Adjusted for smoother hover animation */
-  border-image: linear-gradient(
-    to right,
-    #000000 #110740,
-    #0b214b,
-    #1e0b51
-  ); /* Reversed gradient for border animation */
-  border-image-slice: 1;
+    .logo {
+      @apply scroll-m-20 bg-background text-foreground pb-2 text-3xl font-semibold tracking-tight first:mt-0;
+    }
+
+    .time {
+      @apply text-2xl bg-background rounded-lg py-1 w-36 flex items-center justify-center;
+    }
+  }
+
+  .menuWrapper {
+    @apply flex items-center gap-4;
+
+    .creditWrapper {
+      @apply flex items-center gap-4 mr-10;
+
+      .button {
+        @apply text-center w-fit h-8 shadow-2xl;
+
+        background: linear-gradient(135deg, #341c75, #183467, #271965, #433d3d);
+        background-size: 300% auto;
+        color: #fff;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .button:hover {
+        background-position: 100% 0;
+        transform: translateY(-1px); /* Adjusted for smoother hover animation */
+        border-image: linear-gradient(
+          to right,
+          #000000 #110740,
+          #0b214b,
+          #1e0b51
+        ); /* Reversed gradient for border animation */
+        border-image-slice: 1;
+      }
+    }
+
+    .reports {
+      @apply border-none rounded-sm h-8;
+    }
+
+    .theme {
+      @apply h-6 w-6 cursor-pointer;
+    }
+
+    .settings {
+      @apply h-5 w-5 cursor-pointer;
+    }
+  }
 }

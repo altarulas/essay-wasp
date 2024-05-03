@@ -21,6 +21,7 @@ import {
 } from "@/redux-store/features/essayStore";
 import { Skeleton } from "../../ui/skeleton";
 import { Loader2 } from "lucide-react";
+import styles from "./Feedback.module.scss";
 
 export const Feedback = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -82,9 +83,9 @@ export const Feedback = () => {
         </DialogTrigger>
       )}
 
-      <DialogContent className="max-w-[700px] h-fit overflow-y-auto">
+      <DialogContent className={styles.dialogContent}>
         <DialogHeader>
-          <DialogTitle className="pb-8 w-full text-center">
+          <DialogTitle className={styles.dialogTitle}>
             Essay Feedback
           </DialogTitle>
           <DialogDescription className="whitespace-pre-wrap p-4">
@@ -111,7 +112,7 @@ export const Feedback = () => {
           >
             Reset This Session
             {loadingStates.isDeletingAllEssayInfo && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className={styles.loading} />
             )}
           </Button>
           <Button
@@ -123,7 +124,7 @@ export const Feedback = () => {
           >
             Save This Session
             {loadingStates.isSavingAllEssayInfo && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className={styles.loading} />
             )}
           </Button>
         </DialogFooter>

@@ -1,0 +1,11 @@
+.container {
+  @apply w-screen h-screen overflow-y-auto;
+
+  .navbar {
+    @apply h-[10%] w-full;
+  }
+
+  .content {
+    @apply w-full h-[90%] flex justify-center items-center;
+  }
+}

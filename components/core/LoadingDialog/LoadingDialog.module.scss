@@ -1,0 +1,7 @@
+.alertContent {
+  @apply bg-transparent border-none w-fit h-fit flex justify-center items-center;
+
+  .loading {
+    @apply h-10 w-10 animate-spin;
+  }
+}
