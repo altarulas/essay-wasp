@@ -1,0 +1,10 @@
+.container {
+  @apply w-screen h-screen flex justify-center items-center;
+  opacity: 1;
+  background-image: radial-gradient(#727272 1px, #000000 1px);
+  background-size: 150px 150px;
+
+  .contentWrapper {
+    @apply w-1/2 h-1/2;
+  }
+}

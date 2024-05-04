@@ -1,16 +1,8 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
 import { supabaseClient } from "@/utils/supabase/client";
 import { Button } from "../../ui/button";
+import { Google } from "@/components/pages/HomePage/GoogleIcon";
 
 export const Login = () => {
   const handleGoogleLogin = async () => {
@@ -19,33 +11,22 @@ export const Login = () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        /* queryParams: {
-              access_type: "offline",
-              prompt: "consent",
-            }, */
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
         redirectTo: `${location.origin}/auth/callback`,
       },
     });
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="p-6" variant="default">
-          Google Login
-        </Button>
-      </DialogTrigger>
-
-      <DialogContent className="flex flex-col justify-center items-center gap-8">
-        <DialogHeader className="flex flex-col items-center">
-          <DialogTitle>Google Login</DialogTitle>
-          <DialogDescription>Login in with Google</DialogDescription>
-        </DialogHeader>
-
-        <Button className="w-1/2 h-12" onClick={handleGoogleLogin}>
-          Login
-        </Button>
-      </DialogContent>
-    </Dialog>
+    <Button
+      onClick={handleGoogleLogin}
+      className="rounded-md flex gap-2 bg-zinc-950"
+    >
+      <Google className="w-6 h-6" />
+      <span>Sing in with Google</span>
+    </Button>
   );
 };

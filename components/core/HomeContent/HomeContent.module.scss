@@ -1,0 +1,30 @@
+.container {
+  @apply w-full h-full flex justify-center items-center;
+
+  .contentWrapper {
+    @apply flex flex-col items-center gap-10;
+
+    .titleWrapper {
+      @apply rounded-2xl;
+
+      background: linear-gradient(
+        90deg,
+        #000,
+        #000,
+        #000,
+        rgb(10, 0, 22),
+        #000,
+        #000,
+        #000
+      );
+
+      .title {
+        @apply scroll-m-20 text-6xl font-extrabold tracking-tight p-6 rounded-2xl bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-indigo-500;
+      }
+    }
+
+    .titleAnimation {
+      @apply scroll-m-20 text-4xl font-bold tracking-tight text-white;
+    }
+  }
+}

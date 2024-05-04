@@ -131,7 +131,7 @@ export const Navbar = () => {
 
                 <AlertDialog>
                   <AlertDialogTrigger>
-                    <Button className={styles.button}>Premium</Button>
+                    <Button className={styles.button}>Use Unlimited</Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
