@@ -3,7 +3,6 @@
 import { Logout } from "../Logout/Logout";
 import { CiLight } from "react-icons/ci";
 import { IoSettingsOutline } from "react-icons/io5";
-import { useTheme } from "next-themes";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { Button } from "../../ui/button";
@@ -23,11 +22,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Image from "next/image";
 
 export const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
-
-  const { setTheme, theme } = useTheme();
 
   const { status } = useSelector(
     (state: RootState) => state.userInfoStore.user.subscription_info
@@ -127,7 +125,7 @@ export const Navbar = () => {
               <Skeleton className="w-60 h-10" />
             ) : (
               <>
-                <span className="text-sm">credits: {user.credits}</span>
+                <span className={styles.credit}>credits: {user.credits}</span>
 
                 <AlertDialog>
                   <AlertDialogTrigger>
@@ -151,6 +149,16 @@ export const Navbar = () => {
                         entered in Natural Lang, you will not be able to get
                         premium rights and you will also waste your money.
                       </AlertDialogDescription>
+
+                      <div className="w-full flex justify-center items-center py-4">
+                        <Image
+                          className="rounded-2xl"
+                          src="/upgrade.png"
+                          height={300}
+                          width={250}
+                          alt="upgrade"
+                        />
+                      </div>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -170,15 +178,8 @@ export const Navbar = () => {
         </div>
 
         <Link href="/reports">
-          <Button className={styles.reports} variant="outline">
-            Reports
-          </Button>
+          <Button className="rounded-sm h-8 bg-black">Reports</Button>
         </Link>
-
-        <CiLight
-          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          className={styles.theme}
-        />
 
         <Link href="/settings">
           <IoSettingsOutline className={styles.settings} />

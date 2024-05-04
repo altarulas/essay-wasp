@@ -41,10 +41,10 @@ export const Report = (props: ReportProps) => {
             <DialogDescription>{essayQuestion}</DialogDescription>
           </DialogHeader>
 
-          <div className={styles.essayInfoWrapper}>
+          <DialogHeader className="space-y-6">
             <DialogTitle> Essay Content </DialogTitle>
             <DialogDescription>{essayText}</DialogDescription>
-          </div>
+          </DialogHeader>
         </DialogContent>
       </Dialog>
 

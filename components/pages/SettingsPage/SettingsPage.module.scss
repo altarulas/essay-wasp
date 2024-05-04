@@ -1,6 +1,8 @@
 .container {
   @apply w-screen h-screen;
 
+  background: linear-gradient(90deg, #fff, rgb(218, 215, 255), #fff);
+
   .contentWrapper {
     @apply h-full w-full flex justify-center items-center;
 

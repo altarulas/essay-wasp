@@ -7,16 +7,7 @@
     .titleWrapper {
       @apply rounded-2xl;
 
-      background: linear-gradient(
-        90deg,
-        #000,
-        #000,
-        #000,
-        rgb(10, 0, 22),
-        #000,
-        #000,
-        #000
-      );
+      background: linear-gradient(90deg, #fff, rgb(237, 236, 255), #fff);
 
       .title {
         @apply scroll-m-20 text-6xl font-extrabold tracking-tight p-6 rounded-2xl bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-indigo-500;
@@ -24,7 +15,7 @@
     }
 
     .titleAnimation {
-      @apply scroll-m-20 text-4xl font-bold tracking-tight text-white;
+      @apply scroll-m-20 text-4xl font-bold tracking-tight text-black shadow-sm;
     }
   }
 }

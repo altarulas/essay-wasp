@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Image from "next/image";
 
 export const Settings = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,7 +40,7 @@ export const Settings = () => {
   }, []);
 
   return (
-    <Card className={cn(styles.container, "bg-zinc-50 dark:bg-zinc-900")}>
+    <Card className={cn(styles.container)}>
       {isLoadingInfoStore ? (
         <div className={styles.loadingWrapper}>
           <Skeleton className={styles.loading} />
@@ -51,6 +52,15 @@ export const Settings = () => {
         <>
           <CardContent className={styles.cardContentWrapper}>
             <div className={styles.content}>
+              {!user.subscription_info.status && (
+                <div className="flex items-center gap-[32px]">
+                  <span>Remain Credits</span>
+                  <Button disabled variant="outline">
+                    {user.credits}
+                  </Button>
+                </div>
+              )}
+
               {user.subscription_info.status ? (
                 <div className="flex items-center gap-8">
                   <div className="mr-6">Subscription</div>
@@ -71,6 +81,16 @@ export const Settings = () => {
                           {`We are using Buy Me Coffee as a payment method. To
                           cancel subscription, you should cancel your membership
                           on Buy Me Coffee. Click "Go to Buy Me Coffee" button and login Buy Me Coffee with email that you used to buy premium. After that you can cancel your membership on My account --> Payments section.`}
+
+                          <div className="w-full flex justify-center items-center py-4">
+                            <Image
+                              className="rounded-2xl"
+                              src="/cancel.png"
+                              height={300}
+                              width={250}
+                              alt="cancel"
+                            />
+                          </div>
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -96,7 +116,7 @@ export const Settings = () => {
 
                   <AlertDialog>
                     <AlertDialogTrigger>
-                      <Button className={styles.button}>Premium</Button>
+                      <Button className={styles.button}>Use Premium</Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
@@ -116,6 +136,16 @@ export const Settings = () => {
                           entered in Natural Lang, you will not be able to get
                           premium rights and you will also waste your money.
                         </AlertDialogDescription>
+
+                        <div className="w-full flex justify-center items-center py-4">
+                          <Image
+                            className="rounded-2xl"
+                            src="/upgrade.png"
+                            height={300}
+                            width={250}
+                            alt="upgrade"
+                          />
+                        </div>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -146,15 +176,6 @@ export const Settings = () => {
                   disabled
                 />
               </div>
-
-              {!user.subscription_info.status && (
-                <div className="flex items-center gap-[32px]">
-                  <span>Remain Credits</span>
-                  <Button disabled variant="outline">
-                    {user.credits}
-                  </Button>
-                </div>
-              )}
             </div>
           </CardContent>
 

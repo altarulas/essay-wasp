@@ -5,11 +5,11 @@
     @apply flex justify-center items-center gap-10;
 
     .logo {
-      @apply scroll-m-20 bg-background text-foreground pb-2 text-3xl font-semibold tracking-tight first:mt-0;
+      @apply scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-indigo-500;
     }
 
     .time {
-      @apply text-2xl bg-background rounded-lg py-1 w-36 flex items-center justify-center;
+      @apply text-2xl font-bold rounded-lg py-1 w-36 flex items-center justify-center;
     }
   }
 
@@ -18,6 +18,10 @@
 
     .creditWrapper {
       @apply flex items-center gap-4 mr-10;
+
+      .credit {
+        @apply text-sm font-semibold;
+      }
 
       .button {
         @apply text-center w-fit h-8 shadow-2xl;
@@ -43,10 +47,6 @@
         ); /* Reversed gradient for border animation */
         border-image-slice: 1;
       }
-    }
-
-    .reports {
-      @apply border-none rounded-sm h-8;
     }
 
     .theme {

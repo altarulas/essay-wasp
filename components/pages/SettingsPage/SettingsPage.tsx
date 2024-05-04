@@ -10,11 +10,7 @@ const SettingsPage = () => {
       <div className={styles.contentWrapper}>
         <div className={styles.content}>
           <Link className="font-bold text-3xl" href="/">
-            <Button
-              className="bg-zinc-50 dark:bg-zinc-900"
-              variant="outline"
-              size="icon"
-            >
+            <Button variant="outline" size="icon">
               <FaArrowLeft className="h-4 w-4" />
             </Button>
           </Link>

@@ -1,6 +1,8 @@
 .container {
   @apply w-screen h-screen overflow-y-auto;
 
+  background: linear-gradient(90deg, #fff, rgb(218, 215, 255), #fff);
+
   .navbar {
     @apply h-[10%] w-full;
   }

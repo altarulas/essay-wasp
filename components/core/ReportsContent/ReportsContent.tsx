@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Card, CardContent } from "../../ui/card";
+import { Card, CardContent, CardHeader } from "../../ui/card";
 import { getUserSavedEssay } from "@/redux-store/features/essayStore";
 import { AppDispatch, RootState } from "@/redux-store/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +26,7 @@ export const Reports = () => {
   }, []);
 
   return (
-    <Card className={cn(styles.container, "bg-zinc-50 dark:bg-zinc-900")}>
+    <Card className={cn(styles.container)}>
       {loadingStates.isSavedSessionLoading ? (
         <div className={styles.loadingWrapper}>
           <Skeleton className={styles.loading} />
@@ -36,18 +36,21 @@ export const Reports = () => {
           <Skeleton className={styles.loading} />
         </div>
       ) : savedEssayInfo.length > 0 ? (
-        <CardContent className={styles.content}>
-          {savedEssayInfo.map((essay, index) => (
-            <Report
-              key={String(essay.created_at)}
-              leftTime={essay.left_time}
-              createdAt={essay.created_at}
-              essayQuestion={essay.essay_question}
-              essayText={essay.essay_text}
-              essayFeedback={essay.essay_feedback}
-            />
-          ))}
-        </CardContent>
+        <>
+          <CardHeader className={styles.title}>Reports Detail</CardHeader>
+          <CardContent className={styles.content}>
+            {savedEssayInfo.map((essay, index) => (
+              <Report
+                key={String(essay.created_at)}
+                leftTime={essay.left_time}
+                createdAt={essay.created_at}
+                essayQuestion={essay.essay_question}
+                essayText={essay.essay_text}
+                essayFeedback={essay.essay_feedback}
+              />
+            ))}
+          </CardContent>
+        </>
       ) : (
         <div className={styles.emptyInfoWrapper}>
           <span className="text-lg">You have no reports currently</span>
