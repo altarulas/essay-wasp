@@ -218,6 +218,10 @@ export const Navbar = () => {
           <Button className="rounded-sm h-8 bg-black">Reports</Button>
         </Link>
 
+        <Link target="_blank" href="https://altarulas.com">
+          <Button className="rounded-sm h-8 bg-black">Contact Me</Button>
+        </Link>
+
         <Link href="/settings">
           <IoSettingsOutline className={styles.settings} />
         </Link>
