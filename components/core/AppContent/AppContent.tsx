@@ -11,6 +11,8 @@ import { Feedback } from "../Feedback/Feedback";
 import { Question } from "../Question/Question";
 import { Skeleton } from "../../ui/skeleton";
 
+// dummy text
+
 export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();
 
