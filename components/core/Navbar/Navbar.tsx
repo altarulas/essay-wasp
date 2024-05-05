@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import Image from "next/image";
 import { toast } from "@/components/ui/use-toast";
-import { Toaster } from "@/components/ui/toaster";
 
 export const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();

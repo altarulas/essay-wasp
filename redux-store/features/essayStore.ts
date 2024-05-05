@@ -82,7 +82,7 @@ const initialState: IEssayInfo = {
     isFeedbackLoading: false,
     isSavingAllEssayInfo: false,
     isDeletingAllEssayInfo: false,
-    isSavedSessionLoading: false,
+    isSavedSessionLoading: true,
     isDialogOpen: false,
   },
 };
@@ -366,7 +366,7 @@ export const saveAllEssayInfo = createAsyncThunk(
       });
 
       if (!error) {
-        toast({ title: "Essay session is saved" });
+        toast({ title: "Essay session has saved" });
         return;
       } else {
         toast({ title: "Something went wrong" });
@@ -401,7 +401,7 @@ export const deleteAllTempEssayInfo = createAsyncThunk(
         .eq("email_address", email_address);
 
       if (!error) {
-        toast({ title: "Essay session is reseated" });
+        toast({ title: "Essay session has reseated" });
         return;
       } else {
         toast({ title: "Something went wrong" });
@@ -437,7 +437,7 @@ export const resetSessionInfo = createAsyncThunk(
 
       if (!error) {
         dispatch(resetState());
-        toast({ title: "Essay session is deleted" });
+        toast({ title: "Essay session has reseated" });
         return;
       } else {
         toast({ title: "Something went wrong" });

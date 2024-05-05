@@ -35,7 +35,7 @@ export const Reports = () => {
           <Skeleton className={styles.loading} />
           <Skeleton className={styles.loading} />
         </div>
-      ) : savedEssayInfo.length > 0 ? (
+      ) : !(savedEssayInfo.length > 0) ? (
         <>
           <CardHeader className={styles.title}>Reports Detail</CardHeader>
           <CardContent className={styles.content}>
@@ -53,7 +53,9 @@ export const Reports = () => {
         </>
       ) : (
         <div className={styles.emptyInfoWrapper}>
-          <span className="text-lg">You have no reports currently</span>
+          <span className="text-md font-medium">
+            You have no reports currently
+          </span>
         </div>
       )}
     </Card>

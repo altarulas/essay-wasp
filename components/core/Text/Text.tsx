@@ -8,6 +8,13 @@ import {
   saveEssayText,
   setEssayContent,
 } from "@/redux-store/features/essayStore";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Text = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -44,12 +51,24 @@ export const Text = () => {
   }, [sessionConditions.is_session_finished]);
 
   return (
-    <Textarea
-      disabled={!sessionConditions.is_timer_running}
-      value={essayText}
-      onChange={(e) => handleEssayChange(e)}
-      className="w-1/2 h-[70%] p-4 bg-zinc-50"
-      placeholder="Type your essay here..."
-    />
+    <div className="w-1/2 h-[70%] flex flex-col items-end gap-1 -mt-4">
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger className="cursor-default h-fit">
+            <IoMdInformationCircleOutline className="h-6 w-6 text-zinc-400" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>min 250, max 400 words</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <Textarea
+        disabled={!sessionConditions.is_timer_running}
+        value={essayText}
+        onChange={(e) => handleEssayChange(e)}
+        className="h-full p-4 bg-zinc-50"
+        placeholder="Type your essay here..."
+      />
+    </div>
   );
 };

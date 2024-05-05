@@ -10,6 +10,13 @@ import { Text } from "../Text/Text";
 import { Feedback } from "../Feedback/Feedback";
 import { Question } from "../Question/Question";
 import { Skeleton } from "../../ui/skeleton";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();
