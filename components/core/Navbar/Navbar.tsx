@@ -23,6 +23,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import Image from "next/image";
 import { toast } from "@/components/ui/use-toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +47,6 @@ export const Navbar = () => {
 
   const [time, setTime] = useState<number>(0);
   const [remainingTime, setRemainingTime] = useState<string | null>(null);
-  const [isTimeFinished, setIsTimeFinished] = useState<boolean>(false);
 
   useEffect(() => {
     if (sessionConditions.is_timer_running) {
@@ -78,7 +83,7 @@ export const Navbar = () => {
       !sessionConditions.left_timer
     ) {
       const leftTime = formatTime(time);
-      dispatch(saveLeftTime(leftTime));
+      leftTime && dispatch(saveLeftTime(leftTime));
     } else return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -110,26 +115,38 @@ export const Navbar = () => {
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
+  const isFormattedTimeAvailable = (): boolean => {
+    return (
+      (sessionConditions.show_timer || sessionConditions.is_timer_running) &&
+      !sessionConditions.left_timer
+    );
+  };
+
+  const isRemainingTimeAvailable = (): boolean => {
+    return (
+      sessionConditions.show_timer &&
+      !sessionConditions.is_timer_running &&
+      !!sessionConditions.left_timer
+    );
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.logoWrapper}>
         <div className={styles.logo}>Natural Lang</div>
-        {(sessionConditions.show_timer || sessionConditions.is_timer_running) &&
-          !sessionConditions.left_timer && (
-            <div className={styles.time}>{formatTime(time)}</div>
-          )}
+        {isFormattedTimeAvailable() && (
+          <div className={styles.time}>{formatTime(time)}</div>
+        )}
 
-        {sessionConditions.show_timer &&
-          !sessionConditions.is_timer_running &&
-          sessionConditions.left_timer && (
-            <div className={styles.time}>{remainingTime}</div>
-          )}
+        {isRemainingTimeAvailable() && (
+          <div className={styles.time}>{remainingTime}</div>
+        )}
       </div>
 
       <div className={styles.menuWrapper}>
         <div className={styles.creditWrapper}>
-          {!status &&
-            (isLoadingInfoStore ? (
+          {!status ? (
+            isLoadingInfoStore ? (
               <Skeleton className="w-60 h-10" />
             ) : (
               <>
@@ -182,7 +199,19 @@ export const Navbar = () => {
                   </AlertDialogContent>
                 </AlertDialog>
               </>
-            ))}
+            )
+          ) : (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className={styles.button}>Premium</Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>You have unlimited credits!</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
 
         <Link href="/reports">
