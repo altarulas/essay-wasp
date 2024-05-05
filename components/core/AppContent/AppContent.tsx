@@ -37,8 +37,8 @@ export const AppContent = () => {
 
       <div className="flex justify-center items-center flex-col gap-1">
         <span className="text-[12px] text-gray-500">
-          Natural Lang is an experimental tool. Please do not completely trust
-          AI results.
+          Essay Wasp is an experimental tool. Please do not completely trust AI
+          results.
         </span>
 
         <span className="text-[12px] text-gray-500">Powered by GPT-4</span>

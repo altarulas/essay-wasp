@@ -125,7 +125,7 @@ export const Settings = () => {
                           We are using Buy Me Coffee as a payment method. To
                           understand your sales purchase, enter the e-mail
                           address of your gmail account that you registered with
-                          Natural Lang. By doing this, you are creating a Buy Me
+                          Essay Wasp. By doing this, you are creating a Buy Me
                           Coffee account with that e-mail. In Buy Me Coffee, you
                           will be able to manage all subscription operations.
                         </AlertDialogDescription>
@@ -133,7 +133,7 @@ export const Settings = () => {
                         <AlertDialogDescription className="text-red-700 font-bold">
                           If you purchase a membership from Buy Me Coffee with a
                           different e-mail address than the e-mail address you
-                          entered in Natural Lang, you will not be able to get
+                          entered in Essay Wasp, you will not be able to get
                           premium rights and you will also waste your money.
                         </AlertDialogDescription>
 

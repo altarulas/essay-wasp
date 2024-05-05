@@ -133,7 +133,7 @@ export const Navbar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logoWrapper}>
-        <div className={styles.logo}>Natural Lang</div>
+        <div className={styles.logo}>Essay Wasp</div>
         {isFormattedTimeAvailable() && (
           <div className={styles.time}>{formatTime(time)}</div>
         )}
@@ -171,7 +171,7 @@ export const Navbar = () => {
                       <AlertDialogDescription className="text-red-700 font-bold">
                         If you purchase a membership from Buy Me Coffee with a
                         different e-mail address than the e-mail address you
-                        entered in Natural Lang, you will not be able to get
+                        entered in Essay Wasp, you will not be able to get
                         premium rights and you will also waste your money.
                       </AlertDialogDescription>
 

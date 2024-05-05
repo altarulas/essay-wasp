@@ -9,7 +9,7 @@ export const HomeContent = () => {
     <div className={styles.container}>
       <div className={styles.contentWrapper}>
         <div className={styles.titleWrapper}>
-          <h1 className={styles.title}>Natural Lang</h1>
+          <h1 className={styles.title}>Essay Wasp</h1>
         </div>
         <TypeAnimation
           sequence={[
