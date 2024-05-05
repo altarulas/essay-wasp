@@ -13,7 +13,7 @@ export const Question = () => {
   );
 
   return (
-    <Card className={cn(styles.container, "bg-zinc-50 dark:bg-zinc-900")}>
+    <Card className={cn(styles.container)}>
       {loadingStates.isQuestionLoading ? (
         <div className={styles.loadingWrapper}>
           <Skeleton className="h-1/3 w-full" />

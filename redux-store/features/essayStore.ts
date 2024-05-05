@@ -588,6 +588,9 @@ export const EssayStore = createSlice({
       localStorage.removeItem("is_timer_running");
       localStorage.removeItem("countdown_end_time");
 
+      const leftTime = localStorage.getItem("left_time");
+      state.sessionConditions.left_timer = leftTime;
+
       state.sessionConditions.is_session_started = false;
       state.sessionConditions.is_session_finished = true;
       state.sessionConditions.is_timer_running = false;

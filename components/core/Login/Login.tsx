@@ -23,9 +23,9 @@ export const Login = () => {
   return (
     <Button
       onClick={handleGoogleLogin}
-      className="rounded-md flex gap-2 bg-zinc-950"
+      className="rounded-md flex gap-2 bg-zinc-950 w-48"
     >
-      <Google className="w-6 h-6" />
+      <Google className="w-6 h-6 flex justify-center items-center" />
       <span>Sing in with Google</span>
     </Button>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { Logout } from "../Logout/Logout";
-import { CiLight } from "react-icons/ci";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux-store/store";
@@ -9,7 +8,7 @@ import { Button } from "../../ui/button";
 import Link from "next/link";
 import { Skeleton } from "../../ui/skeleton";
 import { useEffect, useState } from "react";
-import { saveLeftTime } from "@/redux-store/features/essayStore";
+import { finishSession, saveLeftTime } from "@/redux-store/features/essayStore";
 import styles from "./Navbar.module.scss";
 import {
   AlertDialog,
@@ -23,6 +22,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Image from "next/image";
+import { toast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 
 export const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,6 +42,7 @@ export const Navbar = () => {
 
   const [time, setTime] = useState<number>(0);
   const [remainingTime, setRemainingTime] = useState<string | null>(null);
+  const [isTimeFinished, setIsTimeFinished] = useState<boolean>(false);
 
   useEffect(() => {
     if (sessionConditions.is_timer_running) {
@@ -96,6 +98,13 @@ export const Navbar = () => {
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
+
+    if (minutes === 0 && seconds === 1) {
+      dispatch(saveLeftTime("00:00:00"));
+      dispatch(finishSession());
+      toast({ title: "Your time has finished", variant: "destructive" });
+      return;
+    }
 
     return `${hours.toString().padStart(2, "0")}:${minutes
       .toString()

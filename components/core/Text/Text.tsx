@@ -48,7 +48,7 @@ export const Text = () => {
       disabled={!sessionConditions.is_timer_running}
       value={essayText}
       onChange={(e) => handleEssayChange(e)}
-      className="w-1/2 h-[70%] p-4 bg-zinc-50 dark:bg-zinc-900"
+      className="w-1/2 h-[70%] p-4 bg-zinc-50"
       placeholder="Type your essay here..."
     />
   );
