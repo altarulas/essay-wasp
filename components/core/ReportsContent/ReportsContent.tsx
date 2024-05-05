@@ -35,7 +35,7 @@ export const Reports = () => {
           <Skeleton className={styles.loading} />
           <Skeleton className={styles.loading} />
         </div>
-      ) : !(savedEssayInfo.length > 0) ? (
+      ) : savedEssayInfo.length > 0 ? (
         <>
           <CardHeader className={styles.title}>Reports Detail</CardHeader>
           <CardContent className={styles.content}>

@@ -110,14 +110,21 @@ export const createQuestion = createAsyncThunk(
       return essay_question;
     }
 
+    dispatch(resetState());
+
     try {
       if (!isUserSub) {
-        await dispatch(
+        const creditResponse = await dispatch(
           updateUserCredit({
             email_address: email_address,
             spend_credits: cost,
           })
         );
+
+        if (creditResponse.payload === null) {
+          toast({ title: "Something went wrong" });
+          return essay_question;
+        }
       }
 
       const aiResponse = await aiQuestion(selected_question);
@@ -221,12 +228,17 @@ export const createFeedback = createAsyncThunk(
 
     try {
       if (!isUserSub) {
-        await dispatch(
+        const creditResponse = await dispatch(
           updateUserCredit({
             email_address: email_address,
             spend_credits: cost,
           })
         );
+
+        if (creditResponse.payload === null) {
+          toast({ title: "Something went wrong" });
+          return essay_feedback;
+        }
       }
 
       const response = await aiFeedback(essay_question, essay_text);
@@ -293,12 +305,17 @@ export const saveAllEssayInfo = createAsyncThunk(
 
     try {
       if (!isUserSub) {
-        await dispatch(
+        const creditResponse = await dispatch(
           updateUserCredit({
             email_address: email_address,
             spend_credits: cost,
           })
         );
+
+        if (creditResponse.payload === null) {
+          toast({ title: "Something went wrong" });
+          return;
+        }
       }
 
       const { data, error } = await supabase.from("users_essay").insert({

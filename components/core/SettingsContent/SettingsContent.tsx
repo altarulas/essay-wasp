@@ -178,10 +178,6 @@ export const Settings = () => {
               </div>
             </div>
           </CardContent>
-
-          <CardFooter className={styles.cardFooter}>
-            <Button variant="destructive">Delete My Account</Button>
-          </CardFooter>
         </>
       )}
     </Card>

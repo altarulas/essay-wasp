@@ -136,7 +136,7 @@ export const updateUserCredit = createAsyncThunk(
         return new_credits;
       } else {
         toast({ title: "Something went wrong" });
-        return current_credits;
+        return null;
       }
     } catch (error) {
       console.error(error);
@@ -213,6 +213,9 @@ export const UserInfoStore = createSlice({
       })
       .addCase(updateUserCredit.fulfilled, (state, action) => {
         state.user.credits = action.payload;
+      })
+      .addCase(updateUserCredit.rejected, (state, action) => {
+        action.payload;
       });
   },
 });
