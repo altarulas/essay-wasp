@@ -87,96 +87,37 @@ const initialState: IEssayInfo = {
   },
 };
 
-export const createEssaySession = createAsyncThunk(
-  "essayStore/createEssaySession",
-
-  async (selected_question: string, { dispatch, getState }) => {
-    const state = getState() as RootState;
-    const current_essay_question =
-      state.essayStore.tempEssayInfo.essay_question;
-
-    let essay_question: string = "";
-
-    if (!selected_question) {
-      toast({ title: "Please select an essay topic type" });
-      return current_essay_question;
-    }
-
-    dispatch(resetState());
-
-    try {
-      const email_address = state.userInfoStore.user.email_address;
-      const credit = state.userInfoStore.user.credits;
-      const isUserSub = state.userInfoStore.user.subscription_info.status;
-
-      if (!email_address || !credit) {
-        toast({ title: "Something went wrong" });
-        return current_essay_question;
-      }
-
-      if (!isUserSub) {
-        if (credit >= 10) {
-          const data = await dispatch(
-            createQuestion({ selected_question, email_address })
-          );
-          essay_question = data.payload as string;
-          return essay_question;
-        } else {
-          toast({ title: "Credits are not enough" });
-          return current_essay_question;
-        }
-      } else {
-        const data = await dispatch(
-          createQuestion({ selected_question, email_address })
-        );
-        essay_question = data.payload as string;
-        return essay_question;
-      }
-    } catch (error) {
-      console.error(error);
-      toast({ title: "Something went wrong" });
-      return current_essay_question;
-    }
-  }
-);
-
 export const createQuestion = createAsyncThunk(
   "essayStore/createQuestion",
 
-  async (
-    {
-      selected_question,
-      email_address,
-    }: {
-      selected_question: string;
-      email_address: string;
-    },
-    { dispatch, getState }
-  ) => {
+  async (selected_question: string, { dispatch, getState }) => {
     let essay_question: string = "";
 
     const state = getState() as RootState;
 
+    const email_address = state.userInfoStore.user.email_address;
     const isUserSub = state.userInfoStore.user.subscription_info.status;
     const cost = state.essayStore.operationCosts.create_question_cost;
+    const current_credits = state.userInfoStore.user.credits;
 
-    if (!email_address || !cost) {
+    if (!email_address || !cost || current_credits === null) {
       toast({ title: "Something went wrong" });
+      return essay_question;
+    }
+
+    if (current_credits < cost) {
+      toast({ title: "Credits are not enough" });
       return essay_question;
     }
 
     try {
       if (!isUserSub) {
-        const creditResponse = await dispatch(
+        await dispatch(
           updateUserCredit({
             email_address: email_address,
             spend_credits: cost,
           })
         );
-
-        if (!creditResponse.payload) {
-          return essay_question;
-        }
       }
 
       const aiResponse = await aiQuestion(selected_question);
@@ -261,9 +202,15 @@ export const createFeedback = createAsyncThunk(
     const essay_text = state.essayStore.tempEssayInfo.essay_text;
     const isUserSub = state.userInfoStore.user.subscription_info.status;
     const cost = state.essayStore.operationCosts.create_feedback_cost;
+    const current_credits = state.userInfoStore.user.credits;
 
-    if (!email_address || !cost) {
+    if (!email_address || !cost || current_credits === null) {
       toast({ title: "Something went wrong" });
+      return essay_feedback;
+    }
+
+    if (current_credits < cost) {
+      toast({ title: "Credits are not enough" });
       return essay_feedback;
     }
 
@@ -274,16 +221,12 @@ export const createFeedback = createAsyncThunk(
 
     try {
       if (!isUserSub) {
-        const creditResponse = await dispatch(
+        await dispatch(
           updateUserCredit({
             email_address: email_address,
             spend_credits: cost,
           })
         );
-
-        if (!creditResponse.payload) {
-          return essay_feedback;
-        }
       }
 
       const response = await aiFeedback(essay_question, essay_text);
@@ -329,12 +272,17 @@ export const saveAllEssayInfo = createAsyncThunk(
     const essay_text = state.essayStore.tempEssayInfo.essay_text;
     const essay_feedback = state.essayStore.tempEssayInfo.essay_feedback;
     const cost = state.essayStore.operationCosts.save_essay_cost;
+    const current_credits = state.userInfoStore.user.credits;
     const isUserSub = state.userInfoStore.user.subscription_info.status;
-
     const leftTime = String(localStorage.getItem("left_time"));
 
-    if (!email_address || !cost) {
+    if (!email_address || !cost || !current_credits) {
       toast({ title: "Something went wrong" });
+      return;
+    }
+
+    if (current_credits < cost) {
+      toast({ title: "Credits are not enough" });
       return;
     }
 
@@ -345,16 +293,12 @@ export const saveAllEssayInfo = createAsyncThunk(
 
     try {
       if (!isUserSub) {
-        const creditResponse = await dispatch(
+        await dispatch(
           updateUserCredit({
             email_address: email_address,
             spend_credits: cost,
           })
         );
-
-        if (!creditResponse.payload) {
-          return;
-        }
       }
 
       const { data, error } = await supabase.from("users_essay").insert({
@@ -628,14 +572,14 @@ export const EssayStore = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createEssaySession.pending, (state, action) => {
+      .addCase(createQuestion.pending, (state, action) => {
         state.loadingStates.isQuestionLoading = true;
       })
-      .addCase(createEssaySession.fulfilled, (state, action) => {
+      .addCase(createQuestion.fulfilled, (state, action) => {
         state.tempEssayInfo.essay_question = action.payload;
         state.loadingStates.isQuestionLoading = false;
       })
-      .addCase(createEssaySession.rejected, (state, action) => {
+      .addCase(createQuestion.rejected, (state, action) => {
         state.loadingStates.isQuestionLoading = false;
       })
       .addCase(saveEssayText.pending, (state, action) => {

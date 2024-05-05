@@ -16,7 +16,7 @@ import { Button } from "../../ui/button";
 import {
   createFeedback,
   finishSession,
-  createEssaySession,
+  createQuestion,
   startSession,
   setShowFeedbackDialog,
   resetSessionInfo,
@@ -51,7 +51,7 @@ export const Menu = () => {
   };
 
   const handleCreateTopic = async () => {
-    await dispatch(createEssaySession(selectedTopic));
+    await dispatch(createQuestion(selectedTopic));
   };
 
   const handleGiveFeedback = async () => {

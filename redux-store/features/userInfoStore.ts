@@ -117,6 +117,12 @@ export const updateUserCredit = createAsyncThunk(
     }
 
     const new_credits = current_credits - spend_credits;
+
+    if (new_credits < 0) {
+      toast({ title: "Credits are not enough" });
+      return current_credits;
+    }
+
     const updated_at = dayjs().format("YYYY-MM-DD HH:mm:ss");
 
     try {
@@ -130,13 +136,13 @@ export const updateUserCredit = createAsyncThunk(
         return new_credits;
       } else {
         toast({ title: "Something went wrong" });
-        return null;
+        return current_credits;
       }
     } catch (error) {
       console.error(error);
     }
 
-    return null;
+    return current_credits;
   }
 );
 

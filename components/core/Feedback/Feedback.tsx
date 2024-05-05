@@ -26,9 +26,17 @@ import styles from "./Feedback.module.scss";
 export const Feedback = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { tempEssayInfo, loadingStates } = useSelector(
+  const { tempEssayInfo, loadingStates, operationCosts } = useSelector(
     (state: RootState) => state.essayStore
   );
+
+  const { credits } = useSelector(
+    (state: RootState) => state.userInfoStore.user
+  );
+
+  if (credits! < operationCosts.create_feedback_cost!) {
+    return;
+  }
 
   const handleSaveSession = async () => {
     dispatch(setShowFeedbackDialog(false));
