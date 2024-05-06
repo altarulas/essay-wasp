@@ -60,7 +60,14 @@ export const getUserSubscription = createAsyncThunk(
 
       if (!error) {
         subscriptionInfo.subscription_type = data.subscription_type;
-        subscriptionInfo.status = data.status;
+
+        if (data.status === "active") {
+          subscriptionInfo.status = true;
+        } else if (data.status === "canceled") {
+          subscriptionInfo.status = false;
+        } else {
+          subscriptionInfo.status = false;
+        }
 
         return subscriptionInfo;
       }
