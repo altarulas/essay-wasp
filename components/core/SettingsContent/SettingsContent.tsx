@@ -151,7 +151,7 @@ export const Settings = () => {
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <Link
                           target="_blank"
-                          href="https://buymeacoffee.com/natural.lang/membership"
+                          href="https://buymeacoffee.com/essaywasp/membership"
                         >
                           <AlertDialogAction>Continue</AlertDialogAction>
                         </Link>

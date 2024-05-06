@@ -8,7 +8,7 @@ import { toast } from "@/components/ui/use-toast";
 
 const supabase = supabaseClient();
 
-type subscriptionType = "MONTHLY" | "UNKNOWN" | null;
+type subscriptionType = "MONTHLY" | null;
 
 interface ISubscriptionInfo {
   subscription_type: subscriptionType;

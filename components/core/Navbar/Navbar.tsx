@@ -196,7 +196,7 @@ export const Navbar = () => {
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <Link
                         target="_blank"
-                        href="https://buymeacoffee.com/natural.lang/membership"
+                        href="https://buymeacoffee.com/essaywasp/membership"
                       >
                         <AlertDialogAction>
                           Go to Buy Me Coffee
