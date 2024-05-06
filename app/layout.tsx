@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import ProviderRedux from "@/redux-store/Provider";
+import { Mulish } from "next/font/google";
 
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+const font = Mulish({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "EssayWasp",
+  title: "Essay Wasp",
 };
 
 export default function RootLayout({
@@ -21,10 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
-        )}
+        className={cn("min-h-screen bg-background antialiased", font.className)}
       >
         <ProviderRedux>{children}</ProviderRedux>
       </body>

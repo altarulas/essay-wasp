@@ -55,7 +55,7 @@ export const Text = () => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger className="cursor-default h-fit">
-            <IoMdInformationCircleOutline className="h-6 w-6 text-zinc-400" />
+            <IoMdInformationCircleOutline className="h-6 w-6 text-neutral-300" />
           </TooltipTrigger>
           <TooltipContent>
             <p>min 250, max 400 words</p>

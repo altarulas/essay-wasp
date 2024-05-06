@@ -37,6 +37,8 @@ export const AppContent = () => {
 
       {loading ? <Skeleton className="w-1/2 h-[75%]" /> : <Text />}
 
+      <Feedback />
+
       <div className="flex justify-center items-center flex-col gap-1">
         <span className="text-[12px] text-gray-500">
           Essay Wasp is an experimental tool. Please do not completely trust AI
@@ -45,8 +47,6 @@ export const AppContent = () => {
 
         <span className="text-[12px] text-gray-500">Powered by GPT-4</span>
       </div>
-
-      <Feedback />
     </div>
   );
 };

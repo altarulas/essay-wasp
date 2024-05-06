@@ -87,7 +87,7 @@ export const Feedback = () => {
           onClick={() => dispatch(setShowFeedbackDialog(true))}
           asChild
         >
-          <Button>Show Feedback</Button>
+          <Button variant="outline">Show Feedback</Button>
         </DialogTrigger>
       )}
 
