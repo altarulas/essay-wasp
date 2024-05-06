@@ -121,7 +121,7 @@ export const Settings = () => {
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>About Premium Usage</AlertDialogTitle>
-                        <AlertDialogDescription>
+                        <AlertDialogDescription className="text-[10px]">
                           We are using Buy Me Coffee as a payment method. To
                           understand your sales purchase, enter the e-mail
                           address of your gmail account that you registered with
@@ -130,7 +130,7 @@ export const Settings = () => {
                           will be able to manage all subscription operations.
                         </AlertDialogDescription>
                         <AlertDialogTitle>Important!!!</AlertDialogTitle>
-                        <AlertDialogDescription className="text-red-700 font-bold">
+                        <AlertDialogDescription className="text-red-700 text-[10px] font-bold">
                           If you purchase a membership from Buy Me Coffee with a
                           different e-mail address than the e-mail address you
                           entered in Essay Wasp, you will not be able to get

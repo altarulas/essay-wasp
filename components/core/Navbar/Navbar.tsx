@@ -166,7 +166,7 @@ export const Navbar = () => {
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>About Premium Usage</AlertDialogTitle>
-                      <AlertDialogDescription>
+                      <AlertDialogDescription className="text-[10px]">
                         We are using Buy Me Coffee as a payment method. To
                         understand your sales purchase, enter the e-mail address
                         of your gmail account that you registered with Natural
@@ -175,18 +175,18 @@ export const Navbar = () => {
                         able to manage all subscription operations.
                       </AlertDialogDescription>
                       <AlertDialogTitle>Important!!!</AlertDialogTitle>
-                      <AlertDialogDescription className="text-red-700 font-bold">
+                      <AlertDialogDescription className="text-red-700 text-[10px] font-bold">
                         If you purchase a membership from Buy Me Coffee with a
                         different e-mail address than the e-mail address you
                         entered in Essay Wasp, you will not be able to get
                         premium rights and you will also waste your money.
                       </AlertDialogDescription>
 
-                      <div className="w-full flex justify-center items-center py-4">
+                      <div className="w-full flex justify-center items-center py-2">
                         <Image
                           className="rounded-2xl"
                           src="/upgrade.png"
-                          height={300}
+                          height={200}
                           width={250}
                           alt="upgrade"
                         />
