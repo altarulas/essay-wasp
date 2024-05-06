@@ -40,6 +40,10 @@ export const Menu = () => {
     (state: RootState) => state.essayStore
   );
 
+  const { subscription_info } = useSelector(
+    (state: RootState) => state.userInfoStore.user
+  );
+
   const handleSelectChange = (value: string) => {
     setSelectedTopic(value);
   };
@@ -130,15 +134,25 @@ export const Menu = () => {
         </SelectContent>
       </Select>
 
-      <Button
-        disabled={
-          sessionConditions.is_timer_running || !!tempEssayInfo.essay_question
-        }
-        variant="ghost"
-        onClick={handleCreateTopic}
-      >
-        Create Topic
-      </Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              disabled={
+                sessionConditions.is_timer_running ||
+                !!tempEssayInfo.essay_question
+              }
+              variant="ghost"
+              onClick={handleCreateTopic}
+            >
+              Create Topic
+            </Button>
+          </TooltipTrigger>
+          {!subscription_info.status && (
+            <TooltipContent>{<p>Cost 5 Credits</p>}</TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
 
       <Button
         variant="ghost"
@@ -156,13 +170,22 @@ export const Menu = () => {
         Finish Session
       </Button>
 
-      <Button
-        variant="ghost"
-        disabled={isFeedbackAvailable()}
-        onClick={handleGiveFeedback}
-      >
-        Give Feedback
-      </Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              disabled={isFeedbackAvailable()}
+              onClick={handleGiveFeedback}
+            >
+              Give Feedback
+            </Button>
+          </TooltipTrigger>
+          {!subscription_info.status && (
+            <TooltipContent>{<p>Cost 10 Credits</p>}</TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
 
       <LoadingDialog open={loading} />
     </div>

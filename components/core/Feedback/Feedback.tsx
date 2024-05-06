@@ -22,6 +22,12 @@ import {
 import { Skeleton } from "../../ui/skeleton";
 import { Loader2 } from "lucide-react";
 import styles from "./Feedback.module.scss";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Feedback = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,7 +36,7 @@ export const Feedback = () => {
     (state: RootState) => state.essayStore
   );
 
-  const { credits } = useSelector(
+  const { credits, subscription_info } = useSelector(
     (state: RootState) => state.userInfoStore.user
   );
 
@@ -123,18 +129,28 @@ export const Feedback = () => {
               <Loader2 className={styles.loading} />
             )}
           </Button>
-          <Button
-            disabled={isSessionSaveable()}
-            onClick={() => {
-              handleSaveSession();
-            }}
-            type="submit"
-          >
-            Save This Session
-            {loadingStates.isSavingAllEssayInfo && (
-              <Loader2 className={styles.loading} />
-            )}
-          </Button>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  disabled={isSessionSaveable()}
+                  onClick={() => {
+                    handleSaveSession();
+                  }}
+                  type="submit"
+                >
+                  Save This Session
+                  {loadingStates.isSavingAllEssayInfo && (
+                    <Loader2 className={styles.loading} />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              {!subscription_info.status && (
+                <TooltipContent>{<p>Cost 10 Credits</p>}</TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
         </DialogFooter>
       </DialogContent>
     </Dialog>
