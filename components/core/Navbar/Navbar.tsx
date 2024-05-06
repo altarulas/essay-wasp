@@ -29,6 +29,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Lottie from "lottie-react";
+import WaspAnimation from "@/utils/WaspAnimation.json";
 
 export const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -133,7 +135,12 @@ export const Navbar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logoWrapper}>
-        <div className={styles.logo}>Essay Wasp</div>
+        <div className={styles.logo}>
+          Essay Wasp
+          <div className="w-16 h-16">
+            <Lottie animationData={WaspAnimation} loop={true} />
+          </div>
+        </div>
         {isFormattedTimeAvailable() && (
           <div className={styles.time}>{formatTime(time)}</div>
         )}
@@ -215,11 +222,9 @@ export const Navbar = () => {
         </div>
 
         <Link href="/reports">
-          <Button className="rounded-sm h-8 bg-black">Reports</Button>
-        </Link>
-
-        <Link target="_blank" href="https://altarulas.com">
-          <Button className="rounded-sm h-8 bg-black">Contact Me</Button>
+          <Button variant="ghost" className="rounded-sm h-8 hover:bg-white">
+            Reports
+          </Button>
         </Link>
 
         <Link href="/settings">

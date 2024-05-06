@@ -178,6 +178,11 @@ export const Settings = () => {
               </div>
             </div>
           </CardContent>
+          <CardFooter className="flex w-full justify-end">
+            <Link target="_blank" href="https://altarulas.com">
+              <Button className="rounded-sm h-8">Contact Creator</Button>
+            </Link>
+          </CardFooter>
         </>
       )}
     </Card>

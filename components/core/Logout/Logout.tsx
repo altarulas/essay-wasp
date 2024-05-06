@@ -14,7 +14,11 @@ export const Logout = () => {
   };
 
   return (
-    <Button className="rounded-sm h-8 bg-black" onClick={handleLogoutGoogle}>
+    <Button
+      variant="ghost"
+      className="rounded-sm h-8 hover:bg-white"
+      onClick={handleLogoutGoogle}
+    >
       Logout
     </Button>
   );

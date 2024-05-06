@@ -5,7 +5,7 @@
     @apply flex justify-center items-center gap-10;
 
     .logo {
-      @apply scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-indigo-500;
+      @apply flex justify-center items-center scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-indigo-500;
     }
 
     .time {
