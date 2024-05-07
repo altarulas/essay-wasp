@@ -17,8 +17,6 @@ interface ISubscriptionInfo {
 
 interface IUser {
   email_address: string;
-  full_name: string;
-  avatar_url: string;
   credits: number | null;
   subscription_info: ISubscriptionInfo;
 }
@@ -31,8 +29,6 @@ interface IUserInfo {
 const initialState: IUserInfo = {
   user: {
     email_address: "",
-    full_name: "",
-    avatar_url: "",
     credits: null,
     subscription_info: {
       subscription_type: null,
@@ -158,8 +154,6 @@ export const getUserInfoStore = createAsyncThunk(
   async (_, { dispatch }) => {
     let info: IUser = {
       email_address: "",
-      full_name: "",
-      avatar_url: "",
       credits: 0,
       subscription_info: {
         subscription_type: null,
@@ -172,7 +166,7 @@ export const getUserInfoStore = createAsyncThunk(
     try {
       const { data, error } = await supabase
         .from("profiles")
-        .select("email_address, full_name, avatar_url")
+        .select("email_address")
         .eq("id", id)
         .single();
 
@@ -186,8 +180,6 @@ export const getUserInfoStore = createAsyncThunk(
 
         info = {
           email_address: data.email_address,
-          full_name: data.full_name,
-          avatar_url: data.avatar_url,
           credits: credit.payload,
           subscription_info: subscriptionInfo.payload as ISubscriptionInfo,
         };

@@ -168,14 +168,6 @@ export const Settings = () => {
                   disabled
                 />
               </div>
-              <div className="flex items-center gap-[72px]">
-                <span> Full Name </span>
-                <Input
-                  className="w-fit"
-                  placeholder={user.full_name}
-                  disabled
-                />
-              </div>
             </div>
           </CardContent>
           <CardFooter className="flex w-full justify-end">
