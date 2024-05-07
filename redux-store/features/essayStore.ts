@@ -362,7 +362,7 @@ export const deleteAllTempEssayInfo = createAsyncThunk(
         .eq("email_address", email_address);
 
       if (!error) {
-        toast({ title: "Essay session has reseated" });
+        toast({ title: "Essay session has cleared" });
         return;
       } else {
         toast({ title: "Something went wrong" });
@@ -398,7 +398,7 @@ export const resetSessionInfo = createAsyncThunk(
 
       if (!error) {
         dispatch(resetState());
-        toast({ title: "Essay session has reseated" });
+        toast({ title: "Essay session has cleared" });
         return;
       } else {
         toast({ title: "Something went wrong" });

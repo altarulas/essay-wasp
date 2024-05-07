@@ -106,9 +106,9 @@ export const Feedback = () => {
             {loadingStates.isFeedbackLoading ? (
               <div className="space-y-4">
                 <Skeleton className="w-full h-10" />
-                <Skeleton className="w-full h-20" />
-                <Skeleton className="w-full h-32" />
-                <Skeleton className="w-full h-36" />
+                <Skeleton className="w-full h-16" />
+                <Skeleton className="w-full h-24" />
+                <Skeleton className="w-full h-28" />
               </div>
             ) : (
               tempEssayInfo.essay_feedback
