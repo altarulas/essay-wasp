@@ -8,12 +8,21 @@
   .time {
     @apply w-24 flex justify-center font-semibold text-base;
   }
+}
 
-  .dialogContent {
-    @apply max-w-[750px] h-fit space-y-4 overflow-y-auto;
+.dialogContent {
+  @apply max-w-[700px] max-h-[600px] overflow-y-auto;
 
-    .essayInfoWrapper {
-      @apply flex flex-col gap-6;
-    }
+  /* Hiding scrollbar for Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hiding scrollbar for IE, Edge and Firefox */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+
+  .essayInfoWrapper {
+    @apply flex flex-col gap-6;
   }
 }

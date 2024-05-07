@@ -28,7 +28,7 @@ export const AppContent = () => {
   }, []);
 
   return (
-    <div className="w-full h-[90%] flex flex-col justify-center items-center gap-8">
+    <div className="w-full h-[90%] flex flex-col justify-center items-center gap-5 animate-appear">
       {loading ? <Skeleton className="w-1/2 h-[10%]" /> : <Menu />}
 
       {loading ? <Skeleton className="w-1/2 h-[15%]" /> : <Question />}

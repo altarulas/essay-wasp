@@ -100,7 +100,7 @@ export const Navbar = () => {
     }
   }, [sessionConditions.left_timer]);
 
-  const formatTime = (time: number) => {
+  const formatTime = (time: number, type?: string) => {
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
@@ -112,9 +112,13 @@ export const Navbar = () => {
       return;
     }
 
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    if (type === "h") {
+      return `${hours.toString().padStart(2, "0")}`;
+    } else if (type === "m") {
+      return `${minutes.toString().padStart(2, "0")}`;
+    } else if (type === "s") {
+      return `${seconds.toString().padStart(2, "0")}`;
+    }
   };
 
   const isFormattedTimeAvailable = (): boolean => {
@@ -141,8 +145,15 @@ export const Navbar = () => {
             <Lottie animationData={WaspAnimation} loop={true} />
           </div>
         </div>
+
         {isFormattedTimeAvailable() && (
-          <div className={styles.time}>{formatTime(time)}</div>
+          <div className="flex justify-center items-center gap-1">
+            <div className={styles.time}>{formatTime(time, "h")}</div>
+            {`:`}
+            <div className={styles.time}>{formatTime(time, "m")}</div>
+            {`:`}
+            <div className={styles.time}>{formatTime(time, "s")}</div>
+          </div>
         )}
 
         {isRemainingTimeAvailable() && (
@@ -157,7 +168,9 @@ export const Navbar = () => {
               <Skeleton className="w-60 h-10" />
             ) : (
               <>
-                <span className={styles.credit}>credits: {user.credits}</span>
+                <Button variant="outline" className={styles.credit}>
+                  credits: {user.credits}
+                </Button>
 
                 <AlertDialog>
                   <AlertDialogTrigger>

@@ -1,5 +1,5 @@
 .container {
-  @apply w-full h-full flex justify-center items-center;
+  @apply w-full h-full flex justify-center items-center animate-appear;
 
   .contentWrapper {
     @apply flex flex-col items-center gap-10;

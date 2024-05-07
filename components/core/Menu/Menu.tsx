@@ -29,6 +29,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const Menu = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -154,13 +163,33 @@ export const Menu = () => {
         </Tooltip>
       </TooltipProvider>
 
-      <Button
-        variant="ghost"
-        disabled={isStartSessionAvailable()}
-        onClick={handleStartSession}
-      >
-        Start Session
-      </Button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button disabled={isStartSessionAvailable()} variant="ghost">
+            Start Session
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogDescription className="text-sm">
+              Do you wanna start the session? When you click start session, 40
+              minutes countdown will be started.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel asChild>
+              <Button
+                className="bg-black text-white hover:bg-black/80 hover:text-white"
+                disabled={isStartSessionAvailable()}
+                onClick={handleStartSession}
+              >
+                Start Session
+              </Button>
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Button
         variant="ghost"

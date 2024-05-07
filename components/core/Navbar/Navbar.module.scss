@@ -9,7 +9,7 @@
     }
 
     .time {
-      @apply text-2xl font-bold rounded-lg py-1 w-36 flex items-center justify-center;
+      @apply bg-white text-xl font-semibold rounded-sm py-1 px-2 flex items-center justify-center text-zinc-800 shadow-2xl;
     }
   }
 
@@ -20,7 +20,7 @@
       @apply flex items-center gap-4 mr-10;
 
       .credit {
-        @apply text-sm font-semibold;
+        @apply text-sm font-semibold cursor-default h-8;
       }
 
       .button {
