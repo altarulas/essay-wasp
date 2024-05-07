@@ -24,7 +24,7 @@ export const HomeContent = () => {
           className={styles.titleAnimation}
           repeat={Infinity}
         />
-        <Login />
+        {/*  <Login /> */}
       </div>
     </div>
   );
