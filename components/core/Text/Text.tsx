@@ -15,6 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import styles from "./Text.module.scss";
 
 export const Text = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -66,7 +67,7 @@ export const Text = () => {
         disabled={!sessionConditions.is_timer_running}
         value={essayText}
         onChange={(e) => handleEssayChange(e)}
-        className="h-full p-4 bg-zinc-50"
+        className={styles.textContainer}
         placeholder="Type your essay here..."
       />
     </div>

@@ -1,5 +1,5 @@
 .container {
-  @apply px-4 py-8 h-full w-[650px] flex flex-col;
+  @apply px-4 py-8 h-full w-[650px] flex flex-col animate-appear;
 
   .loadingWrapper {
     @apply w-full h-full flex flex-col items-center space-y-6;
