@@ -118,6 +118,10 @@ export const Navbar = () => {
       return `${minutes.toString().padStart(2, "0")}`;
     } else if (type === "s") {
       return `${seconds.toString().padStart(2, "0")}`;
+    } else {
+      return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     }
   };
 
@@ -134,6 +138,22 @@ export const Navbar = () => {
       !sessionConditions.is_timer_running &&
       !!sessionConditions.left_timer
     );
+  };
+
+  const getTimePart = (time: string | null, type: string) => {
+    if (!time) return;
+
+    const [hours, minutes, seconds] = time.split(":");
+    switch (type) {
+      case "h":
+        return hours;
+      case "m":
+        return minutes;
+      case "s":
+        return seconds;
+      default:
+        return "";
+    }
   };
 
   return (
@@ -157,7 +177,13 @@ export const Navbar = () => {
         )}
 
         {isRemainingTimeAvailable() && (
-          <div className={styles.time}>{remainingTime}</div>
+          <div className="flex justify-center items-center gap-1">
+            <div className={styles.time}>{getTimePart(remainingTime, "h")}</div>
+            {`:`}
+            <div className={styles.time}>{getTimePart(remainingTime, "m")}</div>
+            {`:`}
+            <div className={styles.time}>{getTimePart(remainingTime, "s")}</div>
+          </div>
         )}
       </div>
 

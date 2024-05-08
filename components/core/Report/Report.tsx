@@ -35,15 +35,19 @@ export const Report = (props: ReportProps) => {
           <Button variant="outline">Show Essay</Button>
         </DialogTrigger>
 
-        <DialogContent className={styles.dialogContent}>
+        <DialogContent className="max-w-[700px] max-h-[600px] overflow-y-auto">
           <DialogHeader className="space-y-6">
             <DialogTitle> Essay Topic </DialogTitle>
-            <DialogDescription>{essayQuestion}</DialogDescription>
+            <DialogDescription className="max-w-[600px] break-all">
+              {essayQuestion}
+            </DialogDescription>
           </DialogHeader>
 
           <DialogHeader className="space-y-6">
             <DialogTitle> Essay Content </DialogTitle>
-            <DialogDescription>{essayText}</DialogDescription>
+            <DialogDescription className="max-w-[600px] break-all">
+              {essayText}
+            </DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>
@@ -53,7 +57,7 @@ export const Report = (props: ReportProps) => {
           <Button variant="outline">Show Feedback</Button>
         </DialogTrigger>
 
-        <DialogContent className={styles.dialogContent}>
+        <DialogContent className="max-w-[700px] max-h-[600px] overflow-y-auto">
           <DialogHeader className="space-y-6">
             <DialogTitle> Essay Feedback </DialogTitle>
             <DialogDescription className="whitespace-pre-wrap">
