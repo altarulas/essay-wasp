@@ -90,7 +90,7 @@ const initialState: IEssayInfo = {
 export const createQuestion = createAsyncThunk(
   "essayStore/createQuestion",
 
-  async (selected_question: string, { dispatch, getState }) => {
+  async (selected_type: string, { dispatch, getState }) => {
     let essay_question: string = "";
 
     const state = getState() as RootState;
@@ -99,6 +99,11 @@ export const createQuestion = createAsyncThunk(
     const isUserSub = state.userInfoStore.user.subscription_info.status;
     const cost = state.essayStore.operationCosts.create_question_cost;
     const current_credits = state.userInfoStore.user.credits;
+
+    if (!selected_type) {
+      toast({ title: "Please select a topic type first" });
+      return essay_question;
+    }
 
     if (!email_address || !cost || current_credits === null) {
       toast({ title: "Something went wrong" });
@@ -127,7 +132,7 @@ export const createQuestion = createAsyncThunk(
         }
       }
 
-      const aiResponse = await aiQuestion(selected_question);
+      const aiResponse = await aiQuestion(selected_type);
 
       if (aiResponse?.error) {
         const message = aiResponse.error.context.text();
