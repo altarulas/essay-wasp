@@ -9,19 +9,19 @@ import { toast } from "@/components/ui/use-toast";
 
 const supabase = supabaseClient();
 
-interface ICost {
+export interface ICost {
   create_question_cost: number | null;
   create_feedback_cost: number | null;
   save_essay_cost: number | null;
 }
 
-interface ITempEssay {
+export interface ITempEssay {
   essay_question: string;
   essay_text: string;
   essay_feedback: string;
 }
 
-interface ISavedEssay {
+export interface ISavedEssay {
   essay_question: string;
   essay_text: string;
   essay_feedback: string;
@@ -29,7 +29,7 @@ interface ISavedEssay {
   created_at: Date | null;
 }
 
-interface ISessionConditions {
+export interface ISessionConditions {
   is_session_started: boolean;
   is_session_finished: boolean;
   is_timer_running: boolean;
@@ -37,7 +37,7 @@ interface ISessionConditions {
   left_timer: string | null;
 }
 
-interface ILoading {
+export interface ILoading {
   isEssayStoreLoading: boolean;
   isQuestionLoading: boolean;
   isSavingEssayText: boolean;
@@ -48,7 +48,7 @@ interface ILoading {
   isDialogOpen: boolean;
 }
 
-interface IEssayInfo {
+export interface IEssayInfo {
   tempEssayInfo: ITempEssay;
   savedEssayInfo: ISavedEssay[] | [];
   operationCosts: ICost;
