@@ -10,18 +10,6 @@ import { Skeleton } from "../../ui/skeleton";
 import { useEffect, useState } from "react";
 import { finishSession, saveLeftTime } from "@/redux-store/features/essayStore";
 import styles from "./Navbar.module.scss";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import Image from "next/image";
 import { toast } from "@/components/ui/use-toast";
 import {
   Tooltip,
@@ -31,6 +19,8 @@ import {
 } from "@/components/ui/tooltip";
 import Lottie from "lottie-react";
 import WaspAnimation from "@/utils/WaspAnimation.json";
+import { PremiumDialog } from "../PremiumDialog/PremiumDialog";
+import { Tutorial } from "../Tutorial/Tutorial";
 
 export const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -188,62 +178,19 @@ export const Navbar = () => {
       </div>
 
       <div className={styles.menuWrapper}>
+        <Tutorial />
+
         <div className={styles.creditWrapper}>
           {!status ? (
             isLoadingInfoStore ? (
               <Skeleton className="w-60 h-10" />
             ) : (
               <>
-                <Button variant="outline" className={styles.credit}>
-                  credits: {user.credits}
+                <Button variant="secondary" className={styles.credit}>
+                  Credits: {user.credits}
                 </Button>
 
-                <AlertDialog>
-                  <AlertDialogTrigger>
-                    <Button className={styles.button}>Use Unlimited</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>About Premium Usage</AlertDialogTitle>
-                      <AlertDialogDescription className="text-[10px]">
-                        We are using Buy Me Coffee as a payment method. To
-                        understand your sales purchase, enter the e-mail address
-                        of your gmail account that you registered with Natural
-                        Lang. By doing this, you are creating a Buy Me Coffee
-                        account with that e-mail. In Buy Me Coffee, you will be
-                        able to manage all subscription operations.
-                      </AlertDialogDescription>
-                      <AlertDialogTitle>Important!!!</AlertDialogTitle>
-                      <AlertDialogDescription className="text-red-700 text-[10px] font-bold">
-                        If you purchase a membership from Buy Me Coffee with a
-                        different e-mail address than the e-mail address you
-                        entered in Essay Wasp, you will not be able to get
-                        premium rights and you will also waste your money.
-                      </AlertDialogDescription>
-
-                      <div className="w-full flex justify-center items-center py-2">
-                        <Image
-                          className="rounded-2xl"
-                          src="/upgrade.png"
-                          height={200}
-                          width={250}
-                          alt="upgrade"
-                        />
-                      </div>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <Link
-                        target="_blank"
-                        href="https://buymeacoffee.com/essaywasp/membership"
-                      >
-                        <AlertDialogAction>
-                          Go to Buy Me Coffee
-                        </AlertDialogAction>
-                      </Link>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                <PremiumDialog />
               </>
             )
           ) : (

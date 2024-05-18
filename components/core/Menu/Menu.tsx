@@ -20,6 +20,8 @@ import {
   startSession,
   setShowFeedbackDialog,
   resetSessionInfo,
+  ISessionConditions,
+  ITempEssay,
 } from "@/redux-store/features/essayStore";
 import { LoadingDialog } from "../LoadingDialog/LoadingDialog";
 import { RiRefreshLine } from "react-icons/ri";
@@ -122,26 +124,11 @@ export const Menu = () => {
         </Tooltip>
       </TooltipProvider>
 
-      <Select
-        disabled={
-          sessionConditions.is_timer_running || !!tempEssayInfo.essay_text
-        }
-        onValueChange={(value) => handleSelectChange(value)}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select an Essay Type" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Essay Type</SelectLabel>
-            <SelectItem value="opinion">Opinion</SelectItem>
-            <SelectItem value="discussion">Discussion</SelectItem>
-            <SelectItem value="solution">Solution</SelectItem>
-            <SelectItem value="direct">Direct</SelectItem>
-            <SelectItem value="adv">Advantages / Disadvantages</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <TypeSelector
+        sessionConditions={sessionConditions}
+        tempEssayInfo={tempEssayInfo}
+        onHandleSelectChange={handleSelectChange}
+      />
 
       <TooltipProvider>
         <Tooltip>
@@ -163,33 +150,10 @@ export const Menu = () => {
         </Tooltip>
       </TooltipProvider>
 
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button disabled={isStartSessionAvailable()} variant="ghost">
-            Start Session
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogDescription className="text-sm">
-              Do you wanna start the session? When you click start session, 40
-              minutes countdown will be started.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogCancel asChild>
-              <Button
-                className="bg-black text-white hover:bg-black/80 hover:text-white"
-                disabled={isStartSessionAvailable()}
-                onClick={handleStartSession}
-              >
-                Start Session
-              </Button>
-            </AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <StartSessionAlert
+        isStartSessionAvailable={isStartSessionAvailable}
+        onHandleStartSession={handleStartSession}
+      />
 
       <Button
         variant="ghost"
@@ -218,5 +182,81 @@ export const Menu = () => {
 
       <LoadingDialog open={loading} />
     </div>
+  );
+};
+
+interface TypeSelectorProps {
+  sessionConditions: ISessionConditions;
+  tempEssayInfo: ITempEssay;
+  onHandleSelectChange: (value: string) => void;
+}
+
+const TypeSelector = ({
+  sessionConditions,
+  tempEssayInfo,
+  onHandleSelectChange,
+}: TypeSelectorProps) => {
+  const { is_timer_running } = sessionConditions;
+  const { essay_text } = tempEssayInfo;
+
+  return (
+    <Select
+      disabled={is_timer_running || !!essay_text}
+      onValueChange={(value) => onHandleSelectChange(value)}
+    >
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Select an Essay Type" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Essay Type</SelectLabel>
+          <SelectItem value="opinion">Opinion</SelectItem>
+          <SelectItem value="discussion">Discussion</SelectItem>
+          <SelectItem value="solution">Solution</SelectItem>
+          <SelectItem value="direct">Direct</SelectItem>
+          <SelectItem value="adv">Advantages / Disadvantages</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+};
+
+interface StartSessionAlertProps {
+  isStartSessionAvailable: () => boolean | undefined;
+  onHandleStartSession: () => void;
+}
+
+const StartSessionAlert = ({
+  isStartSessionAvailable,
+  onHandleStartSession,
+}: StartSessionAlertProps) => {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button disabled={isStartSessionAvailable()} variant="ghost">
+          Start Session
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogDescription className="text-sm">
+            Do you wanna start the session? When you click start session, 40
+            minutes countdown will be started.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel asChild>
+            <Button
+              className="bg-black text-white hover:bg-black/80 hover:text-white"
+              disabled={isStartSessionAvailable()}
+              onClick={onHandleStartSession}
+            >
+              Start Session
+            </Button>
+          </AlertDialogCancel>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };

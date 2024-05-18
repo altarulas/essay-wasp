@@ -23,6 +23,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Image from "next/image";
+import { PremiumDialog } from "../PremiumDialog/PremiumDialog";
 
 export const Settings = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -68,44 +69,7 @@ export const Settings = () => {
                   <Button variant="premium">{"PREMIUM"}</Button>
                   <Button variant="default">{"MONTHLY"}</Button>
 
-                  <AlertDialog>
-                    <AlertDialogTrigger>
-                      <Button variant="destructive">Cancel Subscription</Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          About Canceling Premium
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          {`We are using Buy Me Coffee as a payment method. To
-                          cancel subscription, you should cancel your membership
-                          on Buy Me Coffee. Click "Go to Buy Me Coffee" button and login Buy Me Coffee with email that you used to buy premium. After that you can cancel your membership on My account --> Payments section.`}
-
-                          <div className="w-full flex justify-center items-center py-4">
-                            <Image
-                              className="rounded-2xl"
-                              src="/cancel.png"
-                              height={300}
-                              width={250}
-                              alt="cancel"
-                            />
-                          </div>
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <Link
-                          target="_blank"
-                          href="https://studio.buymeacoffee.com/my-account/payments/memberships"
-                        >
-                          <AlertDialogAction>
-                            Go to Buy Me Coffee
-                          </AlertDialogAction>
-                        </Link>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <CancelPremium />
                 </div>
               ) : (
                 <div className={styles.subscription}>
@@ -114,50 +78,7 @@ export const Settings = () => {
                     {"FREE"}
                   </Button>
 
-                  <AlertDialog>
-                    <AlertDialogTrigger>
-                      <Button className={styles.button}>Use Premium</Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>About Premium Usage</AlertDialogTitle>
-                        <AlertDialogDescription className="text-[10px]">
-                          We are using Buy Me Coffee as a payment method. To
-                          understand your sales purchase, enter the e-mail
-                          address of your gmail account that you registered with
-                          Essay Wasp. By doing this, you are creating a Buy Me
-                          Coffee account with that e-mail. In Buy Me Coffee, you
-                          will be able to manage all subscription operations.
-                        </AlertDialogDescription>
-                        <AlertDialogTitle>Important!!!</AlertDialogTitle>
-                        <AlertDialogDescription className="text-red-700 text-[10px] font-bold">
-                          If you purchase a membership from Buy Me Coffee with a
-                          different e-mail address than the e-mail address you
-                          entered in Essay Wasp, you will not be able to get
-                          premium rights and you will also waste your money.
-                        </AlertDialogDescription>
-
-                        <div className="w-full flex justify-center items-center py-4">
-                          <Image
-                            className="rounded-2xl"
-                            src="/upgrade.png"
-                            height={300}
-                            width={250}
-                            alt="upgrade"
-                          />
-                        </div>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <Link
-                          target="_blank"
-                          href="https://buymeacoffee.com/essaywasp/membership"
-                        >
-                          <AlertDialogAction>Continue</AlertDialogAction>
-                        </Link>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <PremiumDialog />
                 </div>
               )}
               <div className="flex items-center gap-10">
@@ -178,5 +99,44 @@ export const Settings = () => {
         </>
       )}
     </Card>
+  );
+};
+
+const CancelPremium = () => {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger>
+        <Button variant="destructive">Cancel Subscription</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>About Canceling Premium</AlertDialogTitle>
+          <AlertDialogDescription>
+            {`We are using Buy Me Coffee as a payment method. To
+        cancel subscription, you should cancel your membership
+        on Buy Me Coffee. Click "Go to Buy Me Coffee" button and login Buy Me Coffee with email that you used to buy premium. After that you can cancel your membership on My account --> Payments section.`}
+
+            <div className="w-full flex justify-center items-center py-4">
+              <Image
+                className="rounded-2xl"
+                src="/cancel.png"
+                height={300}
+                width={250}
+                alt="cancel"
+              />
+            </div>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <Link
+            target="_blank"
+            href="https://studio.buymeacoffee.com/my-account/payments/memberships"
+          >
+            <AlertDialogAction>Go to Buy Me Coffee</AlertDialogAction>
+          </Link>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };

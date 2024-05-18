@@ -9,19 +9,19 @@ import { toast } from "@/components/ui/use-toast";
 
 const supabase = supabaseClient();
 
-interface ICost {
+export interface ICost {
   create_question_cost: number | null;
   create_feedback_cost: number | null;
   save_essay_cost: number | null;
 }
 
-interface ITempEssay {
+export interface ITempEssay {
   essay_question: string;
   essay_text: string;
   essay_feedback: string;
 }
 
-interface ISavedEssay {
+export interface ISavedEssay {
   essay_question: string;
   essay_text: string;
   essay_feedback: string;
@@ -29,7 +29,7 @@ interface ISavedEssay {
   created_at: Date | null;
 }
 
-interface ISessionConditions {
+export interface ISessionConditions {
   is_session_started: boolean;
   is_session_finished: boolean;
   is_timer_running: boolean;
@@ -37,7 +37,7 @@ interface ISessionConditions {
   left_timer: string | null;
 }
 
-interface ILoading {
+export interface ILoading {
   isEssayStoreLoading: boolean;
   isQuestionLoading: boolean;
   isSavingEssayText: boolean;
@@ -48,7 +48,7 @@ interface ILoading {
   isDialogOpen: boolean;
 }
 
-interface IEssayInfo {
+export interface IEssayInfo {
   tempEssayInfo: ITempEssay;
   savedEssayInfo: ISavedEssay[] | [];
   operationCosts: ICost;
@@ -90,7 +90,7 @@ const initialState: IEssayInfo = {
 export const createQuestion = createAsyncThunk(
   "essayStore/createQuestion",
 
-  async (selected_question: string, { dispatch, getState }) => {
+  async (selected_type: string, { dispatch, getState }) => {
     let essay_question: string = "";
 
     const state = getState() as RootState;
@@ -99,6 +99,11 @@ export const createQuestion = createAsyncThunk(
     const isUserSub = state.userInfoStore.user.subscription_info.status;
     const cost = state.essayStore.operationCosts.create_question_cost;
     const current_credits = state.userInfoStore.user.credits;
+
+    if (!selected_type) {
+      toast({ title: "Please select a topic type first" });
+      return essay_question;
+    }
 
     if (!email_address || !cost || current_credits === null) {
       toast({ title: "Something went wrong" });
@@ -127,7 +132,7 @@ export const createQuestion = createAsyncThunk(
         }
       }
 
-      const aiResponse = await aiQuestion(selected_question);
+      const aiResponse = await aiQuestion(selected_type);
 
       if (aiResponse?.error) {
         const message = aiResponse.error.context.text();
