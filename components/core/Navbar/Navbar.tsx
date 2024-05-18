@@ -20,6 +20,7 @@ import {
 import Lottie from "lottie-react";
 import WaspAnimation from "@/utils/WaspAnimation.json";
 import { PremiumDialog } from "../PremiumDialog/PremiumDialog";
+import { Tutorial } from "../Tutorial/Tutorial";
 
 export const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -177,14 +178,16 @@ export const Navbar = () => {
       </div>
 
       <div className={styles.menuWrapper}>
+        <Tutorial />
+
         <div className={styles.creditWrapper}>
           {!status ? (
             isLoadingInfoStore ? (
               <Skeleton className="w-60 h-10" />
             ) : (
               <>
-                <Button variant="outline" className={styles.credit}>
-                  credits: {user.credits}
+                <Button variant="secondary" className={styles.credit}>
+                  Credits: {user.credits}
                 </Button>
 
                 <PremiumDialog />
