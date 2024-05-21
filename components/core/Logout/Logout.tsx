@@ -22,6 +22,7 @@ export const Logout = () => {
   return (
     <>
       <Button
+        data-testid="logout-button"
         variant="ghost"
         className="rounded-sm h-8 hover:bg-white"
         onClick={handleLogoutGoogle}

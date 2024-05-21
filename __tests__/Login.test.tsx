@@ -11,9 +11,21 @@ jest.mock("@/utils/supabase/client", () => ({
   }),
 }));
 
-const supabase = supabaseClient();
-
 describe("Login Component", () => {
+  const mockSignIn = jest.fn();
+
+  beforeEach(() => {
+    (supabaseClient as jest.Mock).mockReturnValue({
+      auth: {
+        signInWithOAuth: mockSignIn,
+      },
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test("should render login button with google icon and text", () => {
     render(<Login />);
 
@@ -33,8 +45,8 @@ describe("Login Component", () => {
     const button = screen.getByTestId("login-button");
     fireEvent.click(button);
 
-    expect(supabase.auth.signInWithOAuth).toHaveBeenCalledTimes(1);
-    expect(supabase.auth.signInWithOAuth).toHaveBeenCalledWith({
+    expect(mockSignIn).toHaveBeenCalledTimes(1);
+    expect(mockSignIn).toHaveBeenCalledWith({
       provider: "google",
       options: {
         queryParams: {
