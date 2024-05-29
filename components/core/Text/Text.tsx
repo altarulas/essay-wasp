@@ -55,14 +55,18 @@ export const Text = () => {
     <div className="w-1/2 h-[70%] flex flex-col items-end gap-1 -mt-4">
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger className="cursor-default h-fit">
+          <TooltipTrigger
+            data-testid="tooltip-button"
+            className="cursor-default h-fit"
+          >
             <IoMdInformationCircleOutline className="h-6 w-6 text-neutral-300" />
           </TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent data-testid="tooltip-info">
             <p>min 250, max 400 words</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+
       <Textarea
         disabled={!sessionConditions.is_timer_running}
         value={essayText}

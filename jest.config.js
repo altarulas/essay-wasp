@@ -13,6 +13,7 @@ const config = {
   moduleNameMapper: {
     "^@/components/(.*)$": "<rootDir>/components/$1",
     "^@/utils/(.*)$": "<rootDir>/utils/$1",
+    "^@/redux-store/(.*)$": "<rootDir>/redux-store/$1",
   },
 
   // Add more setup options before each test is run
