@@ -10,7 +10,6 @@ import { Text } from "../Text/Text";
 import { Feedback } from "../Feedback/Feedback";
 import { Question } from "../Question/Question";
 import { Skeleton } from "../../ui/skeleton";
-import { Tutorial } from "../Tutorial/Tutorial";
 
 export const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();

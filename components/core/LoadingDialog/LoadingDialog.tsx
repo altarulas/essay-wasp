@@ -13,7 +13,7 @@ export const LoadingDialog = ({ open }: { open: boolean }) => {
   return (
     <AlertDialog open={open}>
       <AlertDialogContent className={styles.alertContent}>
-        <Loader2 className={styles.loading} />
+        <Loader2 data-testid="loading-icon" className={styles.loading} />
       </AlertDialogContent>
     </AlertDialog>
   );

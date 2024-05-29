@@ -26,7 +26,7 @@ interface IUserInfo {
   isLoadingInfoStore: boolean;
 }
 
-const initialState: IUserInfo = {
+export const initialState: IUserInfo = {
   user: {
     email_address: "",
     credits: null,

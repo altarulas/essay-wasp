@@ -56,7 +56,7 @@ export interface IEssayInfo {
   loadingStates: ILoading;
 }
 
-const initialState: IEssayInfo = {
+export const initialState: IEssayInfo = {
   tempEssayInfo: {
     essay_question: "",
     essay_text: "",
