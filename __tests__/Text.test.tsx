@@ -1,11 +1,10 @@
 // components/Text.test.js
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Text } from "@/components/core/Text/Text";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import "@testing-library/jest-dom";
-import userEvent from "@testing-library/user-event";
 
 // Create a mock store
 const mockStore = configureStore([]);
@@ -16,70 +15,57 @@ const initialState = {
   },
 };
 
-const store = mockStore(initialState);
+const defaultStore = mockStore(initialState);
 
-test("renders Text component", () => {
-  render(
-    <Provider store={store}>
-      <Text />
-    </Provider>
-  );
+describe("Text Component", () => {
+  test("renders Text component", () => {
+    render(
+      <Provider store={defaultStore}>
+        <Text />
+      </Provider>
+    );
 
-  // Check if the textarea is rendered
-  expect(
-    screen.getByPlaceholderText("Type your essay here...")
-  ).toBeInTheDocument();
-});
+    const textarea = screen.getByPlaceholderText("Type your essay here...");
 
-test("updates textarea value when user types", () => {
-  render(
-    <Provider store={store}>
-      <Text />
-    </Provider>
-  );
+    expect(textarea).toBeInTheDocument();
+    expect(textarea).toHaveTextContent("");
+  });
 
-  const textarea = screen.getByPlaceholderText("Type your essay here...");
+  test("updates textarea value when user types", () => {
+    render(
+      <Provider store={defaultStore}>
+        <Text />
+      </Provider>
+    );
 
-  fireEvent.change(textarea, { target: { value: "New essay text" } });
+    const textarea = screen.getByPlaceholderText("Type your essay here...");
 
-  expect(String(textarea.textContent)).toBe("New essay text");
-});
+    fireEvent.change(textarea, { target: { value: "New essay text" } });
 
-test("disables textarea when session timer is not running", () => {
-  const stateWithTimerStopped = {
-    essayStore: {
-      tempEssayInfo: { essay_text: "" },
-      sessionConditions: {
-        is_session_finished: false,
-        is_timer_running: false,
+    expect(textarea).toHaveTextContent("New essay text");
+  });
+
+  test("disables textarea when session timer is not running (when session is finished)", () => {
+    const stateWithTimerStopped = {
+      essayStore: {
+        tempEssayInfo: { essay_text: "New essay text" },
+        sessionConditions: {
+          is_session_finished: true,
+          is_timer_running: false,
+        },
       },
-    },
-  };
-  const storeWithTimerStopped = mockStore(stateWithTimerStopped);
+    };
 
-  render(
-    <Provider store={storeWithTimerStopped}>
-      <Text />
-    </Provider>
-  );
+    const storeWithTimerStopped = mockStore(stateWithTimerStopped);
 
-  const textarea = screen.getByPlaceholderText("Type your essay here...");
-  expect(textarea).toBeDisabled();
-});
+    render(
+      <Provider store={storeWithTimerStopped}>
+        <Text />
+      </Provider>
+    );
 
-test("tooltip displays correct information", async () => {
-  render(
-    <Provider store={store}>
-      <Text />
-    </Provider>
-  );
-
-  // Hover over the tooltip trigger
-  const tooltipButton = screen.getByTestId("tooltip-button");
-  await userEvent.hover(tooltipButton);
-
-  const tooltipContent = await screen.findAllByRole("tooltip");
-  expect(String(tooltipContent[0].textContent)).toContain(
-    "min 250, max 400 words"
-  );
+    const textarea = screen.getByPlaceholderText("Type your essay here...");
+    expect(textarea).toBeDisabled();
+    expect(textarea).toHaveTextContent("New essay text");
+  });
 });

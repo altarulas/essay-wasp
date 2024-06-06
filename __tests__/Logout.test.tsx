@@ -6,37 +6,23 @@ import { useRouter } from "next/navigation";
 
 // Mock useRouter
 jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
+  useRouter: jest.fn().mockReturnValue({
+    push: jest.fn(),
+  }),
 }));
 
 // Mock supabaseClient
 jest.mock("@/utils/supabase/client", () => ({
-  supabaseClient: jest.fn(() => ({
+  supabaseClient: jest.fn().mockReturnValue({
     auth: {
       signOut: jest.fn(),
     },
-  })),
+  }),
 }));
 
 describe("Logout Component", () => {
-  const mockPush = jest.fn();
-  const mockSignOut = jest.fn();
-
-  beforeEach(() => {
-    (useRouter as jest.Mock).mockReturnValue({
-      push: mockPush,
-    });
-
-    (supabaseClient as jest.Mock).mockReturnValue({
-      auth: {
-        signOut: mockSignOut,
-      },
-    });
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  const mockPush = useRouter().push;
+  const mockSupabaseSignOut = supabaseClient().auth.signOut;
 
   test("should render logout button", () => {
     render(<Logout />);
@@ -58,7 +44,7 @@ describe("Logout Component", () => {
     expect(loadingDialog).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(mockSignOut).toHaveBeenCalledTimes(1);
+      expect(mockSupabaseSignOut).toHaveBeenCalledTimes(1);
     });
 
     await waitFor(() => {
