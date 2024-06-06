@@ -5,6 +5,7 @@ import { Text } from "@/components/core/Text/Text";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import "@testing-library/jest-dom";
+import userEvent from "@testing-library/user-event";
 
 // Create a mock store
 const mockStore = configureStore([]);
@@ -75,5 +76,10 @@ test("tooltip displays correct information", async () => {
 
   // Hover over the tooltip trigger
   const tooltipButton = screen.getByTestId("tooltip-button");
-  fireEvent.mouseOver(tooltipButton);
+  await userEvent.hover(tooltipButton);
+
+  const tooltipContent = await screen.findAllByRole("tooltip");
+  expect(String(tooltipContent[0].textContent)).toContain(
+    "min 250, max 400 words"
+  );
 });

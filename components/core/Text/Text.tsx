@@ -61,8 +61,8 @@ export const Text = () => {
           >
             <IoMdInformationCircleOutline className="h-6 w-6 text-neutral-300" />
           </TooltipTrigger>
-          <TooltipContent data-testid="tooltip-info">
-            <p>min 250, max 400 words</p>
+          <TooltipContent>
+            <p role="tooltip">min 250, max 400 words</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
