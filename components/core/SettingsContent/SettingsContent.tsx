@@ -25,10 +25,10 @@ import {
 import Image from "next/image";
 import { PremiumDialog } from "../PremiumDialog/PremiumDialog";
 
-export const Settings = () => {
+export const SettingsContent = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { user, isLoadingInfoStore } = useSelector(
+  const { user, isLoadingUserInfo } = useSelector(
     (state: RootState) => state.userInfoStore
   );
 
@@ -42,7 +42,7 @@ export const Settings = () => {
 
   return (
     <Card className={cn(styles.container)}>
-      {isLoadingInfoStore ? (
+      {isLoadingUserInfo ? (
         <div className={styles.loadingWrapper}>
           <Skeleton className={styles.loading} />
           <Skeleton className={styles.loading} />
