@@ -1,4 +1,4 @@
-import { Settings } from "@/components/core/SettingsContent/SettingsContent";
+import { SettingsContent } from "@/components/core/SettingsContent/SettingsContent";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
@@ -14,7 +14,7 @@ const SettingsPage = () => {
               <FaArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
-          <Settings />
+          <SettingsContent />
         </div>
       </div>
     </div>

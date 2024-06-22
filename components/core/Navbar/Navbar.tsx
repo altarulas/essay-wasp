@@ -25,7 +25,7 @@ export const Navbar = () => {
     (state: RootState) => state.userInfoStore.user.subscription_info
   );
 
-  const { user, isLoadingInfoStore } = useSelector(
+  const { user, isLoadingUserInfo } = useSelector(
     (state: RootState) => state.userInfoStore
   );
 
@@ -46,7 +46,7 @@ export const Navbar = () => {
 
         <div className={styles.creditWrapper}>
           {!status ? (
-            isLoadingInfoStore ? (
+            isLoadingUserInfo ? (
               <Skeleton className="w-60 h-10" />
             ) : (
               <>
